@@ -1,0 +1,37 @@
+#			  _____  _     _____
+#			 / ____|| |   |  __ \
+#			| (___  | | __| |  | | _   _  _ __   _ __ ___    __ _  _ __
+#			 \___ \ | |/ /| |  | || | | || '_ \ | '_ ` _ \  / _` || '_ \
+#			 ____) ||   < | |__| || |_| || | | || | | | | || (_| || |_) |
+#			|_____/ |_|\_\|_____/  \__, ||_| |_||_| |_| |_| \__,_|| .__/
+#			                        __/ |                         | |
+#			                       |___/                          |_|
+# === CONFIGURATION ===
+# This file is the configuration for the SkDynmap Addon, make sure to reload it after making changes ! (/skdynmap reload)
+
+# === update-interval ===
+# This value is the time spent (in seconds) between each automatic rendering of areas.
+# Set to 0 if you don't want automatics renderings.
+update-interval: 5
+
+# === info-window ===
+# These parameters are the HTML in the popups when an area is clicked
+# with-desc: The HTML in the popups of areas with descriptions
+# without-desc: The HTML in the popups of areas without descriptions
+info-window:
+  with-desc: '<div class"infowindow"><span><strong>Name: </strong>%name%<br><strong>Description: </strong>%description%</div>'
+  without-desc: '<div class"infowindow"><span><strong>Name: </strong>%name%</div>'
+
+# === default-style ===
+# This section is the default style for areas,
+#   when they are created without any particular style assigned
+# Changing this value will affect only new areas created after the changement.
+# To change style of existing area, use the area.yml file, or the provided syntax
+default-style:
+  fill:
+    color: "#FF0000"
+    opacity: 0.35
+  line:
+    color: "#FF0000"
+    opacity: 0.8
+    weight: 3
