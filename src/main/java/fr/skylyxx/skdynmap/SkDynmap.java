@@ -3,6 +3,8 @@ package fr.skylyxx.skdynmap;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CMDSkDynmap;
+import fr.skylyxx.skdynmap.utils.Util;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,11 +41,11 @@ public class SkDynmap extends JavaPlugin {
         this.pm = Bukkit.getPluginManager();
 
         final Plugin SKRIPT = pm.getPlugin("Skript");
-        if(SKRIPT != null && SKRIPT.isEnabled() == true && Skript.isAcceptRegistrations()) {
+        if (SKRIPT != null && SKRIPT.isEnabled() == true && Skript.isAcceptRegistrations()) {
             addon = Skript.registerAddon(this);
 
             // Skript stuff registration
-            loadSkriptElements();
+            loadSkript();
 
             // Loading config files
             initConfig();
@@ -55,7 +57,7 @@ public class SkDynmap extends JavaPlugin {
             this.getCommand("skdynmap").setExecutor(new CMDSkDynmap());
 
             // BETA Warning
-            if(getDescription().getVersion().contains("beta")) {
+            if (getDescription().getVersion().contains("beta")) {
                 Util.log("This is a BETA build of SkDynmap, things may not work as expected ! Please report bugs on Gitub !", Level.WARNING);
                 Util.log(getDescription().getWebsite(), Level.WARNING);
             }
@@ -73,7 +75,7 @@ public class SkDynmap extends JavaPlugin {
         DEF_INFOWINDOW_WITHOUTDESC = getConfig().getString("info-window.without-desc");
 
         areasFile = new File(getDataFolder(), "areas.yml");
-        if(!areasFile.exists()) {
+        if (!areasFile.exists()) {
             areasFile.getParentFile().mkdirs();
             saveResource("areas.yml", false);
         }
@@ -114,14 +116,14 @@ public class SkDynmap extends JavaPlugin {
         api = (DynmapCommonAPI)dynmap;
         markerapi = api.getMarkerAPI();
 
-        if(markerapi == null) {
+        if (markerapi == null) {
             Util.log("Error loading dynmap MarkerAPI !", Level.SEVERE);
             return;
         }
         Util.log("MarkerAPI loaded successfully.", Level.INFO);
 
         set = markerapi.getMarkerSet("skdynmap.markerset");
-        if(set == null) {
+        if (set == null) {
             set = markerapi.createMarkerSet("skdynmap.markerset", "SkDynmap", null, false);
         } else {
             set.setMarkerSetLabel("SkDynmap");
@@ -132,7 +134,7 @@ public class SkDynmap extends JavaPlugin {
         set.setHideByDefault(false);
 
         int renderTaskInterval = getConfig().getInt("update-interval");
-        if(renderTaskInterval > 0) {
+        if (renderTaskInterval > 0) {
             int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
@@ -145,9 +147,9 @@ public class SkDynmap extends JavaPlugin {
         }
     }
 
-    private void loadSkriptElements() {
+    private void loadSkript() {
         try {
-            addon.loadClasses("fr.skylyxx.skdynmap.elements");
+            addon.loadClasses("fr.skylyxx.skdynmap.skript");
         } catch (IOException e) {
             Util.log("Error while enable SkDynmap's syntaxes !", Level.SEVERE);
             e.printStackTrace();

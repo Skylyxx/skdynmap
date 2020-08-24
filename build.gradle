@@ -25,8 +25,6 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
     // The Spigot API with no shadowing. Requires the OSS repo.
-
-    compileOnly 'org.spigotmc:spigot:1.15.2-R0.1-SNAPSHOT'
     // The full Spigot server with no shadowing. Requires mavenLocal.
     implementation 'com.github.SkriptLang:Skript:2.5-alpha5'
     implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-2'

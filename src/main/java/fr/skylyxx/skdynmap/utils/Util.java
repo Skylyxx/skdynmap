@@ -1,4 +1,4 @@
-package fr.skylyxx.skdynmap;
+package fr.skylyxx.skdynmap.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.dynmap.markers.AreaMarker;
+
+import fr.skylyxx.skdynmap.SkDynmap;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ public class Util {
         markerid = markerid.toLowerCase();
 
         skdynmap.getAreasConfig().set("areas." + markerid + ".name", name);
-        if(description != null) {
+        if (description != null) {
             skdynmap.getAreasConfig().set("areas." + markerid + ".description", description);
         }
         skdynmap.getAreasConfig().set("areas." + markerid + ".location.world", world.getName());
@@ -100,7 +102,7 @@ public class Util {
         m.setLineStyle(style.getLineWeight(), style.getLineOpacity(), Integer.parseInt(style.getLineColor().substring(1), 16));
 
         //popup
-        if(!skdynmap.getAreasConfig().isSet("areas." + markerid + ".description")) {
+        if (!skdynmap.getAreasConfig().isSet("areas." + markerid + ".description")) {
             String desc = skdynmap.DEF_INFOWINDOW_WITHOUTDESC;
             desc = desc.replaceAll("%name%", name);
             m.setDescription(desc);
