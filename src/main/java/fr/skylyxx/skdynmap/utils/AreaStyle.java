@@ -1,4 +1,4 @@
-package fr.skylyxx.skdynmap;
+package fr.skylyxx.skdynmap.utils;
 
 public class AreaStyle {
 
@@ -37,7 +37,7 @@ public class AreaStyle {
         return fillOpacity;
     }
 
-    public String valuesToString() {
+    public String toString() {
         return "line-color=" + getLineColor() + " line-opacity=" + getLineOpacity() + " line-weight=" + getLineWeight() + " fill-color=" + getFillColor() + " fill-opacity=" + getFillOpacity();
     }
 
