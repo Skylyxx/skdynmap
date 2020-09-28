@@ -25,10 +25,6 @@ public class CMDSkDynmap implements CommandExecutor {
                 sender.sendMessage("§6SkDynmap version: §e" + skdynmap.getDescription().getVersion());
                 sender.sendMessage("§6Author: §e" + skdynmap.getDescription().getAuthors().toString());
                 sender.sendMessage("§6Help/Documentation: §ehttps://github.com/SkylyxxFR/skdynmap");
-            /*} else if (args[0].equalsIgnoreCase("delete")) {
-                skdynmap.deleteAllAreas();
-            } else if (args[0].equalsIgnoreCase("render")) {
-                skdynmap.renderAllAreas();*/
             } else {
                 sender.sendMessage("§c§m          §r " + Util.getPrefix() + "§r §c§m          §r");
                 sender.sendMessage("§6/skdynmap §ereload§b: Reload SkDynmap's configuration files");

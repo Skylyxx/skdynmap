@@ -10,12 +10,11 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 
 
-
 public class EffDeleteArea extends Effect {
 
     static {
         Skript.registerEffect(EffDeleteArea.class,
-            "delete [dynmap] area (named|with name) %string% in %world%"
+                "delete [dynmap] area (named|with name) %string% in %world%"
         );
     }
 

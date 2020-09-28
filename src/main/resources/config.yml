@@ -11,7 +11,8 @@
 
 # === update-interval ===
 # This value is the time spent (in seconds) between each automatic rendering of areas.
-# Set to 0 if you don't want automatics renderings.
+# Set to 0 if you don't want automatics renderings. If you disable automatics renderings,
+# you can manually rendering areas using this syntax: [make] render of (all areas|%dynmaprea%)
 update-interval: 5
 
 # === info-window ===

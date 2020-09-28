@@ -4,7 +4,6 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CMDSkDynmap;
 import fr.skylyxx.skdynmap.utils.Util;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,45 +20,55 @@ import java.util.logging.Level;
 
 public class SkDynmap extends JavaPlugin {
 
+    public static String DEF_INFOWINDOW_WITHDESC;
+    public static String DEF_INFOWINDOW_WITHOUTDESC;
     private static SkDynmap INSTANCE;
     private PluginManager pm;
     private SkriptAddon addon;
-
     private File areasFile;
     private YamlConfiguration areasConfig;
-
     private Plugin dynmap;
     private DynmapCommonAPI api;
     private MarkerAPI markerapi;
     private MarkerSet set;
-    public static String DEF_INFOWINDOW_WITHDESC;
-    public static String DEF_INFOWINDOW_WITHOUTDESC;
+
+    public static SkDynmap getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public void onEnable() {
         INSTANCE = this;
-        this.pm = Bukkit.getPluginManager();
+        pm = Bukkit.getPluginManager();
 
         final Plugin SKRIPT = pm.getPlugin("Skript");
         if (SKRIPT != null && SKRIPT.isEnabled() == true && Skript.isAcceptRegistrations()) {
-            addon = Skript.registerAddon(this);
+            final Plugin DYNMAP = pm.getPlugin("dynmap");
+            if (DYNMAP != null && DYNMAP.isEnabled() == true) {
 
-            // Skript stuff registration
-            loadSkript();
+                addon = Skript.registerAddon(this);
 
-            // Loading config files
-            initConfig();
+                // Skript stuff registration
+                loadSkript();
 
-            //Init Dynmap layer
-            initDynmap();
+                // Loading config files
+                initConfig();
 
-            // Registering command
-            this.getCommand("skdynmap").setExecutor(new CMDSkDynmap());
+                //Init Dynmap layer
+                initDynmap();
 
-            // BETA Warning
-            if (getDescription().getVersion().contains("beta")) {
-                Util.log("This is a BETA build of SkDynmap, things may not work as expected ! Please report bugs on Gitub !", Level.WARNING);
-                Util.log(getDescription().getWebsite(), Level.WARNING);
+                // Registering command
+                this.getCommand("skdynmap").setExecutor(new CMDSkDynmap());
+
+                // BETA Warning
+                if (getDescription().getVersion().contains("beta")) {
+                    Util.log("This is a BETA build of SkDynmap, things may not work as expected ! Please report bugs on Gitub !", Level.WARNING);
+                    Util.log(getDescription().getWebsite(), Level.WARNING);
+                }
+            } else {
+                Util.log("Dynmap dependency was not found ! Disabling SkDynmap !", Level.SEVERE);
+                pm.disablePlugin(this);
+                return;
             }
         } else {
             Util.log("Skript dependency was not found ! Disabling SkDynmap", Level.SEVERE);
@@ -113,7 +122,7 @@ public class SkDynmap extends JavaPlugin {
 
     private void initDynmap() {
         dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
-        api = (DynmapCommonAPI)dynmap;
+        api = (DynmapCommonAPI) dynmap;
         markerapi = api.getMarkerAPI();
 
         if (markerapi == null) {
@@ -151,12 +160,8 @@ public class SkDynmap extends JavaPlugin {
         try {
             addon.loadClasses("fr.skylyxx.skdynmap.skript");
         } catch (IOException e) {
-            Util.log("Error while enable SkDynmap's syntaxes !", Level.SEVERE);
+            Util.log("Error while loading  SkDynmap's syntaxes !", Level.SEVERE);
             e.printStackTrace();
         }
-    }
-
-    public static SkDynmap getInstance() {
-        return INSTANCE;
     }
 }

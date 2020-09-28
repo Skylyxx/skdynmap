@@ -1,5 +1,6 @@
 package fr.skylyxx.skdynmap.utils;
 
+import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -7,8 +8,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.dynmap.markers.AreaMarker;
 
-import fr.skylyxx.skdynmap.SkDynmap;
-
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,11 +17,11 @@ import java.util.logging.Level;
 
 public class Util {
 
-    private static SkDynmap skdynmap = SkDynmap.getInstance();
     public static ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
+    private static SkDynmap skdynmap = SkDynmap.getInstance();
 
     public static void log(String message, Level level) {
-        Bukkit.getLogger().log(level, "[SkDynmap] " + message);
+        skdynmap.getLogger().log(level, message);
     }
 
     public static String getPrefix() {
@@ -32,8 +32,18 @@ public class Util {
         return new AreaStyle(skdynmap.getConfig().getString("default-style.line.color"), skdynmap.getConfig().getDouble("default-style.line.opacity"), skdynmap.getConfig().getInt("default-style.line.weight"), skdynmap.getConfig().getString("default-style.fill.color"), skdynmap.getConfig().getDouble("default-style.fill.opacity"));
     }
 
+
+    public static int getHexInt(String hex) {
+        hex = hex.replace("#", "");
+        return Integer.parseInt(hex, 16);
+    }
+
+    /*
+        Area Management
+     */
+
     public static void createArea(World world, String name, String description, Location pos1, Location pos2, AreaStyle style) {
-        String markerid = world.getName() + "_" + name.replace(" ", "-");
+        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
         markerid = markerid.toLowerCase();
 
         skdynmap.getAreasConfig().set("areas." + markerid + ".name", name);
@@ -84,10 +94,14 @@ public class Util {
         double[] x = new double[4];
         double[] z = new double[4];
 
-        x[0] = pos1.getX(); z[0] = pos1.getZ();
-        x[1] = pos1.getX(); z[1] = pos2.getZ();
-        x[2] = pos2.getX(); z[2] = pos2.getZ();
-        x[3] = pos2.getX(); z[3] = pos1.getZ();
+        x[0] = pos1.getX();
+        z[0] = pos1.getZ();
+        x[1] = pos1.getX();
+        z[1] = pos2.getZ();
+        x[2] = pos2.getX();
+        z[2] = pos2.getZ();
+        x[3] = pos2.getX();
+        z[3] = pos1.getZ();
 
         AreaMarker m;
         m = skdynmap.getMarkerSet().createAreaMarker(markerid, name, false, world.getName(), x, z, false);
@@ -120,7 +134,7 @@ public class Util {
 
     public static void unrenderAllAreas() {
         Iterator<AreaMarker> it = renderedAreas.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             AreaMarker area = it.next();
             area.deleteMarker();
             it.remove();
@@ -136,8 +150,61 @@ public class Util {
         }
     }
 
-    public static int getHexInt(String hex) {
-        hex = hex.replace("#", "");
-        return Integer.parseInt(hex, 16);
+    @Nullable
+    public static DynmapArea getArea(String name, World world) {
+        if (Util.areaExist(name, world)) {
+            return new DynmapArea(name, world);
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean areaExist(@Nullable String name, @Nullable World world) {
+        if (name == null || world == null) {
+            return false;
+        }
+        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
+        markerid = markerid.toLowerCase();
+
+        if (skdynmap.getAreasConfig().get("areas." + markerid) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean areaExist(DynmapArea area) {
+        try {
+            String name = area.getName();
+            World world = area.getWorld();
+            return areaExist(name, world);
+        } catch (NullPointerException err) {
+            return false;
+        }
+    }
+
+    public static void setAreaStyle(DynmapArea area, AreaStyle style) {
+        if (!Util.areaExist(area)) {
+            log("Trying to change the style of an inexistant area !", Level.SEVERE);
+            return;
+        }
+        String name = area.getName();
+        World world = area.getWorld();
+
+        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
+        markerid = markerid.toLowerCase();
+
+        skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.color", style.getFillColor());
+        skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.opacity", style.getFillOpacity());
+        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.color", style.getLineColor());
+        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.opacity", style.getLineOpacity());
+        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.weight", style.getLineWeight());
+
+        try {
+            skdynmap.getAreasConfig().save(skdynmap.getAreasFile());
+            Util.log("File areas.yml saved succesffully !", Level.INFO);
+        } catch (IOException err) {
+            Util.log("Unable to save file areas.yml !", Level.SEVERE);
+            err.printStackTrace();
+        }
     }
 }

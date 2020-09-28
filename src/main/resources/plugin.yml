@@ -1,7 +1,7 @@
 name: SkDynmap
 author: Skylyxx
 main: fr.skylyxx.skdynmap.SkDynmap
-version: 1.0-beta01
+version: 1.0-beta02
 description: A Skript addon that let you interact with Dynmap
 website: https://github.com/SkylyxxFR/skdynmap
 depend: [Skript,dynmap]

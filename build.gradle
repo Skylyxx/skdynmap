@@ -3,30 +3,24 @@ plugins {
 }
 
 group 'fr.skylyxx.skdynmap'
-version '1.0-beta01'
+version '1.0-beta02'
 
 repositories {
+    mavenCentral()
     jcenter()
-    maven {
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
-    maven {
-        url = 'https://oss.sonatype.org/content/repositories/snapshots'
-    }
-    mavenLocal()
-    maven {
-        url = 'https://jitpack.io'
-    }
-    maven {
-        url = 'https://repo.destroystokyo.com/repository/maven-public/'
-    }
+    maven {url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
+    maven {url = 'https://oss.sonatype.org/content/repositories/snapshots'}
+    maven {url = 'https://jitpack.io'}
+    maven {url = 'https://repo.destroystokyo.com/repository/maven-public/'}
 }
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
-    // The Spigot API with no shadowing. Requires the OSS repo.
-    // The full Spigot server with no shadowing. Requires mavenLocal.
-    implementation 'com.github.SkriptLang:Skript:2.5-alpha5'
+    implementation('com.github.SkriptLang:Skript:2.5-alpha5') {
+        exclude group: 'com.sk89q.worldguard', module: 'worldguard-legacy'
+        exclude group: 'net.milkbowl.vault', module: 'Vault'
+    }
     implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-2'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
