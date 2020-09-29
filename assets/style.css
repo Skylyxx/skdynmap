@@ -1,0 +1,156 @@
+/* classes */
+
+:root {
+    --main-color: #4f85fa;
+    --secondary-color: #ebebeb;
+    --dark-color: #3d3d3d;
+    --light-color: #ffffff;
+}
+
+@font-face {
+    font-family: "CustomFont";
+    src: url("CustomFont.ttf");
+}
+
+* {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    scroll-behavior: smooth;
+}
+
+.button {
+    color: var(--light-color);
+    text-decoration: none;
+    
+    border-radius: 5px;
+    border: 3px solid var(--light-color);
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.button:hover {
+    color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.link {
+    color: #ffffff;
+}
+
+/* background */
+
+.background-img {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    background-image: url("background.webp");
+    background-size: cover;
+    background-position: center;
+
+    text-align: center;
+
+    z-index: -1;
+}
+
+.background-text {
+    text-align: center;
+}
+
+.background-text h1,
+.background-text hr,
+.background-text h3,
+.background-text button {
+    color: var(--light-color);
+}
+
+.background-text h1 {
+    font-family: 'CustomFont', sans-serif;
+    font-size: 60px;
+
+    margin-top: 15%;
+    padding-bottom: 0;
+}
+
+.background-text hr {
+    width: 50%;
+    display: inline-block;
+}
+
+.background-text h3 {
+    font-size: 30px;
+}
+
+.background-text .button {
+    margin-left: 50px;
+    position: relative;
+    top: 70px;
+}
+
+/* content */
+
+.allpages {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+}
+
+.page {
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.content {
+    padding-left: 30px;
+    padding-right: 30px;
+    text-align: justify;
+}
+
+/* page 1 */
+
+.page1 {
+    background-color: var(--main-color);
+    color: var(--light-color);
+}
+
+h1#why {
+    padding-bottom: 10px;
+}
+
+p#why {
+    padding-left: 20px;
+}
+
+/* page 2 */
+
+.page2 {
+    background: var(--secondary-color);
+    color: var(--dark-color);;
+}
+
+h1#example {
+    padding-bottom: 10px;
+}
+
+p#example {
+    padding-left: 20px;
+    padding-bottom: 10px;
+}
+
+/* page 3 */
+
+.page3 {
+    background-color: var(--main-color);
+    color: var(--light-color);
+}
+
+h1#credits {
+    padding-bottom: 10px;
+}
+
+p#credits {
+    padding-left: 10px;
+}
