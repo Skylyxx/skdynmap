@@ -27,4 +27,4 @@ To install **SkDynmap**:
 
 ## Support
 
-For any questions, or report bugs, you can create <a href="https://github.com/Skylyxx/skdynmap/issues">issue</a>, or contact me on **Discord:** `Skylyxx#8816` (Future Discord Server is comming).
+For any questions, or report bugs, you can create an <a href="https://github.com/Skylyxx/skdynmap/issues">issue</a>, or by going on the SkDynmap's related channel on the Skript-Chat Discord (<a href="https://discord.gg/uetAHQc">here</a>)
