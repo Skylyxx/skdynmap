@@ -16,6 +16,13 @@ To install **SkDynmap**:
 - Restart your server
 - Enjoy ! 😉
 
+## Documentation
+
+Documentation of **SkDynmap** is available on:
+
+<a href="http://skripthub.net/docs/?addon=SkDynmap"><img src="http://skripthub.net/static/addon/ViewTheDocsButton.png" width="200px"></a>
+
+<a href="https://docs.skunity.com/syntax/search/addon:Skdynmap"><img src="https://docs.skunity.com/img/skunity_docs_center.png" width="200px"></a>
 ## Future features
 
 ##### In the future, I plan to add some features:
@@ -27,4 +34,4 @@ To install **SkDynmap**:
 
 ## Support
 
-For any questions, or report bugs, you can create an <a href="https://github.com/Skylyxx/skdynmap/issues">issue</a>, or by going on the SkDynmap's related channel on the Skript-Chat Discord (<a href="https://discord.gg/uetAHQc">here</a>)
+For any questions, or report bugs, you can create <a href="https://github.com/Skylyxx/skdynmap/issues">issue</a>, or contact me on **Discord:** `Skylyxx#8816` (Future Discord Server is comming).
