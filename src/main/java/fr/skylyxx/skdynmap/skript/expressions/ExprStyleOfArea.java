@@ -2,6 +2,10 @@ package fr.skylyxx.skdynmap.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -16,6 +20,12 @@ import org.bukkit.event.Event;
 import javax.annotation.Nullable;
 import java.util.logging.Level;
 
+@Name("SkDynmap - Style of area")
+@Description("This expression will return the style of the dynmap area provided. (Return a %areastyle%)")
+@Examples({"set {_style} to style of area named \"My Area\" in world of player",
+           "set style of area named \"My Area\" in world of player to default style"
+})
+@Since("1.0-beta02")
 public class ExprStyleOfArea extends SimpleExpression<AreaStyle> {
 
     static {

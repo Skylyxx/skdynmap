@@ -1,6 +1,10 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -9,7 +13,10 @@ import fr.skylyxx.skdynmap.utils.Util;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 
-
+@Name("SkDynmap - Delete an area")
+@Description("This effect allow you to remove an area from the map")
+@Examples("delete area named \"My Area\" in world of player")
+@Since("1.0-beta02")
 public class EffDeleteArea extends Effect {
 
     static {

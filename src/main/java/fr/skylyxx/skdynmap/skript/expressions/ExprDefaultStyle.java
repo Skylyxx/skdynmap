@@ -1,6 +1,10 @@
 package fr.skylyxx.skdynmap.skript.expressions;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -10,6 +14,10 @@ import fr.skylyxx.skdynmap.utils.AreaStyle;
 import fr.skylyxx.skdynmap.utils.Util;
 import org.bukkit.event.Event;
 
+@Name("SkDynmap - Default style")
+@Description("This expression return the default style defined in the config. (Return a %areastyle%)")
+@Examples("set {_style} to default style")
+@Since("1.0-beta02")
 public class ExprDefaultStyle extends SimpleExpression {
 
     static {

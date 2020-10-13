@@ -2,6 +2,10 @@ package fr.skylyxx.skdynmap.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -15,6 +19,12 @@ import org.bukkit.event.Event;
 import javax.annotation.Nullable;
 import java.util.logging.Level;
 
+@Name("SkDynmap - Line Opacity")
+@Description("This expression will return the line-opacity property of the provided style. (Return a numner)")
+@Examples({"set {_lineopacity} to line-opacity of {_style}",
+        "set line-opacity of {_style} to 0.8"
+})
+@Since("1.0-beta02")
 public class ExprLineOpacity extends SimpleExpression<Double> {
 
     static {

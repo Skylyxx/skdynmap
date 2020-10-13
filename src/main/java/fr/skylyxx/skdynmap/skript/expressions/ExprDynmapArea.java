@@ -1,6 +1,10 @@
 package fr.skylyxx.skdynmap.skript.expressions;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -11,6 +15,10 @@ import fr.skylyxx.skdynmap.utils.Util;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 
+@Name("SkDynmap - Dynmap Area")
+@Description("This expression will search, and return the requested area. (Return a %dynmaparea%)")
+@Examples("set {_area} to area named \"My Area\" in world of player")
+@Since("1.0-beta02")
 public class ExprDynmapArea extends SimpleExpression<DynmapArea> {
 
     static {

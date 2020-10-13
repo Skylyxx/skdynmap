@@ -1,6 +1,10 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +17,10 @@ import org.bukkit.World;
 import org.bukkit.event.Event;
 
 
+@Name("SkDynmap - Create an area")
+@Description("This effect allow you to create an area on the map")
+@Examples("create new area named \"My Area\" in world of player between {pos1} and {pos2}")
+@Since("1.0-beta02")
 public class EffCreateArea extends Effect {
 
     static {

@@ -1,6 +1,10 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -11,6 +15,10 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("SkDynmap - Render an area")
+@Description("This effect allow you to render an area on the map. This can be used when auto-rendering is disabled")
+@Examples("make render of area named \"My Area\" in world of player")
+@Since("1.0-beta02")
 public class EffRenderArea extends Effect {
 
     static {
