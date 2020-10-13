@@ -147,10 +147,31 @@ p#example {
     color: var(--light-color);
 }
 
+a#credits {
+    text-decoration: none;
+    color: inherit;
+}
+
+#credits img {
+    height: 65px;
+    position: relative;
+}
+
 h1#credits {
+    padding-bottom: 10px;
+}
+
+#credits span {
+    position: relative;
+    top: -20px;
+}
+
+#docs {
     padding-bottom: 10px;
 }
 
 p#credits {
     padding-left: 10px;
 }
+
+
