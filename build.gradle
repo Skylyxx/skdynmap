@@ -1,9 +1,11 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     id 'java'
 }
 
 group 'fr.skylyxx.skdynmap'
-version '1.0-beta02'
+version '1.0.1'
 
 repositories {
     mavenCentral()
@@ -12,6 +14,7 @@ repositories {
     maven {url = 'https://oss.sonatype.org/content/repositories/snapshots'}
     maven {url = 'https://jitpack.io'}
     maven {url = 'https://repo.destroystokyo.com/repository/maven-public/'}
+    maven {url = 'https://repo.codemc.org/repository/maven-public'}
 }
 
 dependencies {
@@ -22,5 +25,10 @@ dependencies {
     }
     implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.bstats:bstats-bukkit:1.7'
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+processResources {
+    filter ReplaceTokens, tokens: ["version": project.property("version")]
+}

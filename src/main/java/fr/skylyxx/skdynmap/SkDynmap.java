@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CMDSkDynmap;
 import fr.skylyxx.skdynmap.utils.Util;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,6 +41,8 @@ public class SkDynmap extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         pm = Bukkit.getPluginManager();
+
+        Metrics metrics = new Metrics(this, 9273);
 
         final Plugin SKRIPT = pm.getPlugin("Skript");
         if (SKRIPT != null && SKRIPT.isEnabled() == true && Skript.isAcceptRegistrations()) {
@@ -100,7 +103,11 @@ public class SkDynmap extends JavaPlugin {
         }
     }
 
-    public void reloadSkDynmapConfig() {
+    public void reloadAreasConfig() {
+        areasConfig = YamlConfiguration.loadConfiguration(areasFile);
+    }
+
+    public void reloadAllConfigs() {
         this.reloadConfig();
         areasConfig = YamlConfiguration.loadConfiguration(areasFile);
 
@@ -147,6 +154,7 @@ public class SkDynmap extends JavaPlugin {
             int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
                 @Override
                 public void run() {
+                    reloadAreasConfig();
                     Util.renderAllAreas();
                 }
             }, 100, renderTaskInterval * 20);

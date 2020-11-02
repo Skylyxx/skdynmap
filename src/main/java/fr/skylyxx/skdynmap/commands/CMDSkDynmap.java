@@ -16,9 +16,10 @@ public class CMDSkDynmap implements CommandExecutor {
             sender.sendMessage("§6/skdynmap §ereload§b: Reload SkDynmap's configuration files");
             sender.sendMessage("§6/skdynmap §einfo§b: Get informations about SkDynmap");
             sender.sendMessage("§c§m          §r " + Util.getPrefix() + "§r §c§m          §r");
+            return true;
         } else {
             if (args[0].equalsIgnoreCase("reload")) {
-                skdynmap.reloadSkDynmapConfig();
+                skdynmap.reloadAllConfigs();
                 sender.sendMessage(Util.getPrefix() + "§aConfiguration reloaded !");
             } else if (args[0].equalsIgnoreCase("info")) {
                 sender.sendMessage("§c§m          §r " + Util.getPrefix() + "§r §c§m          §r");
@@ -33,7 +34,5 @@ public class CMDSkDynmap implements CommandExecutor {
             }
             return true;
         }
-
-        return false;
     }
 }
