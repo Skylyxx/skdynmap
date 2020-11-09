@@ -2,9 +2,10 @@ package fr.skylyxx.skdynmap;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import com.google.common.io.Files;
 import fr.skylyxx.skdynmap.commands.CMDSkDynmap;
+import fr.skylyxx.skdynmap.utils.Metrics;
 import fr.skylyxx.skdynmap.utils.Util;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,8 +16,12 @@ import org.dynmap.DynmapCommonAPI;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.logging.Level;
 
 public class SkDynmap extends JavaPlugin {
@@ -51,6 +56,13 @@ public class SkDynmap extends JavaPlugin {
 
                 addon = Skript.registerAddon(this);
 
+                //Check for updates
+                try {
+                    checkForUpdates();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 // Skript stuff registration
                 loadSkript();
 
@@ -65,7 +77,7 @@ public class SkDynmap extends JavaPlugin {
 
                 // BETA Warning
                 if (getDescription().getVersion().contains("beta")) {
-                    Util.log("This is a BETA build of SkDynmap, things may not work as expected ! Please report bugs on Gitub !", Level.WARNING);
+                    Util.log("This is a BETA build of SkDynmap, things may not work as expected ! Please report bugs on Github !", Level.WARNING);
                     Util.log(getDescription().getWebsite(), Level.WARNING);
                 }
             } else {
@@ -81,8 +93,55 @@ public class SkDynmap extends JavaPlugin {
         Util.log("Successfully enabled SkDynmap v" + getDescription().getVersion(), Level.INFO);
     }
 
+    // For getting result, using code from Olyno's Skent: https://github.com/Olyno/skent/blob/master/src/main/java/com/olyno/skent/skript/expressions/ExprContentFromURL.java#L59
+    @Nullable
+    public String checkForUpdates() throws IOException {
+        URL url = new URL("https://pastebin.com/ZECi01d9");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+        StringBuilder stringBuilder = new StringBuilder();
+        String inputLine;
+        while ((inputLine = bufferedReader.readLine()) != null) {
+            stringBuilder.append(inputLine);
+            stringBuilder.append(System.lineSeparator());
+        }
+        bufferedReader.close();
+        String result = stringBuilder.toString().trim().split("<textarea class=\"textarea\">")[1].split("</textarea>")[0];
+        if (!result.equalsIgnoreCase(getDescription().getVersion())) {
+            Util.log("You are running an old version of SkDynmap, SkDynmap v" + result + " is available ! Download it at " + getDescription().getWebsite() + "/releases !", Level.SEVERE);
+            return result;
+        }
+        Util.log("You are runing the latest version of SkDynmap !", Level.INFO);
+        return "up-to-date";
+    }
+
     private void initConfig() {
+        Util.log("Loading config files...", Level.INFO);
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            saveDefaultConfig();
+            Util.log("Unable to find config.yml ! Generating file...", Level.WARNING);
+        } else {
+            String version = getConfig().getString("version");
+            if (version == null || !version.equalsIgnoreCase(getDescription().getVersion())) {
+                Util.log("You had an old version of config.yml, file has be regenerated. You might have to remake your changes. Old config.yml is available as config.yml.backup !", Level.SEVERE);
+                File backupConfig = new File(getDataFolder(), "config.yml.backup");
+                if (backupConfig.exists()) {
+                    backupConfig.delete();
+                }
+                try {
+                    Files.copy(configFile, backupConfig);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                configFile.delete();
+                saveDefaultConfig();
+
+            } else {
+                Util.log("Config is up to date !", Level.INFO);
+            }
+        }
         saveDefaultConfig();
+
         DEF_INFOWINDOW_WITHDESC = getConfig().getString("info-window.with-desc");
         DEF_INFOWINDOW_WITHOUTDESC = getConfig().getString("info-window.without-desc");
 

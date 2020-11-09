@@ -9,6 +9,9 @@
 # === CONFIGURATION ===
 # This file is the configuration for the SkDynmap Addon, make sure to reload it after making changes ! (/skdynmap reload)
 
+# PLEASE DO NOT EDIT THIS VALUE !
+version: @version@
+
 # === update-interval ===
 # This value is the time spent (in seconds) between each automatic rendering of areas.
 # Set to 0 if you don't want automatics renderings. If you disable automatics renderings,
