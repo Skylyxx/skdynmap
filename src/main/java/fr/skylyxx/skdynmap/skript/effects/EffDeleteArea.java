@@ -1,10 +1,7 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -17,6 +14,7 @@ import org.bukkit.event.Event;
 @Description("This effect allow you to remove an area from the map")
 @Examples("delete area named \"My Area\" in world of player")
 @Since("1.0-beta02")
+@RequiredPlugins("dynmap")
 public class EffDeleteArea extends Effect {
 
     static {
