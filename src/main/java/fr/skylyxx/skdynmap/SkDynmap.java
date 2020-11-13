@@ -29,6 +29,7 @@ public class SkDynmap extends JavaPlugin {
     public static String DEF_INFOWINDOW_WITHDESC;
     public static String DEF_INFOWINDOW_WITHOUTDESC;
     private static SkDynmap INSTANCE;
+    private boolean isDebugMode;
     private PluginManager pm;
     private SkriptAddon addon;
     private File areasFile;
@@ -144,7 +145,7 @@ public class SkDynmap extends JavaPlugin {
 
         DEF_INFOWINDOW_WITHDESC = getConfig().getString("info-window.with-desc");
         DEF_INFOWINDOW_WITHOUTDESC = getConfig().getString("info-window.without-desc");
-
+        isDebugMode = getConfig().getBoolean("debug-mode");
         areasFile = new File(getDataFolder(), "areas.yml");
         if (!areasFile.exists()) {
             areasFile.getParentFile().mkdirs();
@@ -172,6 +173,7 @@ public class SkDynmap extends JavaPlugin {
 
         DEF_INFOWINDOW_WITHDESC = getConfig().getString("info-window.with-desc");
         DEF_INFOWINDOW_WITHOUTDESC = getConfig().getString("info-window.without-desc");
+        isDebugMode = getConfig().getBoolean("debug-mode");
     }
 
     public YamlConfiguration getAreasConfig() {
@@ -184,6 +186,10 @@ public class SkDynmap extends JavaPlugin {
 
     public MarkerSet getMarkerSet() {
         return set;
+    }
+
+    public boolean getDebugMode() {
+        return isDebugMode;
     }
 
     private void initDynmap() {

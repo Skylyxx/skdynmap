@@ -1,17 +1,23 @@
 package fr.skylyxx.skdynmap.utils;
 
+import ch.njol.skript.Skript;
 import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.dynmap.markers.AreaMarker;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 
 
@@ -19,9 +25,16 @@ public class Util {
 
     public static ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
     private static SkDynmap skdynmap = SkDynmap.getInstance();
+    private static YamlConfiguration targetToSave;
 
     public static void log(String message, Level level) {
-        skdynmap.getLogger().log(level, message);
+        if (level == Level.SEVERE) {
+            skdynmap.getLogger().severe(message);
+        } else if (level == Level.WARNING) {
+            skdynmap.getLogger().warning(message);
+        } else {
+            skdynmap.getLogger().info(message);
+        }
     }
 
     public static String getPrefix() {
@@ -38,13 +51,71 @@ public class Util {
         return Integer.parseInt(hex, 16);
     }
 
+    public static boolean copyConf(final YamlConfiguration sourceConfig, final String sourcePath, final YamlConfiguration targetConfig, final String targetPath) {
+        try {
+            final Object value = sourceConfig.get(sourcePath);
+            if (!(value instanceof ConfigurationSection)) {
+                //System.err.println("COPYING " + sourceConfig.getName() + ":" + sourcePath + " TO " + targetConfig.getName() + ":" + targetPath);
+                targetConfig.set(targetPath, value);
+                targetToSave = targetConfig;
+                return true;
+            }
+            for (final String key : ((ConfigurationSection) value).getKeys(false)) {
+                copyConf(sourceConfig, sourcePath + "." + key, targetConfig, targetPath + "." + key);
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("ERROR COPYING " + sourceConfig.getName() + ":" + sourcePath + " TO " + targetConfig.getName() + ":" + targetPath);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean runCopy(final YamlConfiguration sourceConfig, final String sourcePath, final YamlConfiguration targetConfig, final String targetPath) {
+        try {
+            final ExecutorService executor = Executors.newSingleThreadExecutor();
+            final Future<Boolean> result = executor.submit(() -> copyConf(sourceConfig, sourcePath, targetConfig, targetPath));
+            executor.shutdown();
+            final boolean botResult = result.get();
+            targetToSave.save(skdynmap.getAreasFile());
+            skdynmap.reloadAreasConfig();
+            return botResult;
+        } catch (InterruptedException | ExecutionException | IOException e) {
+            return false;
+        }
+    }
+
+    public static String formatMarkerID(String name, World world) {
+        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
+        markerid = markerid.toLowerCase();
+        return markerid;
+    }
+
     /*
         Area Management
      */
 
+    public static void saveAreas() {
+        try {
+            skdynmap.getAreasConfig().save(skdynmap.getAreasFile());
+            if (skdynmap.getDebugMode()) {
+                log("File areas.yml saved succesffully !", Level.INFO);
+            }
+        } catch (IOException e) {
+            if (skdynmap.getDebugMode()) {
+                log("Unable to save file areas.yml !", Level.SEVERE);
+            }
+            e.printStackTrace();
+        }
+    }
+
     public static void createArea(World world, String name, String description, Location pos1, Location pos2, AreaStyle style) {
-        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
-        markerid = markerid.toLowerCase();
+        String markerid = formatMarkerID(name, world);
+
+        if (areaExist(markerid)) {
+            Skript.error("You are trying to create an area but she already exist ! Aborting...");
+            return;
+        }
 
         skdynmap.getAreasConfig().set("areas." + markerid + ".name", name);
         if (description != null) {
@@ -59,37 +130,45 @@ public class Util {
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.opacity", style.getLineOpacity());
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.weight", style.getLineWeight());
 
-        try {
-            skdynmap.getAreasConfig().save(skdynmap.getAreasFile());
-            log("File areas.yml saved succesffully !", Level.INFO);
-        } catch (IOException e) {
-            log("Unable to save file areas.yml !", Level.SEVERE);
-            e.printStackTrace();
-        }
+        saveAreas();
 
+    }
+
+    public static void createArea(AreaBuilder areaBuilder) {
+        createArea(areaBuilder.getWorld(), areaBuilder.getName(), areaBuilder.getDescription(), areaBuilder.getPos1(), areaBuilder.getPos2(), areaBuilder.getStyle());
     }
 
     public static void deleteArea(String markerid) {
         markerid = markerid.toLowerCase();
 
-        skdynmap.getAreasConfig().set("areas." + markerid, null);
-        try {
-            skdynmap.getAreasConfig().save(skdynmap.getAreasFile());
-            log("File areas.yml saved succesffully !", Level.INFO);
-        } catch (IOException e) {
-            log("Unable to save file areas.yml !", Level.SEVERE);
-            e.printStackTrace();
+        if (!areaExist(markerid)) {
+            Skript.error("You are trying to delete an inexistant area ! Aborting...");
+            return;
         }
+
+        skdynmap.getAreasConfig().set("areas." + markerid, null);
+        saveAreas();
     }
 
     public static void renderArea(String markerid) {
         markerid = markerid.toLowerCase();
 
-        Location pos1 = skdynmap.getAreasConfig().getLocation("areas." + markerid + ".location.pos1");
-        Location pos2 = skdynmap.getAreasConfig().getLocation("areas." + markerid + ".location.pos2");
+        if (!areaExist(markerid)) {
+            Skript.error("You are trying to render an inexistant area ! Aborting...");
+            return;
+        }
+
+        Location pos1 = (Location) skdynmap.getAreasConfig().get("areas." + markerid + ".location.pos1");
+        Location pos2 = (Location) skdynmap.getAreasConfig().get("areas." + markerid + ".location.pos2");
         World world = Bukkit.getWorld(skdynmap.getAreasConfig().getString("areas." + markerid + ".location.world"));
         String name = skdynmap.getAreasConfig().getString("areas." + markerid + ".name");
         AreaStyle style = new AreaStyle(skdynmap.getAreasConfig().getString("areas." + markerid + ".style.line.color"), skdynmap.getAreasConfig().getDouble("areas." + markerid + ".style.line.opacity"), skdynmap.getAreasConfig().getInt("areas." + markerid + ".style.line.weight"), skdynmap.getAreasConfig().getString("areas." + markerid + ".style.fill.color"), skdynmap.getAreasConfig().getDouble("areas." + markerid + ".style.fill.opacity"));
+
+        if (pos1 == null || pos2 == null || world == null || name == null || style == null) {
+            Skript.error("You are trying to rendering an area but one (ore more) of its value(s) is/are null ! Aborting...");
+            return;
+        }
+
 
         double[] x = new double[4];
         double[] z = new double[4];
@@ -132,7 +211,7 @@ public class Util {
 
     }
 
-    public static void unrenderAllAreas() {
+    public static void unRenderAllAreas() {
         Iterator<AreaMarker> it = renderedAreas.iterator();
         while (it.hasNext()) {
             AreaMarker area = it.next();
@@ -142,7 +221,7 @@ public class Util {
     }
 
     public static void renderAllAreas() {
-        unrenderAllAreas();
+        unRenderAllAreas();
         ConfigurationSection areasSection = skdynmap.getAreasConfig().getConfigurationSection("areas");
 
         if (areasSection != null) {
@@ -166,6 +245,10 @@ public class Util {
         String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
         markerid = markerid.toLowerCase();
 
+        return areaExist(markerid);
+    }
+
+    public static boolean areaExist(String markerid) {
         if (skdynmap.getAreasConfig().get("areas." + markerid) != null) {
             return true;
         }
@@ -183,8 +266,8 @@ public class Util {
     }
 
     public static void setAreaStyle(DynmapArea area, AreaStyle style) {
-        if (!Util.areaExist(area)) {
-            log("Trying to change the style of an inexistant area !", Level.SEVERE);
+        if (!areaExist(area)) {
+            log("You are trying to change the style of an inexistant area ! Aborting...", Level.SEVERE);
             return;
         }
         String name = area.getName();
@@ -199,12 +282,6 @@ public class Util {
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.opacity", style.getLineOpacity());
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.weight", style.getLineWeight());
 
-        try {
-            skdynmap.getAreasConfig().save(skdynmap.getAreasFile());
-            Util.log("File areas.yml saved succesffully !", Level.INFO);
-        } catch (IOException err) {
-            Util.log("Unable to save file areas.yml !", Level.SEVERE);
-            err.printStackTrace();
-        }
+        saveAreas();
     }
 }

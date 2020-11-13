@@ -18,10 +18,10 @@ import javax.annotation.Nullable;
 })
 @Since("1.0-beta02")
 @RequiredPlugins("dynmap")
-public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Double> {
+public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Number> {
 
     static {
-        register(ExprFillOpacity.class, Double.class,
+        register(ExprFillOpacity.class, Number.class,
                 "fill(-| )opacity",
                 "areastyle"
         );
@@ -29,13 +29,13 @@ public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Double>
 
     @Nullable
     @Override
-    public Double convert(AreaStyle style) {
+    public Number convert(AreaStyle style) {
         return style.getFillOpacity();
     }
 
     @Override
-    public Class<? extends Double> getReturnType() {
-        return Double.class;
+    public Class<? extends Number> getReturnType() {
+        return Number.class;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Double>
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
-            return CollectionUtils.array(Double.class);
+            return CollectionUtils.array(Number.class, Double.class, Integer.class);
         }
         return null;
     }
@@ -56,7 +56,7 @@ public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Double>
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
         for (AreaStyle style : getExpr().getArray(e)) {
             if (mode == Changer.ChangeMode.SET) {
-                style.setFillOpacity((Double) delta[0]);
+                style.setFillOpacity(((Number) delta[0]).doubleValue());
             } else if (mode == Changer.ChangeMode.RESET) {
                 style.setFillOpacity(Util.getDefaultStyle().getFillOpacity());
             }

@@ -18,10 +18,10 @@ import javax.annotation.Nullable;
 })
 @Since("1.0-beta02")
 @RequiredPlugins("dynmap")
-public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Integer> {
+public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Number> {
 
     static {
-        register(ExprLineWeight.class, Integer.class,
+        register(ExprLineWeight.class, Number.class,
                 "line(-| )weight",
                 "areastyle"
         );
@@ -29,13 +29,13 @@ public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Integer>
 
     @Nullable
     @Override
-    public Integer convert(AreaStyle style) {
+    public Number convert(AreaStyle style) {
         return style.getLineWeight();
     }
 
     @Override
-    public Class<? extends Integer> getReturnType() {
-        return Integer.class;
+    public Class<? extends Number> getReturnType() {
+        return Number.class;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Integer>
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
-            return CollectionUtils.array(Integer.class);
+            return CollectionUtils.array(Double.class, Integer.class, Number.class);
         }
         return null;
     }
@@ -56,7 +56,7 @@ public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Integer>
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
         for (AreaStyle style : getExpr().getArray(e)) {
             if (mode == Changer.ChangeMode.SET) {
-                style.setLineWeight((Integer) delta[0]);
+                style.setLineWeight(((Number)delta[0]).intValue());
             } else if (mode == Changer.ChangeMode.RESET) {
                 style.setLineWeight(Util.getDefaultStyle().getLineWeight());
             }

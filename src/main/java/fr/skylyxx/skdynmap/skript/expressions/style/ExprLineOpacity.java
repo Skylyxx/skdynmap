@@ -18,23 +18,23 @@ import javax.annotation.Nullable;
 })
 @Since("1.0-beta02")
 @RequiredPlugins("dynmap")
-public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double> {
+public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Number> {
 
     static {
-        register(ExprLineOpacity.class, Double.class,
+        register(ExprLineOpacity.class, Number.class,
                 "line(-| )opacity",
                 "areastyle");
     }
 
     @Nullable
     @Override
-    public Double convert(AreaStyle style) {
+    public Number convert(AreaStyle style) {
         return style.getLineOpacity();
     }
 
     @Override
-    public Class<? extends Double> getReturnType() {
-        return Double.class;
+    public Class<? extends Number> getReturnType() {
+        return Number.class;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double>
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
-            return CollectionUtils.array(Double.class);
+            return CollectionUtils.array(Double.class, Integer.class, Number.class);
         }
         return null;
     }
@@ -55,7 +55,7 @@ public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double>
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
         for (AreaStyle style : getExpr().getArray(e)) {
             if (mode == Changer.ChangeMode.SET) {
-                style.setLineOpacity((Double) delta[0]);
+                style.setLineOpacity(((Number) delta[0]).doubleValue());
             } else if (mode == Changer.ChangeMode.RESET) {
                 style.setLineOpacity(Util.getDefaultStyle().getLineOpacity());
             }

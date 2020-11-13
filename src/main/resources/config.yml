@@ -12,6 +12,10 @@
 # PLEASE DO NOT EDIT THIS VALUE !
 version: @version@
 
+# === debug-mode ===
+# Set to true if you want to receive additional logs in the console
+debug-mode: false
+
 # === update-interval ===
 # This value is the time spent (in seconds) between each automatic rendering of areas.
 # Set to 0 if you don't want automatics renderings. If you disable automatics renderings,
