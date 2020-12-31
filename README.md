@@ -25,12 +25,7 @@ Documentation of **SkDynmap** is available on:
 <a href="https://docs.skunity.com/syntax/search/addon:Skdynmap"><img src="https://docs.skunity.com/img/skunity_docs_center.png" width="200px"></a>
 ## Future features
 
-##### In the future, I plan to add some features:
-
-- Adding the possibility to make areas with several locations, for making non-squared areas
-- Adding the `all [dynmap] areas` expression. (Example: to make loop of areas)
-- Adding the hide/show effect to affect player's visibility on the map.
-- Adding Dynmap's Marker support (See example <a href="https://i.imgur.com/bAjHu7r.png">here</a>)
+##### In the future, I plan to add some features, you can check the roadmap at the [SkDynmap's trello](https://trello.com/b/l95Jw99Y/skdynmap)
 
 ## Support
 
