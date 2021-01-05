@@ -1,7 +1,9 @@
-.classpath
-.project
+/.classpath/
+/.idea/
+/.project/
 /bin/
 /.vscode/
 /.intellij/
 /.settings/
 /.gradle/
+/gradle/

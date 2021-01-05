@@ -27,6 +27,19 @@ dependencies {
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
+jar {
+    archiveName("SkDynmap.jar")
+}
+
+task copyJar(type: Copy) {
+    from jar
+    into 'D:\\IdeaProjects\\skdynmap\\out'
+    println "Project ${project.name} has been builded !"
+}
+
+build.finalizedBy copyJar
+copyJar.finalizedBy clean
+
 processResources {
     filter ReplaceTokens, tokens: ["version": project.property("version")]
 }
