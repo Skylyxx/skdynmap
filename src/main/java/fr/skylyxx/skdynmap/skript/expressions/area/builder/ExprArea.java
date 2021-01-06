@@ -42,7 +42,7 @@ public class ExprArea extends SimpleExpression<AreaBuilder> {
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         scope = EffectSection.isCurrentSection(ScopeMakeArea.class);
-        if(!scope) {
+        if (!scope) {
             Skript.error("You can't use '" + parseResult.expr + "' outside of a Make Area scope !");
         }
         return true;

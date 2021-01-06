@@ -56,7 +56,7 @@ public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Number> 
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
         for (AreaStyle style : getExpr().getArray(e)) {
             if (mode == Changer.ChangeMode.SET) {
-                style.setLineWeight(((Number)delta[0]).intValue());
+                style.setLineWeight(((Number) delta[0]).intValue());
             } else if (mode == Changer.ChangeMode.RESET) {
                 style.setLineWeight(Util.getDefaultStyle().getLineWeight());
             }

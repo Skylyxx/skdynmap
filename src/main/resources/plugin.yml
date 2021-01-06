@@ -4,7 +4,7 @@ main: fr.skylyxx.skdynmap.SkDynmap
 version: @version@
 description: A Skript addon that let you interact with Dynmap
 website: https://github.com/Skylyxx/skdynmap
-depend: [Skript,dynmap]
+depend: [ Skript,dynmap ]
 commands:
   skdynmap:
     permission: skdynmap.use

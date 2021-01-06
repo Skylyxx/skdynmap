@@ -57,8 +57,8 @@ public class EffCreateArea extends Effect {
                 builder.getStyle() == null ||
                 builder.getPos1() == null ||
                 builder.getPos2() == null) {
-                Skript.error("Cannot create an area, one (or more) of its values is null");
-                return;
+            Skript.error("Cannot create an area, one (or more) of its values is null");
+            return;
         }
         Util.createArea(builder);
     }
