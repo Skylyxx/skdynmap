@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,19 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("SkDynmap - All areas")
+@Description({"This expression returns a list with all the areas.\n",
+        "You can use this expression to loop all areas."
+})
+@Since("1.0.2")
+@Examples({
+        "command /list-areas:",
+        "\ttrigger:",
+        "\t\tsend \"&eList of all areas:\"",
+        "\t\tloop all areas:",
+        "\t\t\tsend \"&e- &r%name of loop-area%\""
+})
+@RequiredPlugins("dynmap")
 public class ExprAllAreas extends SimpleExpression<DynmapArea> {
 
     static {
