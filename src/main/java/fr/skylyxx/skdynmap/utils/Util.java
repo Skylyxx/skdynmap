@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.dynmap.markers.AreaMarker;
 
 import javax.annotation.Nullable;
@@ -289,23 +290,29 @@ public class Util {
     public static DynmapArea[] getAllAreas() {
         ArrayList<DynmapArea> arrayList = new ArrayList<DynmapArea>();
         Object configurationSection = skdynmap.getAreasConfig().get("areas");
-        if(configurationSection instanceof ConfigurationSection) {
+        if (configurationSection instanceof ConfigurationSection) {
             for (final String key : ((ConfigurationSection) configurationSection).getKeys(false)) {
                 String name = skdynmap.getAreasConfig().getString("areas." + key + ".name");
                 World world = Bukkit.getWorld(skdynmap.getAreasConfig().getString("areas." + key + ".location.world"));
                 DynmapArea currentArea = getArea(name, world);
                 arrayList.add(currentArea);
-                Util.log(key + " added", Level.INFO);
-                Util.log(name, Level.INFO);
-                Util.log(world.getName(), Level.INFO);
             }
         }
-        Util.log("Size: " + arrayList.size(), Level.INFO);
         DynmapArea[] areas = new DynmapArea[arrayList.size()];
         areas = arrayList.toArray(areas);
-        if(areas == null) {
-            Util.log("Areas null",Level.INFO);
-        }
         return areas;
     }
+
+    /*
+        Player Management
+     */
+
+    public static void setPlayerVisiblity(Player player, boolean isVisible) {
+        skdynmap.getDynmapCommonAPI().setPlayerVisiblity(player.getName(), isVisible);
+    }
+
+    public static boolean getPlayerVisiblity(Player player) {
+        return skdynmap.getDynmapCommonAPI().getPlayerVisbility(player.getName());
+    }
+
 }

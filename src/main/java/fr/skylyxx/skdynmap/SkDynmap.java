@@ -35,7 +35,7 @@ public class SkDynmap extends JavaPlugin {
     private File areasFile;
     private YamlConfiguration areasConfig;
     private Plugin dynmap;
-    private DynmapCommonAPI api;
+    private DynmapCommonAPI dynmapCommonAPI;
     private MarkerAPI markerapi;
     private MarkerSet set;
 
@@ -192,10 +192,14 @@ public class SkDynmap extends JavaPlugin {
         return isDebugMode;
     }
 
+    public DynmapCommonAPI getDynmapCommonAPI() {
+        return dynmapCommonAPI;
+    }
+
     private void initDynmap() {
         dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
-        api = (DynmapCommonAPI) dynmap;
-        markerapi = api.getMarkerAPI();
+        dynmapCommonAPI = (DynmapCommonAPI) dynmap;
+        markerapi = dynmapCommonAPI.getMarkerAPI();
 
         if (markerapi == null) {
             Util.log("Error loading dynmap MarkerAPI !", Level.SEVERE);
