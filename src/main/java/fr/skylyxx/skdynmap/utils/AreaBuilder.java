@@ -11,18 +11,16 @@ public class AreaBuilder {
     private String description;
     private World world;
     private AreaStyle style;
-    private Location pos1;
-    private Location pos2;
+    private Location[] locations;
 
     private String markerid;
 
-    public AreaBuilder(String name, @Nullable String description, World world, AreaStyle style, Location pos1, Location pos2) {
+    public AreaBuilder(String name, @Nullable String description, World world, AreaStyle style, Location[] locations) {
         this.name = name;
         this.description = description;
         this.world = world;
         this.style = style;
-        this.pos1 = pos1;
-        this.pos2 = pos2;
+        this.locations = locations;
     }
 
     public AreaBuilder() {
@@ -30,16 +28,13 @@ public class AreaBuilder {
         this.description = null;
         this.world = null;
         this.style = null;
-        this.pos1 = null;
-        this.pos2 = null;
+        this.locations = null;
     }
 
     @Override
     public String toString() {
         return "builder of dynmap area named " + this.name + " in world " + this.world.getName();
     }
-
-    // GET
 
     @Nullable
     public String getName() {
@@ -79,26 +74,20 @@ public class AreaBuilder {
         this.style = style;
     }
 
-    @Nullable
-    public Location getPos1() {
-        return pos1;
+    public Location[] getLocations() {
+        return locations;
     }
 
-    public void setPos1(Location pos1) {
-        this.pos1 = pos1;
-    }
-
-    @Nullable
-    public Location getPos2() {
-        return pos2;
-    }
-
-    public void setPos2(Location pos2) {
-        this.pos2 = pos2;
+    public void setLocations(Location[] locations) {
+        this.locations = locations;
     }
 
     @Nullable
     public String getMarkerid() {
         return Util.formatMarkerID(name, world);
+    }
+
+    public void setMarkerid(String markerid) {
+        this.markerid = markerid;
     }
 }

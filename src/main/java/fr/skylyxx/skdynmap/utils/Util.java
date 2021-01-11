@@ -110,7 +110,7 @@ public class Util {
         }
     }
 
-    public static void createArea(World world, String name, String description, Location pos1, Location pos2, AreaStyle style) {
+    public static void createArea(World world, String name, String description, Location[] locations, AreaStyle style) {
         String markerid = formatMarkerID(name, world);
 
         if (areaExist(markerid)) {
@@ -123,8 +123,7 @@ public class Util {
             skdynmap.getAreasConfig().set("areas." + markerid + ".description", description);
         }
         skdynmap.getAreasConfig().set("areas." + markerid + ".location.world", world.getName());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.pos1", pos1);
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.pos2", pos2);
+        skdynmap.getAreasConfig().set("areas." + markerid + ".location.locations", locations);
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.color", style.getFillColor());
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.opacity", style.getFillOpacity());
         skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.color", style.getLineColor());
@@ -136,7 +135,7 @@ public class Util {
     }
 
     public static void createArea(AreaBuilder areaBuilder) {
-        createArea(areaBuilder.getWorld(), areaBuilder.getName(), areaBuilder.getDescription(), areaBuilder.getPos1(), areaBuilder.getPos2(), areaBuilder.getStyle());
+        createArea(areaBuilder.getWorld(), areaBuilder.getName(), areaBuilder.getDescription(), areaBuilder.getLocations(), areaBuilder.getStyle());
     }
 
     public static void deleteArea(String markerid) {
@@ -159,29 +158,46 @@ public class Util {
             return;
         }
 
-        Location pos1 = (Location) skdynmap.getAreasConfig().get("areas." + markerid + ".location.pos1");
-        Location pos2 = (Location) skdynmap.getAreasConfig().get("areas." + markerid + ".location.pos2");
+        ArrayList<Location> locationsArrayList = (ArrayList<Location>) skdynmap.getAreasConfig().get("areas." + markerid + ".location.locations");
+        Location[] locations = new Location[locationsArrayList.size()];
+        locations = locationsArrayList.toArray(locations);
         World world = Bukkit.getWorld(skdynmap.getAreasConfig().getString("areas." + markerid + ".location.world"));
         String name = skdynmap.getAreasConfig().getString("areas." + markerid + ".name");
         AreaStyle style = new AreaStyle(skdynmap.getAreasConfig().getString("areas." + markerid + ".style.line.color"), skdynmap.getAreasConfig().getDouble("areas." + markerid + ".style.line.opacity"), skdynmap.getAreasConfig().getInt("areas." + markerid + ".style.line.weight"), skdynmap.getAreasConfig().getString("areas." + markerid + ".style.fill.color"), skdynmap.getAreasConfig().getDouble("areas." + markerid + ".style.fill.opacity"));
 
-        if (pos1 == null || pos2 == null || world == null || name == null || style == null) {
+        if (locations == null || world == null || name == null || style == null) {
             Skript.error("You are trying to rendering an area but one (ore more) of its value(s) is/are null ! Aborting...");
             return;
         }
 
 
-        double[] x = new double[4];
-        double[] z = new double[4];
+        double[] x;
+        double[] z;
 
-        x[0] = pos1.getX();
-        z[0] = pos1.getZ();
-        x[1] = pos1.getX();
-        z[1] = pos2.getZ();
-        x[2] = pos2.getX();
-        z[2] = pos2.getZ();
-        x[3] = pos2.getX();
-        z[3] = pos1.getZ();
+        if(locations.length < 2) {
+            Skript.error("At least 2 locations are required to create araes ! Aborting...");
+            return;
+        } else if(locations.length == 2) {
+            x = new double[4];
+            z = new double[4];
+            x[0] = locations[0].getX();
+            z[0] = locations[0].getZ();
+            x[1] = locations[0].getX();
+            z[1] = locations[1].getZ();
+            x[2] = locations[1].getX();
+            z[2] = locations[1].getZ();
+            x[3] = locations[1].getX();
+            z[3] = locations[0].getZ();
+        } else {
+            x = new double[locations.length];
+            z = new double[locations.length];
+            int index = 0;
+            for (Location pos : locations) {
+                x[index] = pos.getX();
+                z[index] = pos.getZ();
+                index++;
+            }
+        }
 
         AreaMarker m;
         m = skdynmap.getMarkerSet().createAreaMarker(markerid, name, false, world.getName(), x, z, false);

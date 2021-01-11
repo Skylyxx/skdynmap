@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class DynmapArea {
 
@@ -17,8 +18,7 @@ public class DynmapArea {
     private String markerid;
     private String description;
     private AreaStyle style;
-    private Location pos1;
-    private Location pos2;
+    private Location[] locations;
 
     public DynmapArea(String name, World world) {
         this.name = name;
@@ -30,15 +30,17 @@ public class DynmapArea {
 
         if (areas.get("areas." + markerid) != null) {
             String description = areas.getString("areas." + markerid + ".description");
-            Location pos1 = (Location) areas.get("areas." + markerid + ".location.pos1");
-            Location pos2 = (Location) areas.get("areas." + markerid + ".location.pos2");
+
+            ArrayList<Location> locationsArrayList = (ArrayList<Location>) skdynmap.getAreasConfig().get("areas." + markerid + ".location.locations");
+            Location[] locations = new Location[locationsArrayList.size()];
+            locations = locationsArrayList.toArray(locations);
+
             AreaStyle style = new AreaStyle(areas.getString("areas." + markerid + ".style.line.color"), areas.getDouble("areas." + markerid + ".style.line.opacity"), areas.getInt("areas." + markerid + ".style.line.weight"), areas.getString("areas." + markerid + ".style.fill.color"), areas.getDouble("areas." + markerid + ".style.fill.opacity"));
             if (description == null) {
                 description = "";
             }
             this.description = description;
-            this.pos1 = pos1;
-            this.pos2 = pos2;
+            this.locations = locations;
             this.style = style;
             this.markerid = (world.getName() + "_" + name.replaceAll(" ", "-")).toLowerCase();
         }
@@ -48,8 +50,7 @@ public class DynmapArea {
         this.name = null;
         this.world = null;
         this.description = null;
-        this.pos1 = null;
-        this.pos2 = null;
+        this.locations = null;
         this.style = null;
         this.markerid = null;
     }
@@ -92,26 +93,14 @@ public class DynmapArea {
         Util.saveAreas();
     }
 
-    @Nullable
-    public final Location getPos1() {
-        return pos1;
+    public Location[] getLocations() {
+        return locations;
     }
 
-    public void setPos1(Location pos1) {
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.pos1", pos1);
+    public void setLocations(Location[] locations) {
+        this.locations = locations;
+        skdynmap.getAreasConfig().set("areas." + markerid + ".location.locations", locations);
         Util.saveAreas();
-        this.pos1 = pos1;
-    }
-
-    @Nullable
-    public final Location getPos2() {
-        return pos2;
-    }
-
-    public void setPos2(Location pos2) {
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.pos2", pos2);
-        Util.saveAreas();
-        this.pos2 = pos2;
     }
 
     @Nullable
