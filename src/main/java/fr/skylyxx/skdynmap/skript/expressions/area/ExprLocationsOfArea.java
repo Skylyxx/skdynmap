@@ -96,7 +96,6 @@ public class ExprLocationsOfArea extends MultiplyPropertyExpression<Object, Loca
                 } else if (o instanceof AreaBuilder) {
                     ((AreaBuilder) o).setLocations(locations);
                 }
-                Util.log("Finished", Level.WARNING);
             }
         }
     }

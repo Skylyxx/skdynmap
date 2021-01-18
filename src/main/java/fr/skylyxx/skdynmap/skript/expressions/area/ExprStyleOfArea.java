@@ -62,7 +62,7 @@ public class ExprStyleOfArea extends SimplePropertyExpression<Object, AreaStyle>
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(AreaStyle.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override

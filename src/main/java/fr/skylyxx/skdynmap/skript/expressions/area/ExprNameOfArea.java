@@ -58,7 +58,7 @@ public class ExprNameOfArea extends SimplePropertyExpression<Object, String> {
         if (mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(String.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override

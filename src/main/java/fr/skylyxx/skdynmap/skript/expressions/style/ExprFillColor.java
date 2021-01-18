@@ -49,7 +49,7 @@ public class ExprFillColor extends SimplePropertyExpression<AreaStyle, String> {
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(String.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override

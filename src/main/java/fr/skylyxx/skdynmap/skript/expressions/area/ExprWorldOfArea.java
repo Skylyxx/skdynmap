@@ -59,7 +59,7 @@ public class ExprWorldOfArea extends SimplePropertyExpression<Object, World> {
         if (mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(World.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override

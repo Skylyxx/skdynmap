@@ -49,7 +49,7 @@ public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Number>
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(Number.class, Double.class, Integer.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override

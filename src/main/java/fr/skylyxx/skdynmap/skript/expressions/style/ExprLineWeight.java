@@ -49,7 +49,7 @@ public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Number> 
         if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(Double.class, Integer.class, Number.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override
