@@ -1,0 +1,51 @@
+#			  _____  _     _____
+#			 / ____|| |   |  __ \
+#			| (___  | | __| |  | | _   _  _ __   _ __ ___    __ _  _ __
+#			 \___ \ | |/ /| |  | || | | || '_ \ | '_ ` _ \  / _` || '_ \
+#			 ____) ||   < | |__| || |_| || | | || | | | | || (_| || |_) |
+#			|_____/ |_|\_\|_____/  \__, ||_| |_||_| |_| |_| \__,_|| .__/
+#			                        __/ |                         | |
+#			                       |___/                          |_|
+# === CONFIGURATION ===
+# This file is the configuration for the SkDynmap Addon, make sure to reload it after making changes ! (/skdynmap reload)
+
+# PLEASE DO NOT EDIT THIS VALUE !
+version: 1
+
+# === debug_mode ===
+# Set to true if you want to receive additional logs in the console
+debug_mode: false
+
+# === update_interval ===
+# This value is the time spent (in seconds) between each automatic rendering of areas.
+# Set to 0 if you don't want automatics renderings. If you disable automatics renderings,
+# you can manually rendering areas using this syntax: [make] render of (all areas|%dynmaprea%)
+# Any modifications to this setting will take effect after a server restart
+update_interval: 5
+
+# === default_marker_icon ===
+# Type here the name of the default marker icon you want.
+# List of built_in icons is available here: https://github.com/webbukkit/dynmap/wiki/Using_markers#marker_icons
+default_marker_icon: "pin"
+
+# === info_window ===
+# These parameters are the HTML in the popups when an area is clicked
+# with_desc: The HTML in the popups of areas with descriptions
+# without_desc: The HTML in the popups of areas without descriptions
+info_window:
+  with_desc: '<div class"infowindow"><span><strong>Name: </strong>%name%<br><strong>Description: </strong>%description%</div>'
+  without_desc: '<div class"infowindow"><span><strong>Name: </strong>%name%</div>'
+
+# === default_style ===
+# This section is the default style for areas,
+#   when they are created without any particular style assigned
+# Changing this value will affect only new areas created after the changement.
+# To change style of existing area, use the area.yml file, or the provided syntax
+default_style:
+  fill:
+    color: "#FF0000"
+    opacity: 0.35
+  line:
+    color: "#FF0000"
+    opacity: 0.8
+    weight: 3
