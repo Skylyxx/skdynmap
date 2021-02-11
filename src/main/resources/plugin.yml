@@ -1,9 +1,9 @@
-name: SkDynmapRework
+name: SkDynmap
 author: Skylyxx
 main: fr.skylyxx.skdynmap.SkDynmap
 version: @version@
 description: A Skript addon that let you interact with Dynmap
-website: https://github.com/Skylyxx/skdynmap
+website: https://skylyxx.github.io/skdynmap
 softdepend: [ Skript,dynmap ]
 commands:
   skdynmap:

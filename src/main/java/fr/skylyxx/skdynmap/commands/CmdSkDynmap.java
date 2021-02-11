@@ -29,7 +29,7 @@ public class CmdSkDynmap implements CommandExecutor {
                 sender.sendMessage("§c§m          §r " + prefix + "§r §c§m          §r");
                 sender.sendMessage("§6SkDynmap version: §e" + skDynmap.getDescription().getVersion());
                 sender.sendMessage("§6Author: §e" + skDynmap.getDescription().getAuthors().toString());
-                sender.sendMessage("§6Help/Documentation: §ehttps://github.com/SkylyxxFR/skDynmap");
+                sender.sendMessage("§6Documentation: §ehttps://github.com/Skylyxx/skdynmap#documentation");
             } else if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("update")) {
                 String update = null;
                 try {
@@ -43,7 +43,7 @@ public class CmdSkDynmap implements CommandExecutor {
                     if (update.equalsIgnoreCase("up-to-date")) {
                         sender.sendMessage(prefix + "§aGood ! You are running the latest version of SkDynmap !");
                     } else {
-                        sender.sendMessage(prefix + "§eSkDynmap v" + update + " is available ! Download it at §6" + skDynmap.getDescription().getWebsite() + "/releases §e!");
+                        sender.sendMessage(prefix + "§eSkDynmap v" + update + " is available ! Download it at §6" + skDynmap.getDescription().getWebsite() + " §e!");
                     }
                 }
             } else {

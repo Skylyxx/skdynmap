@@ -85,7 +85,7 @@ public class SkDynmap extends JavaPlugin {
         bufferedReader.close();
         String result = stringBuilder.toString();
         if (!result.equalsIgnoreCase(getDescription().getVersion())) {
-            getLogger().severe("You are not running the last stable version of SkDynmap. SkDynmap v" + result + " is available ! Download it at " + getDescription().getWebsite() + "/releases !");
+            getLogger().severe("You are not running the last stable version of SkDynmap. SkDynmap v" + result + " is available ! Download it at " + getDescription().getWebsite() + " !");
             return result;
         }
         getLogger().info("You are runing the latest version of SkDynmap !");
@@ -100,7 +100,7 @@ public class SkDynmap extends JavaPlugin {
             Files.deleteIfExists(configOldPath);
             configPath.toFile().renameTo(configOldPath.toFile());
             saveDefaultConfig();
-            getLogger().warning("You where using an old version of the config !");
+            getLogger().warning("You were using an old version of the config !");
             getLogger().warning("Old configuration has been saved as config.old.yml.");
             getLogger().warning("A new configuration has been generated.");
             getLogger().warning("Be careful ! All the config has the default values, please verify the config !");
