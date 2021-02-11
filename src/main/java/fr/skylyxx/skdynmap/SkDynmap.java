@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CmdSkDynmap;
 import fr.skylyxx.skdynmap.utils.Util;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -42,6 +43,7 @@ public class SkDynmap extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Metrics metrics = new Metrics(this,9273);
         INSTANCE = this;
         final PluginManager pm = Bukkit.getPluginManager();
         final Plugin SKRIPT = pm.getPlugin("Skript");
@@ -188,5 +190,8 @@ public class SkDynmap extends JavaPlugin {
 
     public MarkerSet getMarkerSet() {
         return markerSet;
+    }
+    public MarkerAPI getMarkerAPI() {
+        return markerAPI;
     }
 }
