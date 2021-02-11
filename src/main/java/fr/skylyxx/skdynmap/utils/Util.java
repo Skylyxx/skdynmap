@@ -106,7 +106,7 @@ public class Util {
         m.setLineStyle(areaStyle.getLineWeight(), areaStyle.getLineOpacity(), lineColor);
 
         String desc;
-        if (description == null || description.isBlank()) {
+        if (description == null || description.trim().isEmpty()) {
             desc = Config.INFO_WINDOW.WITHOUT_DESC;
             desc = desc.replaceAll("%name%", name);
         } else {
