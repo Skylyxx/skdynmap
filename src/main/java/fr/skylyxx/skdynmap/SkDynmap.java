@@ -3,8 +3,8 @@ package fr.skylyxx.skdynmap;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CmdSkDynmap;
+import fr.skylyxx.skdynmap.utils.Metrics;
 import fr.skylyxx.skdynmap.utils.Util;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -43,18 +43,18 @@ public class SkDynmap extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Metrics metrics = new Metrics(this,9273);
+        Metrics metrics = new Metrics(this, 9273);
         INSTANCE = this;
         final PluginManager pm = Bukkit.getPluginManager();
         final Plugin SKRIPT = pm.getPlugin("Skript");
         final Plugin DYNMAP = pm.getPlugin("dynmap");
         if (SKRIPT == null || !SKRIPT.isEnabled()) {
-            getLogger().severe("Skript dependency was not found ! Disabling...");
+            Logger.severe("Skript dependency was not found ! Disabling...");
             pm.disablePlugin(this);
             return;
         }
         if (DYNMAP == null || !DYNMAP.isEnabled()) {
-            getLogger().severe("Dynmap dependency was not found ! Disabling...");
+            Logger.severe("Dynmap dependency was not found ! Disabling...");
             pm.disablePlugin(this);
             return;
         }
@@ -87,10 +87,10 @@ public class SkDynmap extends JavaPlugin {
         bufferedReader.close();
         String result = stringBuilder.toString();
         if (!result.equalsIgnoreCase(getDescription().getVersion())) {
-            getLogger().severe("You are not running the last stable version of SkDynmap. SkDynmap v" + result + " is available ! Download it at " + getDescription().getWebsite() + " !");
+            Logger.severe("You are not running the last stable version of SkDynmap. SkDynmap v%s is available ! Download it at %s !", result, getDescription().getWebsite());
             return result;
         }
-        getLogger().info("You are runing the latest version of SkDynmap !");
+        Logger.info("You are runing the latest version of SkDynmap !");
         return "up-to-date";
     }
 
@@ -102,10 +102,10 @@ public class SkDynmap extends JavaPlugin {
             Files.deleteIfExists(configOldPath);
             configPath.toFile().renameTo(configOldPath.toFile());
             saveDefaultConfig();
-            getLogger().warning("You were using an old version of the config !");
-            getLogger().warning("Old configuration has been saved as config.old.yml.");
-            getLogger().warning("A new configuration has been generated.");
-            getLogger().warning("Be careful ! All the config has the default values, please verify the config !");
+            Logger.warning("You were using an old version of the config !");
+            Logger.warning("Old configuration has been saved as config.old.yml.");
+            Logger.warning("A new configuration has been generated.");
+            Logger.warning("Be careful ! All the config has the default values, please verify the config !");
         }
         Config.load();
 
@@ -129,18 +129,15 @@ public class SkDynmap extends JavaPlugin {
 
     public void saveStorageYaml() throws IOException {
         storageYaml.save(storageFile);
-        if(isDebugMode()) {
-            getLogger().info("File storage.yml was saved successfully");
-        }
+        Logger.info("File storage.yml was saved successfully", true);
+
     }
 
     public void reloadSkDynmapConfig() throws IOException, InvalidConfigurationException, IllegalAccessException {
         reloadConfig();
         Config.load();
         reloadStorageConfig();
-        if (isDebugMode()) {
-            getLogger().info("Config has been reloaded !");
-        }
+        Logger.info("Config has been reloaded !", true);
     }
 
     private boolean loadSkript() {
@@ -148,7 +145,7 @@ public class SkDynmap extends JavaPlugin {
         try {
             addon.loadClasses("fr.skylyxx.skdynmap.skript");
         } catch (IOException e) {
-            getLogger().severe("Unable to load SkDynmap's syntaxes ! Disabling...");
+            Logger.severe("Unable to load SkDynmap's syntaxes ! Disabling...");
             e.printStackTrace();
             return false;
         }
@@ -160,7 +157,7 @@ public class SkDynmap extends JavaPlugin {
         dynmapCommonAPI = (DynmapCommonAPI) dynmap;
         markerAPI = dynmapCommonAPI.getMarkerAPI();
         if (markerAPI == null) {
-            getLogger().severe("There was an error while loading MarkerAPI ! Disabling...");
+            Logger.severe("There was an error while loading MarkerAPI ! Disabling...");
             return false;
         }
         markerSet = markerAPI.getMarkerSet("skdynmap.markerset");
@@ -191,6 +188,7 @@ public class SkDynmap extends JavaPlugin {
     public MarkerSet getMarkerSet() {
         return markerSet;
     }
+
     public MarkerAPI getMarkerAPI() {
         return markerAPI;
     }

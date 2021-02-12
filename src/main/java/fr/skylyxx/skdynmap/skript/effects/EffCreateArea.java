@@ -5,6 +5,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import fr.skylyxx.skdynmap.Logger;
 import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -36,7 +37,7 @@ public class EffCreateArea extends Effect {
         try {
             areaBuilder.createArea();
         } catch (IOException | InvalidConfigurationException ioException) {
-            SkDynmap.getINSTANCE().getLogger().severe("Error while creating an area");
+            Logger.severe("Error while creating an area");
             ioException.printStackTrace();
         }
     }
