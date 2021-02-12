@@ -39,10 +39,10 @@ public class ScopeMakeArea extends EffectSection {
         boolean hasNameSetter = false;
         boolean hasLocSetter = false;
 
-        Pattern regexName1 = Pattern.compile("(last )?(generated |created )?area's name");
-        Pattern regexName2 = Pattern.compile("name of( last)?( generated| created)? area");
-        Pattern regexLoc1 = Pattern.compile("(last )?(generated |created )?area's location(s)?");
-        Pattern regexLoc2 = Pattern.compile("location(s)? of( last)?( generated| created)? area");
+        Pattern regexName1 = Pattern.compile("set (last )?(generated |created )?area's name to");
+        Pattern regexName2 = Pattern.compile("set name of( last)?( generated| created)? area to");
+        Pattern regexLoc1 = Pattern.compile("set (last )?(generated |created )?area's location(s)? to");
+        Pattern regexLoc2 = Pattern.compile("set location(s)? of( last)?( generated| created)? area to");
 
         for(Node node : topNode) {
             Matcher matcherName1 = regexName1.matcher(node.getKey());
