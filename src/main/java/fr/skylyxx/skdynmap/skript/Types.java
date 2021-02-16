@@ -3,13 +3,8 @@ package fr.skylyxx.skdynmap.skript;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.registrations.Classes;
-import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
-import fr.skylyxx.skdynmap.utils.types.AreaStyle;
-import fr.skylyxx.skdynmap.utils.types.DynmapArea;
-
-import javax.annotation.Nullable;
+import fr.skylyxx.skdynmap.utils.types.*;
 
 public class Types {
     static {
@@ -90,6 +85,62 @@ public class Types {
 
                     @Override
                     public AreaBuilder parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+
+        Classes.registerClass(new ClassInfo<>(MarkerBuilder.class, "markerbuilder")
+                .user("(dynmap )?marker(-| )?builder")
+                .name("SkDynmap MarkerBuilder")
+                .description("SkDynmap's MarkerBuilder object")
+                .since("1.1")
+                .parser(new Parser<MarkerBuilder>() {
+                    @Override
+                    public String toString(MarkerBuilder o, int flags) {
+                        return o.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(MarkerBuilder o) {
+                        return o.toString();
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public MarkerBuilder parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+
+        Classes.registerClass(new ClassInfo<>(DynmapMarker.class, "dynmapmarker")
+                .user("(dynmap )?marker")
+                .name("SkDynmap DynmapMarker")
+                .description("SkDynmap's DynmapMarker object")
+                .since("1.1")
+                .parser(new Parser<DynmapMarker>() {
+                    @Override
+                    public String toString(DynmapMarker o, int flags) {
+                        return o.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(DynmapMarker o) {
+                        return o.toString();
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public DynmapMarker parse(String s, ParseContext context) {
                         return null;
                     }
                 })

@@ -1,11 +1,12 @@
 package fr.skylyxx.skdynmap.utils;
 
 import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.Logger;
 import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.dynmap.markers.AreaMarker;
 
 import java.util.ArrayList;
@@ -29,31 +30,31 @@ public class Util {
      */
 
     public static DynmapArea getAreaByID(String id) {
+        if (!areaExist(id)) {
+            return null;
+        }
         return new DynmapArea(id);
     }
 
+    public static boolean areaExist(String id) {
+        return skDynmap.dynmapAreas.containsKey(id);
+    }
+
     public static boolean areaExist(DynmapArea area) {
-        return skDynmap.getStorageYaml().isSet("areas." + area.getId());
+        if (area == null) {
+            return false;
+        }
+        return skDynmap.dynmapAreas.containsKey(area.getId());
     }
 
     public static DynmapArea[] getAllAreas() {
-        ArrayList<DynmapArea> arrayList = new ArrayList<>();
-        ConfigurationSection configurationSection = skDynmap.getStorageYaml().getConfigurationSection("areas");
-        if (configurationSection == null) {
-            return new DynmapArea[0];
-        }
-        configurationSection.getKeys(false).forEach((n) -> arrayList.add(getAreaByID(n)));
-        DynmapArea[] areas = new DynmapArea[arrayList.size()];
-        areas = arrayList.toArray(areas);
-        return areas;
+        return skDynmap.dynmapAreas.values().toArray(new DynmapArea[0]);
     }
 
     public static void renderArea(DynmapArea area) {
         unRenderArea(area);
         if (!areaExist(area)) {
-            if (skDynmap.isDebugMode()) {
-                skDynmap.getLogger().warning("You are trying to render an instant area ! (" + area.getId() + ")");
-            }
+            Logger.warning("You are trying to render an instant area ! (%s)", true, area.getId());
             return;
         }
         String name = area.getName();
@@ -62,9 +63,7 @@ public class Util {
         AreaStyle areaStyle = area.getAreaStyle();
 
         if (name == null || locations == null || areaStyle == null) {
-            if (skDynmap.isDebugMode()) {
-                skDynmap.getLogger().warning("You are trying to render an area ! (" + area.getId() + ") but one or more of its values is/are null");
-            }
+            Logger.warning("You are trying to render an area ! (%s) but one or more of its values is/are null", true, area.getId());
             return;
         }
 
@@ -72,7 +71,7 @@ public class Util {
         double[] z;
 
         if (locations.length < 2) {
-            skDynmap.getLogger().warning("At least 2 locations are required to render areas ! Aborting...");
+            Logger.warning("At least 2 locations are required to render areas ! Aborting...");
             return;
         } else if (locations.length == 2) {
             x = new double[4];
@@ -119,28 +118,90 @@ public class Util {
     }
 
     public static void unRenderArea(DynmapArea area) {
-       skDynmap.getMarkerSet().getAreaMarkers().forEach(areaMarker -> {
-          if(areaMarker.getMarkerID().equalsIgnoreCase(area.getId())) {
-              areaMarker.deleteMarker();
-              return;
-          }
-       });
+        skDynmap.getMarkerSet().getAreaMarkers().forEach(areaMarker -> {
+            if (areaMarker.getMarkerID().equalsIgnoreCase(area.getId())) {
+                areaMarker.deleteMarker();
+                return;
+            }
+        });
     }
 
     public static void renderAllAreas() {
-        unRenderAll();
+        unRenderAllAreas();
         for (DynmapArea area : getAllAreas()) {
             renderArea(area);
         }
     }
 
-    public static void unRenderAll() {
+    public static void unRenderAllAreas() {
         skDynmap.getMarkerSet().getAreaMarkers().forEach(areaMarker -> areaMarker.deleteMarker());
-        skDynmap.getMarkerSet().getMarkers().forEach(marker -> marker.deleteMarker());
     }
 
     public static boolean isRendered(DynmapArea area) {
         return skDynmap.getMarkerSet().findAreaMarker(area.getId()) != null;
+    }
+
+    /*
+        MARKERS
+     */
+
+    public static DynmapMarker getMarkerByID(String id) {
+        if (!markerExist(id)) {
+            return null;
+        }
+        return new DynmapMarker(id);
+    }
+
+    public static boolean markerExist(String id) {
+        return skDynmap.dynmapMarkers.containsKey(id);
+    }
+
+    public static boolean markerExist(DynmapMarker marker) {
+        if (marker == null) {
+            return false;
+        }
+        return skDynmap.dynmapMarkers.containsKey(marker.getId());
+    }
+
+    public static DynmapMarker[] getAllMarkers() {
+
+        return skDynmap.dynmapMarkers.values().toArray(new DynmapMarker[0]);
+    }
+
+    public static void unRenderMarker(DynmapMarker dynmapMarker) {
+        skDynmap.getMarkerSet().getMarkers().forEach(marker -> {
+            if (marker.getMarkerID().equalsIgnoreCase(dynmapMarker.getId())) {
+                marker.deleteMarker();
+                return;
+            }
+        });
+    }
+
+    public static void renderAllMarkers() {
+        unRenderAllMarkers();
+        for (DynmapMarker marker : getAllMarkers()) {
+            renderMarker(marker);
+        }
+    }
+
+    public static void renderMarker(DynmapMarker marker) {
+        if (!markerExist(marker)) {
+            return;
+        }
+        SkDynmap.getINSTANCE().getMarkerSet().createMarker(
+                marker.getId(),
+                marker.getName(),
+                marker.getLocation().getWorld().getName(),
+                marker.getLocation().getX(),
+                marker.getLocation().getY(),
+                marker.getLocation().getZ(),
+                marker.getMarkerIcon(),
+                false
+        );
+    }
+
+    public static void unRenderAllMarkers() {
+        skDynmap.getMarkerSet().getMarkers().forEach(marker -> marker.deleteMarker());
     }
 
 }

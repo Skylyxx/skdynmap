@@ -3,11 +3,11 @@ package fr.skylyxx.skdynmap.skript.effects;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
@@ -16,32 +16,40 @@ public class EffMakeRender extends Effect {
 
     static {
         Skript.registerEffect(EffMakeRender.class,
-                "[make] render [of] %dynmapareas%"
+                "[make] render [of] %dynmapareas/dynmapmarkers%",
+                "[make] global render [of [sk]dynmap]"
         );
     }
 
-    private Expression<DynmapArea> dynmapAreaExpression;
+    private Expression<Object> itemExpr;
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        dynmapAreaExpression = (Expression<DynmapArea>) exprs[0];
+        if (matchedPattern == 0) {
+            itemExpr = (Expression<Object>) exprs[0];
+        }
         return true;
     }
 
     @Override
     protected void execute(Event e) {
-        if(dynmapAreaExpression == null) {
+        if (itemExpr == null) {
             Util.renderAllAreas();
+            Util.renderAllMarkers();
             return;
         }
-        for(DynmapArea area : dynmapAreaExpression.getAll(e)) {
-            Util.renderArea(area);
+        for (Object o : itemExpr.getAll(e)) {
+            if (o instanceof DynmapArea) {
+                Util.renderArea((DynmapArea) o);
+            } else if (o instanceof DynmapMarker) {
+                Util.renderMarker((DynmapMarker) o);
+            }
         }
     }
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "make render of " + (dynmapAreaExpression != null ? dynmapAreaExpression.toString(e, debug) : "all areas");
+        return "make render of " + itemExpr.toString(e, debug);
     }
 
 }
