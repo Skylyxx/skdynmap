@@ -31,6 +31,9 @@ public class EffDeleteArea extends Effect {
     @Override
     protected void execute(Event e) {
         DynmapArea dynmapArea = dynmapAreaExpression.getSingle(e);
+        if (!Util.areaExist(dynmapArea)) {
+            return;
+        }
         Util.unRenderArea(dynmapArea);
         dynmapArea.deleteArea();
 
