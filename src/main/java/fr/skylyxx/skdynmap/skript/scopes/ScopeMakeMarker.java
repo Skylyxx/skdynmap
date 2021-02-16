@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Name("Make area")
+@Name("Make Marker")
 @Description("This is a scope that allows you to create markers easily")
 @Since("1.1")
 @Examples("command /make:\n" +
