@@ -5,6 +5,8 @@ import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CmdSkDynmap;
 import fr.skylyxx.skdynmap.utils.Metrics;
 import fr.skylyxx.skdynmap.utils.Util;
+import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -24,6 +26,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class SkDynmap extends JavaPlugin {
 
@@ -36,6 +39,9 @@ public class SkDynmap extends JavaPlugin {
     public DynmapCommonAPI dynmapCommonAPI;
     public MarkerAPI markerAPI;
     public MarkerSet markerSet;
+
+    public HashMap<String, DynmapArea> dynmapAreas = new HashMap<String, DynmapArea>();
+    public HashMap<String, DynmapMarker> dynmapMarkers = new HashMap<String, DynmapMarker>();
 
     public static SkDynmap getINSTANCE() {
         return INSTANCE;
@@ -66,12 +72,21 @@ public class SkDynmap extends JavaPlugin {
         if (!(loadSkript() && loadDynmap())) {
             pm.disablePlugin(this);
         }
-
+        try {
+            reloadStorageConfig();
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
         PluginCommand skDynmapCommand = getCommand("skdynmap");
         skDynmapCommand.setExecutor(new CmdSkDynmap());
         skDynmapCommand.setPermission("skdynmap.use");
         skDynmapCommand.setPermissionMessage("&cSorry but you don't have the required permission !");
 
+    }
+
+    @Override
+    public void onDisable() {
+        saveStorageYaml();
     }
 
     @Nullable
@@ -114,22 +129,47 @@ public class SkDynmap extends JavaPlugin {
             storageFile.getParentFile().mkdirs();
             storageFile.createNewFile();
         }
-        reloadStorageConfig();
     }
 
 
     public void reloadStorageConfig() throws IOException, InvalidConfigurationException {
-        storageYaml = new CustomYamlConfig(storageFile);
+        storageYaml = new CustomYamlConfig();
         storageYaml.load(storageFile);
+        dynmapAreas.clear();
+        if (storageYaml.isSet("areas.")) {
+            storageYaml.getConfigurationSection("areas").getKeys(false).forEach(s -> {
+                DynmapArea area = new DynmapArea(s);
+                dynmapAreas.put(s, area);
+            });
+        }
+        dynmapMarkers.clear();
+        if (storageYaml.isSet("markers.")) {
+            storageYaml.getConfigurationSection("markers").getKeys(false).forEach(s -> {
+                DynmapMarker marker = new DynmapMarker(s);
+                dynmapMarkers.put(s, marker);
+            });
+        }
     }
 
     public CustomYamlConfig getStorageYaml() {
         return storageYaml;
     }
 
-    public void saveStorageYaml() throws IOException {
-        storageYaml.save(storageFile);
-        Logger.info("File storage.yml was saved successfully", true);
+    public void saveStorageYaml() {
+        storageYaml = new CustomYamlConfig();
+        dynmapAreas.forEach((s, dynmapArea) -> {
+            storageYaml.setArea("areas." + s, dynmapArea);
+        });
+        dynmapMarkers.forEach((s, dynmapMarker) -> {
+            storageYaml.setMarker("markers." + s, dynmapMarker);
+        });
+        try {
+            storageYaml.save(storageFile);
+            Logger.info("File storage.yml was saved successfully", true);
+        } catch (IOException e) {
+            Logger.severe("There was an error while saving storage.yml !");
+            e.printStackTrace();
+        }
 
     }
 
@@ -175,6 +215,7 @@ public class SkDynmap extends JavaPlugin {
                 @Override
                 public void run() {
                     Util.renderAllAreas();
+                    Util.renderAllMarkers();
                 }
             }, 100, taskInterval * 20);
         }

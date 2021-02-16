@@ -1,7 +1,6 @@
 package fr.skylyxx.skdynmap.utils.types;
 
 import fr.skylyxx.skdynmap.Config;
-import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 
@@ -69,9 +68,6 @@ public class AreaBuilder {
             setId(getName().toLowerCase().replaceAll(" ", "-") + "_" + getLocations()[0].getWorld().getName().toLowerCase());
         }
         DynmapArea area = new DynmapArea(getId(), getName(), getDescription(), getLocations(), getAreaStyle());
-        SkDynmap.getINSTANCE().getStorageYaml().setArea("areas." + getId(), area);
-        SkDynmap.getINSTANCE().saveStorageYaml();
-        SkDynmap.getINSTANCE().reloadStorageConfig();
         return area;
     }
 

@@ -3,9 +3,7 @@ package fr.skylyxx.skdynmap.utils.types;
 import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.Location;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 public class DynmapArea {
 
@@ -22,6 +20,8 @@ public class DynmapArea {
         this.desc = desc;
         this.locations = locations;
         this.areaStyle = areaStyle;
+
+        skDynmap.dynmapAreas.put(id, this);
     }
 
     private AreaStyle areaStyle;
@@ -32,10 +32,12 @@ public class DynmapArea {
         this.desc = areaBuilder.getDescription();
         this.locations = areaBuilder.getLocations();
         this.areaStyle = areaBuilder.getAreaStyle();
+
+        skDynmap.dynmapAreas.put(id, this);
     }
 
     public DynmapArea(String id) {
-        DynmapArea area = SkDynmap.getINSTANCE().getStorageYaml().getArea("areas." + id);
+        DynmapArea area = skDynmap.getStorageYaml().getArea("areas." + id);
         if(area == null) {
             return;
         }
@@ -63,51 +65,19 @@ public class DynmapArea {
     }
 
     public void setId(String id) {
-        String oldId = this.id;
         this.id = id;
-        try {
-            skDynmap.getStorageYaml().rename("areas." + oldId, "areas." + id);
-            skDynmap.saveStorageYaml();
-        } catch (ExecutionException | InterruptedException | IOException e ) {
-            e.printStackTrace();
-        }
-
     }
     public void setName(String name) {
         this.name = name;
-        skDynmap.getStorageYaml().set("areas." + id + ".name", name);
-        try {
-            skDynmap.saveStorageYaml();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     public void setDescription(String desc) {
         this.desc = desc;
-        skDynmap.getStorageYaml().set("areas." + id + ".description", desc);
-        try {
-            skDynmap.saveStorageYaml();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     public void setLocations(Location[] locations) {
         this.locations = locations;
-        skDynmap.getStorageYaml().set("areas." + id + ".locations", locations);
-        try {
-            skDynmap.saveStorageYaml();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     public void setAreaStyle(AreaStyle areaStyle) {
         this.areaStyle = areaStyle;
-        skDynmap.getStorageYaml().setStyle("areas." + id + ".style", areaStyle);
-        try {
-            skDynmap.saveStorageYaml();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -122,11 +92,6 @@ public class DynmapArea {
     }
 
     public void deleteArea() {
-        skDynmap.getStorageYaml().set("areas." + getId(), null);
-        try {
-            skDynmap.saveStorageYaml();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        skDynmap.dynmapAreas.remove(getId());
     }
 }
