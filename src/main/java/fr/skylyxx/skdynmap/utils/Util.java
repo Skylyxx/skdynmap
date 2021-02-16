@@ -77,14 +77,14 @@ public class Util {
         } else if (locations.length == 2) {
             x = new double[4];
             z = new double[4];
-            int index = 0;
-            for (int xIndex = 0; xIndex < 2; xIndex++) {
-                for (int zIndex = 0; zIndex < 2; zIndex++) {
-                    x[index] = locations[xIndex].getX();
-                    z[index] = locations[zIndex].getZ();
-                    index++;
-                }
-            }
+            x[0] = locations[0].getX();
+            z[0] = locations[0].getZ();
+            x[1] = locations[0].getX();
+            z[1] = locations[1].getZ();
+            x[2] = locations[1].getX();
+            z[2] = locations[1].getZ();
+            x[3] = locations[1].getX();
+            z[3] = locations[0].getZ();
         } else {
             x = new double[locations.length];
             z = new double[locations.length];
