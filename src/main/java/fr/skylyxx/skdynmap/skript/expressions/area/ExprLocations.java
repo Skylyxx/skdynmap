@@ -1,7 +1,6 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.MultiplyPropertyExpression;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
@@ -15,7 +14,7 @@ public class ExprLocations extends MultiplyPropertyExpression<Object, Location> 
 
     static {
         register(ExprLocations.class, Location.class,
-                "location[s]",
+                "locations",
                 "dynmaparea/areabuilder"
         );
     }

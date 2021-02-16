@@ -1,10 +1,12 @@
-package fr.skylyxx.skdynmap.skript.expressions.area;
+package fr.skylyxx.skdynmap.skript.expressions;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
+import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
@@ -14,7 +16,7 @@ public class ExprId extends SimplePropertyExpression<Object, String> {
     static {
         register(ExprId.class, String.class,
                 "id",
-                "dynmaparea/areabuilder"
+                "dynmaparea/areabuilder/dynmapmarker/markerbuilder"
         );
     }
 
@@ -23,8 +25,12 @@ public class ExprId extends SimplePropertyExpression<Object, String> {
     public String convert(Object o) {
         if(o instanceof DynmapArea) {
             return ((DynmapArea) o).getId();
-        } else if(o instanceof AreaBuilder) {
+        } else if (o instanceof AreaBuilder) {
             return ((AreaBuilder) o).getId();
+        } else if (o instanceof DynmapMarker) {
+            return ((DynmapMarker) o).getId();
+        } else if (o instanceof MarkerBuilder) {
+            return ((MarkerBuilder) o).getId();
         }
         return null;
     }
@@ -53,8 +59,12 @@ public class ExprId extends SimplePropertyExpression<Object, String> {
         for(Object o : getExpr().getArray(e)) {
             if(o instanceof DynmapArea) {
                 ((DynmapArea) o).setId((String) delta[0]);
-            } else if(o instanceof AreaBuilder) {
+            } else if (o instanceof AreaBuilder) {
                 ((AreaBuilder) o).setId((String) delta[0]);
+            } else if (o instanceof DynmapMarker) {
+                ((DynmapMarker) o).setId((String) delta[0]);
+            } else if (o instanceof MarkerBuilder) {
+                ((MarkerBuilder) o).setId((String) delta[0]);
             }
         }
     }
