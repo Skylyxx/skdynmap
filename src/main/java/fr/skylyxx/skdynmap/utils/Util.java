@@ -8,14 +8,15 @@ import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Location;
 import org.dynmap.markers.AreaMarker;
+import org.dynmap.markers.GenericMarker;
 
 import java.util.ArrayList;
 
 public class Util {
 
-    private static SkDynmap skDynmap = SkDynmap.getINSTANCE();
+    private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
 
-    private static ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
+    private static final ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
     /*
         OTHER
      */
@@ -76,33 +77,28 @@ public class Util {
         } else if (locations.length == 2) {
             x = new double[4];
             z = new double[4];
-            x[0] = locations[0].getX();
-            z[0] = locations[0].getZ();
-            x[1] = locations[0].getX();
-            z[1] = locations[1].getZ();
-            x[2] = locations[1].getX();
-            z[2] = locations[1].getZ();
-            x[3] = locations[1].getX();
-            z[3] = locations[0].getZ();
+            int index = 0;
+            for (int xIndex = 0; xIndex < 2; xIndex++) {
+                for (int zIndex = 0; zIndex < 2; zIndex++) {
+                    x[index] = locations[xIndex].getX();
+                    z[index] = locations[zIndex].getZ();
+                    index++;
+                }
+            }
         } else {
             x = new double[locations.length];
             z = new double[locations.length];
-            int index = 0;
-            for (Location pos : locations) {
-                x[index] = pos.getX();
-                z[index] = pos.getZ();
-                index++;
+            for (int index = 0; index < locations.length; index++) {
+                x[index] = locations[index].getX();
+                z[index] = locations[index].getZ();
             }
         }
 
-        AreaMarker m;
-        m = skDynmap.getMarkerSet().createAreaMarker(area.getId(), name, false, locations[0].getWorld().getName(), x, z, false);
-        m.setLabel(name);
+        final AreaMarker m = skDynmap.getMarkerSet().createAreaMarker(area.getId(), name, false, locations[0].getWorld().getName(), x, z, false);
 
-        int fillColor = hexToInt(areaStyle.getFillColor());
-        m.setFillStyle(areaStyle.getFillOpacity(), fillColor);
-        int lineColor = hexToInt(areaStyle.getLineColor());
-        m.setLineStyle(areaStyle.getLineWeight(), areaStyle.getLineOpacity(), lineColor);
+        m.setLabel(name);
+        m.setFillStyle(areaStyle.getFillOpacity(), hexToInt(areaStyle.getFillColor()));
+        m.setLineStyle(areaStyle.getLineWeight(), areaStyle.getLineOpacity(), hexToInt(areaStyle.getLineColor()));
 
         String desc;
         if (description == null || description.trim().isEmpty()) {
@@ -118,12 +114,9 @@ public class Util {
     }
 
     public static void unRenderArea(DynmapArea area) {
-        skDynmap.getMarkerSet().getAreaMarkers().forEach(areaMarker -> {
-            if (areaMarker.getMarkerID().equalsIgnoreCase(area.getId())) {
-                areaMarker.deleteMarker();
-                return;
-            }
-        });
+        skDynmap.getMarkerSet().getAreaMarkers().stream()
+                .filter(areaMarker -> areaMarker.getMarkerID().equalsIgnoreCase(area.getId()))
+                .forEach(GenericMarker::deleteMarker);
     }
 
     public static void renderAllAreas() {
@@ -134,7 +127,7 @@ public class Util {
     }
 
     public static void unRenderAllAreas() {
-        skDynmap.getMarkerSet().getAreaMarkers().forEach(areaMarker -> areaMarker.deleteMarker());
+        skDynmap.getMarkerSet().getAreaMarkers().forEach(GenericMarker::deleteMarker);
     }
 
     public static boolean isRendered(DynmapArea area) {
@@ -169,12 +162,9 @@ public class Util {
     }
 
     public static void unRenderMarker(DynmapMarker dynmapMarker) {
-        skDynmap.getMarkerSet().getMarkers().forEach(marker -> {
-            if (marker.getMarkerID().equalsIgnoreCase(dynmapMarker.getId())) {
-                marker.deleteMarker();
-                return;
-            }
-        });
+        skDynmap.getMarkerSet().getMarkers().stream()
+                .filter(marker -> marker.getMarkerID().equalsIgnoreCase(dynmapMarker.getId()))
+                .forEach(GenericMarker::deleteMarker);
     }
 
     public static void renderAllMarkers() {
@@ -201,7 +191,7 @@ public class Util {
     }
 
     public static void unRenderAllMarkers() {
-        skDynmap.getMarkerSet().getMarkers().forEach(marker -> marker.deleteMarker());
+        skDynmap.getMarkerSet().getMarkers().forEach(GenericMarker::deleteMarker);
     }
 
 }

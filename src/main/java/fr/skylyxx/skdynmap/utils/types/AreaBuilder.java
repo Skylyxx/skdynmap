@@ -75,8 +75,7 @@ public class AreaBuilder {
         if (getId() == null) {
             setId(getName().toLowerCase().replaceAll(" ", "-") + "_" + getLocations()[0].getWorld().getName().toLowerCase());
         }
-        DynmapArea area = new DynmapArea(getId(), getName(), getDescription(), getLocations(), getAreaStyle());
-        return area;
+        return new DynmapArea(getId(), getName(), getDescription(), getLocations(), getAreaStyle());
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Config {
     public static String DEFAULT_MARKER_ICON;
     public static InfoWindow INFO_WINDOW;
     public static AreaStyle DEFAULT_STYLE;
-    private static FileConfiguration configFile = SkDynmap.getINSTANCE().getConfig();
+    private static final FileConfiguration configFile = SkDynmap.getINSTANCE().getConfig();
 
     public static void load() throws IllegalAccessException {
         for (Field field : Config.class.getFields()) {
