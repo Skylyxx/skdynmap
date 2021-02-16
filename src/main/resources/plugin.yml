@@ -3,9 +3,10 @@ author: Skylyxx
 main: fr.skylyxx.skdynmap.SkDynmap
 version: @version@
 description: A Skript addon that let you interact with Dynmap
-website: https://github.com/Skylyxx/skdynmap
-depend: [Skript,dynmap]
+website: https://skylyxx.github.io/skdynmap
+softdepend: [ Skript,dynmap ]
 commands:
   skdynmap:
-    permission: skdynmap.use
-    description: Main command of SkDynmap
+    description: SkDynmap management command
+  test:
+    description: test

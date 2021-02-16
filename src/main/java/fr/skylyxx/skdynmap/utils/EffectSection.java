@@ -1,4 +1,4 @@
-package fr.skylyxx.skdynmap.utils.skript;
+package fr.skylyxx.skdynmap.utils;
 
 import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
@@ -8,7 +8,6 @@ import ch.njol.skript.lang.*;
 import ch.njol.skript.log.*;
 import ch.njol.util.Kleenean;
 import ch.njol.util.StringUtils;
-import fr.skylyxx.skdynmap.utils.ReflectionUtils;
 import org.bukkit.event.Event;
 
 import java.util.ArrayList;

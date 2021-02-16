@@ -3,7 +3,7 @@ Class from Olyno's SkRon repository
 Link: https://github.com/Olyno/Skron/blob/master/src/main/java/com/olyno/skron/util/MultiplePropertyExpression.java
  */
 
-package fr.skylyxx.skdynmap.utils.skript;
+package fr.skylyxx.skdynmap.utils;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;

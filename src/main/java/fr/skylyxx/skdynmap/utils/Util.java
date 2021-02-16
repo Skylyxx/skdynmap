@@ -1,287 +1,197 @@
 package fr.skylyxx.skdynmap.utils;
 
-import ch.njol.skript.Skript;
+import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.Logger;
 import fr.skylyxx.skdynmap.SkDynmap;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import fr.skylyxx.skdynmap.utils.types.AreaStyle;
+import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.dynmap.markers.AreaMarker;
+import org.dynmap.markers.GenericMarker;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
-
 
 public class Util {
 
-    public static ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
-    private static SkDynmap skdynmap = SkDynmap.getInstance();
-    private static YamlConfiguration targetToSave;
+    private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
 
-    public static void log(String message, Level level) {
-        if (level == Level.SEVERE) {
-            skdynmap.getLogger().severe(message);
-        } else if (level == Level.WARNING) {
-            skdynmap.getLogger().warning(message);
-        } else {
-            skdynmap.getLogger().info(message);
-        }
-    }
+    private static final ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
+    /*
+        OTHER
+     */
 
-    public static String getPrefix() {
-        return ChatColor.GOLD + "[SkDynmap] ";
-    }
-
-    public static AreaStyle getDefaultStyle() {
-        return new AreaStyle(skdynmap.getConfig().getString("default-style.line.color"), skdynmap.getConfig().getDouble("default-style.line.opacity"), skdynmap.getConfig().getInt("default-style.line.weight"), skdynmap.getConfig().getString("default-style.fill.color"), skdynmap.getConfig().getDouble("default-style.fill.opacity"));
-    }
-
-
-    public static int getHexInt(String hex) {
+    public static int hexToInt(String hex) {
         hex = hex.replace("#", "");
         return Integer.parseInt(hex, 16);
     }
 
-    public static boolean copyConf(final YamlConfiguration sourceConfig, final String sourcePath, final YamlConfiguration targetConfig, final String targetPath) {
-        try {
-            final Object value = sourceConfig.get(sourcePath);
-            if (!(value instanceof ConfigurationSection)) {
-                //System.err.println("COPYING " + sourceConfig.getName() + ":" + sourcePath + " TO " + targetConfig.getName() + ":" + targetPath);
-                targetConfig.set(targetPath, value);
-                targetToSave = targetConfig;
-                return true;
-            }
-            for (final String key : ((ConfigurationSection) value).getKeys(false)) {
-                copyConf(sourceConfig, sourcePath + "." + key, targetConfig, targetPath + "." + key);
-            }
-            return true;
-        } catch (Exception e) {
-            System.err.println("ERROR COPYING " + sourceConfig.getName() + ":" + sourcePath + " TO " + targetConfig.getName() + ":" + targetPath);
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean runCopy(final YamlConfiguration sourceConfig, final String sourcePath, final YamlConfiguration targetConfig, final String targetPath) {
-        try {
-            final ExecutorService executor = Executors.newSingleThreadExecutor();
-            final Future<Boolean> result = executor.submit(() -> copyConf(sourceConfig, sourcePath, targetConfig, targetPath));
-            executor.shutdown();
-            final boolean botResult = result.get();
-            targetToSave.save(skdynmap.getAreasFile());
-            skdynmap.reloadAreasConfig();
-            return botResult;
-        } catch (InterruptedException | ExecutionException | IOException e) {
-            return false;
-        }
-    }
-
-    public static String formatMarkerID(String name, World world) {
-        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
-        markerid = markerid.toLowerCase();
-        return markerid;
-    }
-
     /*
-        Area Management
+        AREA
      */
 
-    public static void saveAreas() {
-        try {
-            skdynmap.getAreasConfig().save(skdynmap.getAreasFile());
-            if (skdynmap.getDebugMode()) {
-                log("File areas.yml saved succesffully !", Level.INFO);
-            }
-        } catch (IOException e) {
-            if (skdynmap.getDebugMode()) {
-                log("Unable to save file areas.yml !", Level.SEVERE);
-            }
-            e.printStackTrace();
+    public static DynmapArea getAreaByID(String id) {
+        if (!areaExist(id)) {
+            return null;
         }
+        return new DynmapArea(id);
     }
 
-    public static void createArea(World world, String name, String description, Location pos1, Location pos2, AreaStyle style) {
-        String markerid = formatMarkerID(name, world);
+    public static boolean areaExist(String id) {
+        return skDynmap.dynmapAreas.containsKey(id);
+    }
 
-        if (areaExist(markerid)) {
-            Skript.error("You are trying to create an area but she already exist ! Aborting...");
+    public static boolean areaExist(DynmapArea area) {
+        if (area == null) {
+            return false;
+        }
+        return skDynmap.dynmapAreas.containsKey(area.getId());
+    }
+
+    public static DynmapArea[] getAllAreas() {
+        return skDynmap.dynmapAreas.values().toArray(new DynmapArea[0]);
+    }
+
+    public static void renderArea(DynmapArea area) {
+        unRenderArea(area);
+        if (!areaExist(area)) {
+            Logger.warning("You are trying to render an instant area ! (%s)", true, area.getId());
+            return;
+        }
+        String name = area.getName();
+        String description = area.getDescription();
+        Location[] locations = area.getLocations();
+        AreaStyle areaStyle = area.getAreaStyle();
+
+        if (name == null || locations == null || areaStyle == null) {
+            Logger.warning("You are trying to render an area ! (%s) but one or more of its values is/are null", true, area.getId());
             return;
         }
 
-        skdynmap.getAreasConfig().set("areas." + markerid + ".name", name);
-        if (description != null) {
-            skdynmap.getAreasConfig().set("areas." + markerid + ".description", description);
-        }
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.world", world.getName());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.pos1", pos1);
-        skdynmap.getAreasConfig().set("areas." + markerid + ".location.pos2", pos2);
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.color", style.getFillColor());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.opacity", style.getFillOpacity());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.color", style.getLineColor());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.opacity", style.getLineOpacity());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.weight", style.getLineWeight());
+        double[] x;
+        double[] z;
 
-        saveAreas();
-
-    }
-
-    public static void createArea(AreaBuilder areaBuilder) {
-        createArea(areaBuilder.getWorld(), areaBuilder.getName(), areaBuilder.getDescription(), areaBuilder.getPos1(), areaBuilder.getPos2(), areaBuilder.getStyle());
-    }
-
-    public static void deleteArea(String markerid) {
-        markerid = markerid.toLowerCase();
-
-        if (!areaExist(markerid)) {
-            Skript.error("You are trying to delete an inexistant area ! Aborting...");
+        if (locations.length < 2) {
+            Logger.warning("At least 2 locations are required to render areas ! Aborting...");
             return;
-        }
-
-        skdynmap.getAreasConfig().set("areas." + markerid, null);
-        saveAreas();
-    }
-
-    public static void renderArea(String markerid) {
-        markerid = markerid.toLowerCase();
-
-        if (!areaExist(markerid)) {
-            Skript.error("You are trying to render an inexistant area ! Aborting...");
-            return;
-        }
-
-        Location pos1 = (Location) skdynmap.getAreasConfig().get("areas." + markerid + ".location.pos1");
-        Location pos2 = (Location) skdynmap.getAreasConfig().get("areas." + markerid + ".location.pos2");
-        World world = Bukkit.getWorld(skdynmap.getAreasConfig().getString("areas." + markerid + ".location.world"));
-        String name = skdynmap.getAreasConfig().getString("areas." + markerid + ".name");
-        AreaStyle style = new AreaStyle(skdynmap.getAreasConfig().getString("areas." + markerid + ".style.line.color"), skdynmap.getAreasConfig().getDouble("areas." + markerid + ".style.line.opacity"), skdynmap.getAreasConfig().getInt("areas." + markerid + ".style.line.weight"), skdynmap.getAreasConfig().getString("areas." + markerid + ".style.fill.color"), skdynmap.getAreasConfig().getDouble("areas." + markerid + ".style.fill.opacity"));
-
-        if (pos1 == null || pos2 == null || world == null || name == null || style == null) {
-            Skript.error("You are trying to rendering an area but one (ore more) of its value(s) is/are null ! Aborting...");
-            return;
-        }
-
-
-        double[] x = new double[4];
-        double[] z = new double[4];
-
-        x[0] = pos1.getX();
-        z[0] = pos1.getZ();
-        x[1] = pos1.getX();
-        z[1] = pos2.getZ();
-        x[2] = pos2.getX();
-        z[2] = pos2.getZ();
-        x[3] = pos2.getX();
-        z[3] = pos1.getZ();
-
-        AreaMarker m;
-        m = skdynmap.getMarkerSet().createAreaMarker(markerid, name, false, world.getName(), x, z, false);
-        //m.setCornerLocations(x, z);
-        m.setLabel(name);
-
-        //style
-        int fillColor = getHexInt(style.getFillColor());
-        m.setFillStyle(style.getFillOpacity(), fillColor);
-
-        int lineColor = getHexInt(style.getLineColor());
-        m.setLineStyle(style.getLineWeight(), style.getLineOpacity(), Integer.parseInt(style.getLineColor().substring(1), 16));
-
-        //popup
-        if (!skdynmap.getAreasConfig().isSet("areas." + markerid + ".description")) {
-            String desc = skdynmap.DEF_INFOWINDOW_WITHOUTDESC;
-            desc = desc.replaceAll("%name%", name);
-            m.setDescription(desc);
+        } else if (locations.length == 2) {
+            x = new double[4];
+            z = new double[4];
+            x[0] = locations[0].getX();
+            z[0] = locations[0].getZ();
+            x[1] = locations[0].getX();
+            z[1] = locations[1].getZ();
+            x[2] = locations[1].getX();
+            z[2] = locations[1].getZ();
+            x[3] = locations[1].getX();
+            z[3] = locations[0].getZ();
         } else {
-            String description = skdynmap.getAreasConfig().getString("areas." + markerid + ".description");
-            String desc = skdynmap.DEF_INFOWINDOW_WITHDESC;
+            x = new double[locations.length];
+            z = new double[locations.length];
+            for (int index = 0; index < locations.length; index++) {
+                x[index] = locations[index].getX();
+                z[index] = locations[index].getZ();
+            }
+        }
+
+        final AreaMarker m = skDynmap.getMarkerSet().createAreaMarker(area.getId(), name, false, locations[0].getWorld().getName(), x, z, false);
+
+        m.setLabel(name);
+        m.setFillStyle(areaStyle.getFillOpacity(), hexToInt(areaStyle.getFillColor()));
+        m.setLineStyle(areaStyle.getLineWeight(), areaStyle.getLineOpacity(), hexToInt(areaStyle.getLineColor()));
+
+        String desc;
+        if (description == null || description.trim().isEmpty()) {
+            desc = Config.INFO_WINDOW.WITHOUT_DESC;
+            desc = desc.replaceAll("%name%", name);
+        } else {
+            desc = Config.INFO_WINDOW.WITH_DESC;
             desc = desc.replaceAll("%name%", name);
             desc = desc.replaceAll("%description%", description);
-            m.setDescription(desc);
         }
-
+        m.setDescription(desc);
         renderedAreas.add(m);
-
     }
 
-    public static void unRenderAllAreas() {
-        Iterator<AreaMarker> it = renderedAreas.iterator();
-        while (it.hasNext()) {
-            AreaMarker area = it.next();
-            area.deleteMarker();
-            it.remove();
-        }
+    public static void unRenderArea(DynmapArea area) {
+        skDynmap.getMarkerSet().getAreaMarkers().stream()
+                .filter(areaMarker -> areaMarker.getMarkerID().equalsIgnoreCase(area.getId()))
+                .forEach(GenericMarker::deleteMarker);
     }
 
     public static void renderAllAreas() {
         unRenderAllAreas();
-        ConfigurationSection areasSection = skdynmap.getAreasConfig().getConfigurationSection("areas");
-
-        if (areasSection != null) {
-            areasSection.getKeys(false).forEach((n) -> renderArea(n));
+        for (DynmapArea area : getAllAreas()) {
+            renderArea(area);
         }
     }
 
-    @Nullable
-    public static DynmapArea getArea(String name, World world) {
-        if (Util.areaExist(name, world)) {
-            return new DynmapArea(name, world);
-        } else {
+    public static void unRenderAllAreas() {
+        skDynmap.getMarkerSet().getAreaMarkers().forEach(GenericMarker::deleteMarker);
+    }
+
+    public static boolean isRendered(DynmapArea area) {
+        return skDynmap.getMarkerSet().findAreaMarker(area.getId()) != null;
+    }
+
+    /*
+        MARKERS
+     */
+
+    public static DynmapMarker getMarkerByID(String id) {
+        if (!markerExist(id)) {
             return null;
         }
+        return new DynmapMarker(id);
     }
 
-    public static boolean areaExist(@Nullable String name, @Nullable World world) {
-        if (name == null || world == null) {
+    public static boolean markerExist(String id) {
+        return skDynmap.dynmapMarkers.containsKey(id);
+    }
+
+    public static boolean markerExist(DynmapMarker marker) {
+        if (marker == null) {
             return false;
         }
-        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
-        markerid = markerid.toLowerCase();
-
-        return areaExist(markerid);
+        return skDynmap.dynmapMarkers.containsKey(marker.getId());
     }
 
-    public static boolean areaExist(String markerid) {
-        if (skdynmap.getAreasConfig().get("areas." + markerid) != null) {
-            return true;
-        }
-        return false;
+    public static DynmapMarker[] getAllMarkers() {
+
+        return skDynmap.dynmapMarkers.values().toArray(new DynmapMarker[0]);
     }
 
-    public static boolean areaExist(DynmapArea area) {
-        try {
-            String name = area.getName();
-            World world = area.getWorld();
-            return areaExist(name, world);
-        } catch (NullPointerException err) {
-            return false;
+    public static void unRenderMarker(DynmapMarker dynmapMarker) {
+        skDynmap.getMarkerSet().getMarkers().stream()
+                .filter(marker -> marker.getMarkerID().equalsIgnoreCase(dynmapMarker.getId()))
+                .forEach(GenericMarker::deleteMarker);
+    }
+
+    public static void renderAllMarkers() {
+        unRenderAllMarkers();
+        for (DynmapMarker marker : getAllMarkers()) {
+            renderMarker(marker);
         }
     }
 
-    public static void setAreaStyle(DynmapArea area, AreaStyle style) {
-        if (!areaExist(area)) {
-            log("You are trying to change the style of an inexistant area ! Aborting...", Level.SEVERE);
+    public static void renderMarker(DynmapMarker marker) {
+        if (!markerExist(marker)) {
             return;
         }
-        String name = area.getName();
-        World world = area.getWorld();
-
-        String markerid = world.getName() + "_" + name.replaceAll(" ", "-");
-        markerid = markerid.toLowerCase();
-
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.color", style.getFillColor());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.fill.opacity", style.getFillOpacity());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.color", style.getLineColor());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.opacity", style.getLineOpacity());
-        skdynmap.getAreasConfig().set("areas." + markerid + ".style.line.weight", style.getLineWeight());
-
-        saveAreas();
+        SkDynmap.getINSTANCE().getMarkerSet().createMarker(
+                marker.getId(),
+                marker.getName(),
+                marker.getLocation().getWorld().getName(),
+                marker.getLocation().getX(),
+                marker.getLocation().getY(),
+                marker.getLocation().getZ(),
+                marker.getMarkerIcon(),
+                false
+        );
     }
+
+    public static void unRenderAllMarkers() {
+        skDynmap.getMarkerSet().getMarkers().forEach(GenericMarker::deleteMarker);
+    }
+
 }

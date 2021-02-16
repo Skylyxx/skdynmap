@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
@@ -51,18 +51,23 @@ public class Metrics {
                     new byte[]{'o', 'r', 'g', '.', 'b', 's', 't', 'a', 't', 's', '.', 'b', 'u', 'k', 'k', 'i', 't'});
             final String examplePackage = new String(new byte[]{'y', 'o', 'u', 'r', '.', 'p', 'a', 'c', 'k', 'a', 'g', 'e'});
             // We want to make sure nobody just copy & pastes the example and use the wrong package names
-            if (Metrics.class.getPackage().getName().equals(defaultPackage) || Metrics.class.getPackage().getName().equals(examplePackage)) {
+            if (fr.skylyxx.skdynmap.utils.Metrics.class.getPackage().getName().equals(defaultPackage) || fr.skylyxx.skdynmap.utils.Metrics.class.getPackage().getName().equals(examplePackage)) {
                 throw new IllegalStateException("bStats Metrics class has not been relocated correctly!");
             }
         }
     }
 
+    // This ThreadFactory enforces the naming convention for our Threads
+    private final ThreadFactory threadFactory = task -> new Thread(task, "bStats-Metrics");
+    // Executor service for requests
+    // We use an executor service because the Bukkit scheduler is affected by server lags
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, threadFactory);
     // The plugin
     private final Plugin plugin;
     // The plugin id
     private final int pluginId;
     // A list with all custom charts
-    private final List<Metrics.CustomChart> charts = new ArrayList<>();
+    private final List<fr.skylyxx.skdynmap.utils.Metrics.CustomChart> charts = new ArrayList<>();
     // Is bStats enabled on this server?
     private boolean enabled;
 
@@ -131,7 +136,7 @@ public class Metrics {
                 }
             }
             // Register our service
-            Bukkit.getServicesManager().register(Metrics.class, this, plugin, ServicePriority.Normal);
+            Bukkit.getServicesManager().register(fr.skylyxx.skdynmap.utils.Metrics.class, this, plugin, ServicePriority.Normal);
             if (!found) {
                 // We are the first!
                 startSubmitting();
@@ -221,7 +226,7 @@ public class Metrics {
      *
      * @param chart The chart to add.
      */
-    public void addCustomChart(Metrics.CustomChart chart) {
+    public void addCustomChart(fr.skylyxx.skdynmap.utils.Metrics.CustomChart chart) {
         if (chart == null) {
             throw new IllegalArgumentException("Chart cannot be null!");
         }
@@ -232,22 +237,24 @@ public class Metrics {
      * Starts the Scheduler which submits our data every 30 minutes.
      */
     private void startSubmitting() {
-        final Timer timer = new Timer(true); // We use a timer cause the Bukkit scheduler is affected by server lags
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (!plugin.isEnabled()) { // Plugin was disabled
-                    timer.cancel();
-                    return;
-                }
-                // Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
-                // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
-                Bukkit.getScheduler().runTask(plugin, () -> submitData());
+        final Runnable submitTask = () -> {
+            if (!plugin.isEnabled()) { // Plugin was disabled
+                scheduler.shutdown();
+                return;
             }
-        }, 1000 * 60 * 5, 1000 * 60 * 30);
-        // Submit the data every 30 minutes, first time after 5 minutes to give other plugins enough time to start
-        // WARNING: Changing the frequency has no effect but your plugin WILL be blocked/deleted!
-        // WARNING: Just don't do it!
+            // Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
+            // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
+            Bukkit.getScheduler().runTask(plugin, this::submitData);
+        };
+
+        // Many servers tend to restart at a fixed time at xx:00 which causes an uneven distribution of requests on the
+        // bStats backend. To circumvent this problem, we introduce some randomness into the initial and second delay.
+        // WARNING: You must not modify and part of this Metrics class, including the submit delay or frequency!
+        // WARNING: Modifying this code will get your plugin banned on bStats. Just don't do it!
+        long initialDelay = (long) (1000 * 60 * (3 + Math.random() * 3));
+        long secondDelay = (long) (1000 * 60 * (Math.random() * 30));
+        scheduler.schedule(submitTask, initialDelay, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -266,7 +273,7 @@ public class Metrics {
         data.addProperty("id", pluginId); // Append the id of the plugin
         data.addProperty("pluginVersion", pluginVersion); // Append the version of the plugin
         JsonArray customCharts = new JsonArray();
-        for (Metrics.CustomChart customChart : charts) {
+        for (fr.skylyxx.skdynmap.utils.Metrics.CustomChart customChart : charts) {
             // Add the data of the custom charts
             JsonObject chart = customChart.getRequestJsonObject();
             if (chart == null) { // If the chart is null, we skip it
@@ -429,7 +436,7 @@ public class Metrics {
     /**
      * Represents a custom simple pie.
      */
-    public static class SimplePie extends Metrics.CustomChart {
+    public static class SimplePie extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<String> callable;
 
@@ -460,7 +467,7 @@ public class Metrics {
     /**
      * Represents a custom advanced pie.
      */
-    public static class AdvancedPie extends Metrics.CustomChart {
+    public static class AdvancedPie extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<Map<String, Integer>> callable;
 
@@ -504,7 +511,7 @@ public class Metrics {
     /**
      * Represents a custom drilldown pie.
      */
-    public static class DrilldownPie extends Metrics.CustomChart {
+    public static class DrilldownPie extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<Map<String, Map<String, Integer>>> callable;
 
@@ -553,7 +560,7 @@ public class Metrics {
     /**
      * Represents a custom single line chart.
      */
-    public static class SingleLineChart extends Metrics.CustomChart {
+    public static class SingleLineChart extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<Integer> callable;
 
@@ -585,7 +592,7 @@ public class Metrics {
     /**
      * Represents a custom multi line chart.
      */
-    public static class MultiLineChart extends Metrics.CustomChart {
+    public static class MultiLineChart extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<Map<String, Integer>> callable;
 
@@ -630,7 +637,7 @@ public class Metrics {
     /**
      * Represents a custom simple bar chart.
      */
-    public static class SimpleBarChart extends Metrics.CustomChart {
+    public static class SimpleBarChart extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<Map<String, Integer>> callable;
 
@@ -668,7 +675,7 @@ public class Metrics {
     /**
      * Represents a custom advanced bar chart.
      */
-    public static class AdvancedBarChart extends Metrics.CustomChart {
+    public static class AdvancedBarChart extends fr.skylyxx.skdynmap.utils.Metrics.CustomChart {
 
         private final Callable<Map<String, int[]>> callable;
 

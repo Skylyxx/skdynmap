@@ -7,49 +7,49 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.Util;
-import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-@Name("Delete area")
-@Description("Delete an existent area")
+@Name("Delete marker")
+@Description("Delete an existent marker")
 @Since("1.1")
-@Examples("command /deletearea <text>:\n" +
+@Examples("command /deletemarker <text>:\n" +
         "\ttrigger:\n" +
-        "\t\tdelete area from area with id arg-1\n" +
+        "\t\tdelete marker from marker with id arg-1\n" +
         "\t\tsend \"Deleted !\"")
 @RequiredPlugins("dynmap")
-public class EffDeleteArea extends Effect {
+public class EffDeleteMarker extends Effect {
 
     static {
-        Skript.registerEffect(EffDeleteArea.class,
-                "delete area [from] %dynmaparea%"
+        Skript.registerEffect(EffDeleteMarker.class,
+                "delete marker [from] %dynmapmarker%"
         );
     }
 
-    private Expression<DynmapArea> dynmapAreaExpression;
+    private Expression<DynmapMarker> dynmapAreaExpr;
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        dynmapAreaExpression = (Expression<DynmapArea>) exprs[0];
+        dynmapAreaExpr = (Expression<DynmapMarker>) exprs[0];
         return true;
     }
 
 
     @Override
     protected void execute(Event e) {
-        DynmapArea dynmapArea = dynmapAreaExpression.getSingle(e);
-        if (!Util.areaExist(dynmapArea)) {
+        DynmapMarker dynmapMarker = dynmapAreaExpr.getSingle(e);
+        if (!Util.markerExist(dynmapMarker)) {
             return;
         }
-        Util.unRenderArea(dynmapArea);
-        dynmapArea.deleteArea();
+        Util.unRenderMarker(dynmapMarker);
+        dynmapMarker.deleteMarker();
 
     }
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "delete area from " + dynmapAreaExpression.toString(e, debug);
+        return "delete area from " + dynmapAreaExpr.toString(e, debug);
     }
 }

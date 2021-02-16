@@ -7,30 +7,34 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.skylyxx.skdynmap.utils.AreaStyle;
-import fr.skylyxx.skdynmap.utils.Util;
+import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.event.Event;
 
-@Name("SkDynmap - Default style")
-@Description("This expression return the default style defined in the config. (Return a %areastyle%)")
-@Examples("set {_style} to default style")
+import javax.annotation.Nullable;
+
+@Name("Default style")
+@Description("Returns the default style defined in the config.")
 @Since("1.0-beta02")
+@Examples("set {_style} to default style")
 @RequiredPlugins("dynmap")
-public class ExprDefaultStyle extends SimpleExpression {
+public class ExprDefaultStyle extends SimpleExpression<AreaStyle> {
 
     static {
-        Skript.registerExpression(ExprDefaultStyle.class, AreaStyle.class, ExpressionType.SIMPLE, "(default|new) [dynmap] area style");
+        Skript.registerExpression(ExprDefaultStyle.class, AreaStyle.class, ExpressionType.SIMPLE,
+                "default [area] style"
+        );
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         return true;
     }
 
+    @Nullable
     @Override
     protected AreaStyle[] get(Event e) {
-        return new AreaStyle[]{Util.getDefaultStyle()};
+        return new AreaStyle[]{Config.DEFAULT_STYLE.clone()};
     }
 
     @Override
@@ -44,7 +48,9 @@ public class ExprDefaultStyle extends SimpleExpression {
     }
 
     @Override
-    public String toString(Event e, boolean debug) {
-        return Util.getDefaultStyle().toString();
+    public String toString(@Nullable Event e, boolean debug) {
+        return "default area style";
     }
+
+
 }

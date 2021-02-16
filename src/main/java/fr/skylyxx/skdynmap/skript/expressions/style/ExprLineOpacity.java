@@ -4,37 +4,35 @@ import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
-import fr.skylyxx.skdynmap.utils.AreaStyle;
-import fr.skylyxx.skdynmap.utils.Util;
+import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-@Name("SkDynmap - Line Opacity")
-@Description("This expression will return the line-opacity property of the provided style. (Return a numner)")
-@Examples({"set {_lineopacity} to line-opacity of {_style}",
-        "set line-opacity of {_style} to 0.8",
-        "reset {_style}'s line opacity"
-})
+@Name("Line opacity")
+@Description("Returns the line-opacity property of the provided style.")
 @Since("1.0-beta02")
+@Examples("set {_lineopacity} to line opacity of {_style}")
 @RequiredPlugins("dynmap")
-public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Number> {
+public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double> {
 
     static {
-        register(ExprLineOpacity.class, Number.class,
+        register(ExprLineOpacity.class, Double.class,
                 "line(-| )opacity",
-                "areastyle");
+                "areastyle"
+        );
     }
 
     @Nullable
     @Override
-    public Number convert(AreaStyle style) {
-        return style.getLineOpacity();
+    public Double convert(AreaStyle areaStyle) {
+        return areaStyle.getLineOpacity();
     }
 
     @Override
-    public Class<? extends Number> getReturnType() {
-        return Number.class;
+    public Class<? extends Double> getReturnType() {
+        return Double.class;
     }
 
     @Override
@@ -45,20 +43,28 @@ public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Number>
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
-            return CollectionUtils.array(Double.class, Integer.class, Number.class);
+        if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
+            return CollectionUtils.array(Double.class, Number.class, Integer.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        for (AreaStyle style : getExpr().getArray(e)) {
-            if (mode == Changer.ChangeMode.SET) {
-                style.setLineOpacity(((Number) delta[0]).doubleValue());
-            } else if (mode == Changer.ChangeMode.RESET) {
-                style.setLineOpacity(Util.getDefaultStyle().getLineOpacity());
-            }
+        switch (mode) {
+            case RESET:
+                for (AreaStyle style : getExpr().getArray(e)) {
+                    style.setLineOpacity(Config.DEFAULT_STYLE.getLineOpacity());
+                }
+                break;
+            case SET:
+                for (AreaStyle style : getExpr().getArray(e)) {
+                    style.setLineOpacity(((Number) delta[0]).doubleValue());
+                }
+                break;
+            default:
+                return;
         }
     }
+
 }

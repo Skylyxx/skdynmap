@@ -7,79 +7,94 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.skylyxx.skdynmap.utils.AreaBuilder;
-import fr.skylyxx.skdynmap.utils.AreaStyle;
-import fr.skylyxx.skdynmap.utils.Util;
+import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
+import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-@Name("SkDynmap - New area builder")
-@Description("This expression allows you to obtain an Area Builder, which you can use to create yours areas")
+@Name("Area builder")
+@Description("The constructor for a future area")
 @Since("1.0.1")
-@Examples({
-        "command /createarea:",
-        "\ttrigger:",
-        "\t\tset {_area} to new area named \"My Area\" in world of player between {pos1} and {pos2}",
-        "\t\tcreate {_area}"
-})
+@Examples("set {_builder} to new area with id \"custom_id\" named \"Blabla\" at ({pos-1}, {pos-2} and {pos-3}) with style {_style}")
 @RequiredPlugins("dynmap")
 public class ExprAreaBuilder extends SimpleExpression<AreaBuilder> {
 
     static {
         Skript.registerExpression(ExprAreaBuilder.class, AreaBuilder.class, ExpressionType.SIMPLE,
-                "[new] [dynmap] area named %string% in %world% between %location% and %location%",
-                "[new] [dynmap] area named %string% with description %string% in %world% between %location% and %location%",
-                "[new] [dynmap] area named %string% in %world% between %location% and %location% with style %areastyle%",
-                "[new] [dynmap] area named %string% with description %string% in %world% between %location% and %location% with style %areastyle%"
+                "new [dynmap] area named %string% at %locations%", // 0: without id, without desc, without style
+                "new [dynmap] area named %string% at %locations% with [style] %areastyle%", // 1: without id, without desc, with style
+                "new [dynmap] area named %string% with description %string% at %locations%", // 2: without id, with desc, without style
+                "new [dynmap] area named %string% with description %string% at %locations% with [style] %areastyle%", // 3: without id, with desc, with style
+                "new [dynmap] area with id %string% named %string% at %locations%", // 4: with id, without desc, without style
+                "new [dynmap] area with id %string% named %string% at %locations% with [style] %areastyle%", // 5: with id, without desc, with style
+                "new [dynmap] area with id %string% named %string% with description %string% at %locations%", // 6: with id, with desc, without style
+                "new [dynmap] area with id %string% named %string% with description %string% at %locations% with [style] %areastyle%" // 7: with id, with desc, with style
         );
     }
 
-    private Expression<String> name;
-    private Expression<String> description;
-    private Expression<World> world;
-    private Expression<Location> pos1;
-    private Expression<Location> pos2;
-    private Expression<AreaStyle> style;
+    private Expression<String> idExpr;
+    private Expression<String> nameExpr;
+    private Expression<String> descExpr;
+    private Expression<Location> locationsExpr;
+    private Expression<AreaStyle> styleExpr;
 
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        name = (Expression<String>) exprs[0];
-        if (matchedPattern == 0) { //without desc / without style
-            world = (Expression<World>) exprs[1];
-            pos1 = (Expression<Location>) exprs[2];
-            pos2 = (Expression<Location>) exprs[3];
-
-        } else if (matchedPattern == 1) { //with desc / without style
-            description = (Expression<String>) exprs[1];
-            world = (Expression<World>) exprs[2];
-            pos1 = (Expression<Location>) exprs[3];
-            pos2 = (Expression<Location>) exprs[4];
-
-        } else if (matchedPattern == 2) { //without desc / with style
-            world = (Expression<World>) exprs[1];
-            pos1 = (Expression<Location>) exprs[2];
-            pos2 = (Expression<Location>) exprs[3];
-            style = (Expression<AreaStyle>) exprs[4];
-
-        } else if (matchedPattern == 3) { // with desc / with style
-            description = (Expression<String>) exprs[1];
-            world = (Expression<World>) exprs[2];
-            pos1 = (Expression<Location>) exprs[3];
-            pos2 = (Expression<Location>) exprs[4];
-            style = (Expression<AreaStyle>) exprs[5];
+        if (matchedPattern == 0) {
+            idExpr = null;
+            nameExpr = (Expression<String>) exprs[0];
+            descExpr = null;
+            locationsExpr = (Expression<Location>) exprs[1];
+            styleExpr = null;
+        } else if (matchedPattern == 1) {
+            idExpr = null;
+            nameExpr = (Expression<String>) exprs[0];
+            descExpr = null;
+            locationsExpr = (Expression<Location>) exprs[1];
+            styleExpr = (Expression<AreaStyle>) exprs[2];
+        } else if (matchedPattern == 2) {
+            idExpr = null;
+            nameExpr = (Expression<String>) exprs[0];
+            descExpr = (Expression<String>) exprs[1];
+            locationsExpr = (Expression<Location>) exprs[2];
+            styleExpr = null;
+        } else if (matchedPattern == 3) {
+            idExpr = null;
+            nameExpr = (Expression<String>) exprs[0];
+            descExpr = (Expression<String>) exprs[1];
+            locationsExpr = (Expression<Location>) exprs[2];
+            styleExpr = (Expression<AreaStyle>) exprs[3];
+        } else if (matchedPattern == 4) {
+            idExpr = (Expression<String>) exprs[0];
+            nameExpr = (Expression<String>) exprs[1];
+            descExpr = null;
+            locationsExpr = (Expression<Location>) exprs[2];
+            styleExpr = null;
+        } else if (matchedPattern == 5) {
+            idExpr = (Expression<String>) exprs[0];
+            nameExpr = (Expression<String>) exprs[1];
+            descExpr = null;
+            locationsExpr = (Expression<Location>) exprs[2];
+            styleExpr = (Expression<AreaStyle>) exprs[3];
+        } else if (matchedPattern == 6) {
+            idExpr = (Expression<String>) exprs[0];
+            nameExpr = (Expression<String>) exprs[1];
+            descExpr = (Expression<String>) exprs[2];
+            locationsExpr = (Expression<Location>) exprs[3];
+            styleExpr = null;
+        } else if (matchedPattern == 7) {
+            idExpr = (Expression<String>) exprs[0];
+            nameExpr = (Expression<String>) exprs[1];
+            descExpr = (Expression<String>) exprs[2];
+            locationsExpr = (Expression<Location>) exprs[3];
+            styleExpr = (Expression<AreaStyle>) exprs[4];
         }
         return true;
     }
 
-    @Nullable
-    @Override
-    protected AreaBuilder[] get(Event e) {
-        AreaBuilder area = getAreaBuilder(e);
-        return new AreaBuilder[]{area};
-    }
 
     @Override
     public boolean isSingle() {
@@ -91,20 +106,39 @@ public class ExprAreaBuilder extends SimpleExpression<AreaBuilder> {
         return AreaBuilder.class;
     }
 
+    @Nullable
     @Override
-    public String toString(@Nullable Event e, boolean debug) {
-        AreaBuilder area = getAreaBuilder(e);
-        return area.toString();
+    protected AreaBuilder[] get(Event e) {
+        String name = nameExpr.getSingle(e);
+        String desc = descExpr != null ? descExpr.getSingle(e) : "";
+        Location[] locations = locationsExpr.getAll(e);
+        AreaStyle areaStyle = styleExpr != null ? styleExpr.getSingle(e) : Config.DEFAULT_STYLE;
+        String id = idExpr != null ? idExpr.getSingle(e) : name.toLowerCase().replaceAll(" ", "-") + "_" + locations[0].getWorld().getName().toLowerCase();
+        AreaBuilder areaBuilder = new AreaBuilder(
+                id,
+                name,
+                desc,
+                locations,
+                areaStyle
+        );
+        return new AreaBuilder[]{areaBuilder};
     }
 
-    private AreaBuilder getAreaBuilder(Event e) {
-        String name = this.name.getSingle(e);
-        String description = this.description != null ? this.description.getSingle(e) : null;
-        World world = this.world.getSingle(e);
-        AreaStyle style = this.style != null ? this.style.getSingle(e) : Util.getDefaultStyle();
-        Location pos1 = this.pos1.getSingle(e);
-        Location pos2 = this.pos2.getSingle(e);
-        AreaBuilder areaBuilder = new AreaBuilder(name, description, world, style, pos1, pos2);
-        return areaBuilder;
+    @Override
+    public String toString(@Nullable Event e, boolean debug) {
+        StringBuilder result = new StringBuilder("new area");
+        if (idExpr != null) {
+            result.append(" with id \"" + idExpr.toString(e, debug) + "\"");
+        }
+        result.append(" named \"" + nameExpr.toString(e, debug) + "\"");
+        if (descExpr != null) {
+            result.append(" with description \"" + descExpr.toString(e, debug) + "\"");
+        }
+        result.append(" at " + locationsExpr.toString(e, debug));
+        if (styleExpr != null) {
+            result.append(" with style " + styleExpr.toString(e, debug));
+        }
+        return result.toString();
     }
 }
+

@@ -4,19 +4,16 @@ import ch.njol.skript.classes.Changer;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
-import fr.skylyxx.skdynmap.utils.AreaStyle;
-import fr.skylyxx.skdynmap.utils.Util;
+import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-@Name("SkDynmap - Line Color")
-@Description("This expression will return the line-color property of the provided style. (Return a text)")
-@Examples({"set {_linecolor} to line-color of {_style}",
-        "set line-color of {_style} to \"##2a6c80\"",
-        "reset {_style}'s line color"
-})
+@Name("Line color")
+@Description("Returns the line-color property of the provided style.")
 @Since("1.0-beta02")
+@Examples("set {_linecolor} to line-color of {_style}")
 @RequiredPlugins("dynmap")
 public class ExprLineColor extends SimplePropertyExpression<AreaStyle, String> {
 
@@ -29,8 +26,8 @@ public class ExprLineColor extends SimplePropertyExpression<AreaStyle, String> {
 
     @Nullable
     @Override
-    public String convert(AreaStyle style) {
-        return style.getLineColor();
+    public String convert(AreaStyle areaStyle) {
+        return areaStyle.getLineColor();
     }
 
     @Override
@@ -46,20 +43,28 @@ public class ExprLineColor extends SimplePropertyExpression<AreaStyle, String> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
+        if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(String.class);
         }
-        return null;
+        return CollectionUtils.array();
     }
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        for (AreaStyle style : getExpr().getArray(e)) {
-            if (mode == Changer.ChangeMode.SET) {
-                style.setLineColor((String) delta[0]);
-            } else if (mode == Changer.ChangeMode.RESET) {
-                style.setLineColor(Util.getDefaultStyle().getLineColor());
-            }
+        switch (mode) {
+            case RESET:
+                for (AreaStyle style : getExpr().getArray(e)) {
+                    style.setLineColor(Config.DEFAULT_STYLE.getLineColor());
+                }
+                break;
+            case SET:
+                for (AreaStyle style : getExpr().getArray(e)) {
+                    style.setLineColor((String) delta[0]);
+                }
+                break;
+            default:
+                return;
         }
     }
+
 }
