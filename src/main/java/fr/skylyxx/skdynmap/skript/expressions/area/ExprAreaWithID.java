@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Area with id")
+@Description("Get an area from its id")
+@Since("1.1")
+@Examples("set {_area} to area with id \"my_area_id\"")
+@RequiredPlugins("dynmap")
 public class ExprAreaWithID extends SimpleExpression<DynmapArea> {
     static {
         Skript.registerExpression(ExprAreaWithID.class, DynmapArea.class, ExpressionType.SIMPLE,

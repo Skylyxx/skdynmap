@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.style;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Default style")
+@Description("Returns the default style defined in the config.")
+@Since("1.0-beta02")
+@Examples("set {_style} to default style")
+@RequiredPlugins("dynmap")
 public class ExprDefaultStyle extends SimpleExpression<AreaStyle> {
 
     static {

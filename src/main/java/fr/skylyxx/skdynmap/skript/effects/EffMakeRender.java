@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,13 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Make render")
+@Description("Make the render of areas or markers or a global render")
+@Since("1.1")
+@Examples("command /renderall:\n" +
+        "\ttrigger:\n" +
+        "\t\tmake global render of skdynmap")
+@RequiredPlugins("dynmap")
 public class EffMakeRender extends Effect {
 
     static {

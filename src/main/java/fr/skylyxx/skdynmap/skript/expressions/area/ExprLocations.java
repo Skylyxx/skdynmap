@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.MultiplyPropertyExpression;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
@@ -10,6 +11,12 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Locations of area")
+@Description("Returns the locations of an area/areabuilder\n" +
+        "It can be get, and set.")
+@Since("1.0.1")
+@Examples("set locations of {_area} to {pos-1} and {pos-2}")
+@RequiredPlugins("dynmap")
 public class ExprLocations extends MultiplyPropertyExpression<Object, Location> {
 
     static {

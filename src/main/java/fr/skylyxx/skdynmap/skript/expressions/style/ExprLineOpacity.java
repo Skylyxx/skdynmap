@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.style;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.Config;
@@ -9,6 +10,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Line opacity")
+@Description("Returns the line-opacity property of the provided style.")
+@Since("1.0-beta02")
+@Examples("set {_lineopacity} to line opacity of {_style}")
+@RequiredPlugins("dynmap")
 public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double> {
 
     static {

@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.style;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.Config;
@@ -9,6 +10,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Fill color")
+@Description("Returns the fill-color property of the provided style.")
+@Since("1.0-beta02")
+@Examples("set {_fillcolor} to fill color of {_style}")
+@RequiredPlugins("dynmap")
 public class ExprFillColor extends SimplePropertyExpression<AreaStyle, String> {
 
     static {

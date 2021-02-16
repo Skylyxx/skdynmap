@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +14,14 @@ import org.bukkit.event.Event;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+@Name("Create area")
+@Description("Create an area and show it on the map")
+@Since("1.1")
+@Examples("command /createarea:\n" +
+        "\ttrigger:\n" +
+        "\t\tcreate area from new area named \"Hello World\" with description \"Hi !\" at {pos-1} and {pos-2}\n" +
+        "\t\tsend \"Area created !\"")
+@RequiredPlugins("dynmap")
 public class EffCreateArea extends Effect {
 
     static {

@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
@@ -10,6 +11,12 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Style of area")
+@Description("Returns the style of an area/areabuilder\n" +
+        "It can be get, set or reset.")
+@Since("1.0.1")
+@Examples("reset style of {_area}")
+@RequiredPlugins("dynmap")
 public class ExprStyle extends SimplePropertyExpression<Object, AreaStyle> {
 
     static {

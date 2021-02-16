@@ -1,14 +1,23 @@
 package fr.skylyxx.skdynmap.skript.expressions.markers;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
+import fr.skylyxx.skdynmap.Config;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Icon of marker")
+@Description("Returns the icon of a marker/markerbuilder\n" +
+        "It can be get, set or reset.\n" +
+        "There is a list of all default dynmap icons: https://github.com/webbukkit/dynmap/wiki/Using-markers#marker-icons")
+@Since("1.1")
+@Examples("set icon of {_marker} to \"house\"")
+@RequiredPlugins("dynmap")
 public class ExprIcon extends SimplePropertyExpression<Object, String> {
 
     static {
@@ -42,7 +51,7 @@ public class ExprIcon extends SimplePropertyExpression<Object, String> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(String.class);
         }
         return CollectionUtils.array();
@@ -50,6 +59,15 @@ public class ExprIcon extends SimplePropertyExpression<Object, String> {
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
+        if(mode != Changer.ChangeMode.SET) {
+            for (Object o : getExpr().getArray(e)) {
+                if (o instanceof DynmapMarker) {
+                    ((DynmapMarker) o).setMarkerIcon(Config.DEFAULT_MARKER_ICON);
+                } else if (o instanceof MarkerBuilder) {
+                    ((MarkerBuilder) o).setMarkerIcon(Config.DEFAULT_MARKER_ICON);
+                }
+            }
+        }
         for (Object o : getExpr().getArray(e)) {
             if (o instanceof DynmapMarker) {
                 ((DynmapMarker) o).setMarkerIcon((String) delta[0]);

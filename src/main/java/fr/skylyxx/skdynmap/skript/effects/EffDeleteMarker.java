@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -11,6 +12,14 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Delete marker")
+@Description("Delete an existent marker")
+@Since("1.1")
+@Examples("command /deletemarker <text>:\n" +
+        "\ttrigger:\n" +
+        "\t\tdelete marker from marker with id arg-1\n" +
+        "\t\tsend \"Deleted !\"")
+@RequiredPlugins("dynmap")
 public class EffDeleteMarker extends Effect {
 
     static {

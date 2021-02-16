@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -11,6 +12,14 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Delete area")
+@Description("Delete an existent area")
+@Since("1.1")
+@Examples("command /deletearea <text>:\n" +
+        "\ttrigger:\n" +
+        "\t\tdelete area from area with id arg-1\n" +
+        "\t\tsend \"Deleted !\"")
+@RequiredPlugins("dynmap")
 public class EffDeleteArea extends Effect {
 
     static {

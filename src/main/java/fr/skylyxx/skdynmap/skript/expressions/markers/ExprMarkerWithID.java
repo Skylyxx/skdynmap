@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.markers;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Marker with id")
+@Description("Get an marker from its id")
+@Since("1.1")
+@Examples("set {_marker} to marker with id \"my_marker_id\"")
+@RequiredPlugins("dynmap")
 public class ExprMarkerWithID extends SimpleExpression<DynmapMarker> {
 
     static {

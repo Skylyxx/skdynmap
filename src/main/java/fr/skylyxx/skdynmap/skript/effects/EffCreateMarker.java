@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.effects;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +14,15 @@ import org.bukkit.event.Event;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+@Name("Create marker")
+@Description("Create a marker and show it on the map")
+@Since("1.1")
+@Examples("command /createmarker:\n" +
+        "\ttrigger:\n" +
+        "\t\tset {_builder} to new marker named \"Marker\" at {pos-1} with icon \"house\"\n" +
+        "\t\tcreate marker {_builder}\n" +
+        "\t\tsend \"Marker created !\"")
+@RequiredPlugins("dynmap")
 public class EffCreateMarker extends Effect {
 
     static {

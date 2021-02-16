@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.markers;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
@@ -10,6 +11,12 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Location of marker")
+@Description("Returns the location of a marker/markerbuilder\n" +
+        "It can be get, or set.")
+@Since("1.1")
+@Examples("set location of {_marker} to {pos-1}")
+@RequiredPlugins("dynmap")
 public class ExprLocation extends SimplePropertyExpression<Object, Location> {
 
     static {

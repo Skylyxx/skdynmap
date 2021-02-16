@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,14 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("All areas")
+@Description("Return a list with all created areas")
+@Since("1.0.1")
+@Examples("command /deleteall:\n" +
+        "\ttrigger:\n" +
+        "\t\tloop all areas:\n" +
+        "\t\t\tdelete area loop-value")
+@RequiredPlugins("dynmap")
 public class ExprAllAreas extends SimpleExpression<DynmapArea> {
 
     static {

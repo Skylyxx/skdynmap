@@ -3,6 +3,7 @@ package fr.skylyxx.skdynmap.skript.scopes;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.Node;
 import ch.njol.skript.config.SectionNode;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.log.SkriptLogger;
@@ -15,6 +16,21 @@ import javax.annotation.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Name("Make marker")
+@Description("This is a scope that allows you to create areas easily")
+@Since("1.0.1")
+@Examples("command /make:\n" +
+        "\ttrigger:\n" +
+        "\t\tmake area:\n" +
+        "\t\t\tset name of area to \"My Area\"\n" +
+        "\t\t\tset description of area to \"Using sections !\"\n" +
+        "\t\t\tset locations of area to {pos-1} and {pos-2}\n" +
+        "\t\t\tset {_style} to default area style\n" +
+        "\t\t\tset line color of {_style} to \"##00FF00\"\n" +
+        "\t\t\tset fill color of {_style} to \"##FFFF00\"\n" +
+        "\t\t\tset style of area to {_style}\n" +
+        "\t\tcreate area from last generated area")
+@RequiredPlugins("dynmap")
 public class ScopeMakeMarker extends EffectSection {
 
     public static MarkerBuilder lastMarker;

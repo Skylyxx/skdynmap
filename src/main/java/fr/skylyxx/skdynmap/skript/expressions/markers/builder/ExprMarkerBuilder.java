@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.markers.builder;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +14,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Marker builder")
+@Description("The constructor for a future marker")
+@Since("1.1")
+@Examples("set {_builder} to new marker with id \"custom_id\" named \"Landmark\" at {pos-1}")
+@RequiredPlugins("dynmap")
 public class ExprMarkerBuilder extends SimpleExpression<MarkerBuilder> {
 
     static {

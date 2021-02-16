@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area.builder;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -14,6 +15,11 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Area builder")
+@Description("The constructor for a future area")
+@Since("1.0.1")
+@Examples("set {_builder} to new area with id \"custom_id\" named \"Blabla\" at ({pos-1}, {pos-2} and {pos-3}) with style {_style}")
+@RequiredPlugins("dynmap")
 public class ExprAreaBuilder extends SimpleExpression<AreaBuilder> {
 
     static {

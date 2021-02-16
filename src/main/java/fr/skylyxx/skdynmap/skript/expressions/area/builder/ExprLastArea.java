@@ -13,20 +13,21 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-@Name("SkDynmap - The last generated area")
+@Name("The area")
 @Description("This expression returns the last generated area using area scope")
-@Since("1.0.1")
-@Examples({
-        "command /createarea:",
-        "\ttrigger:",
-        "\t\tmake area:",
-        "\t\t\tset area's name to \"My Area\"",
-        "\t\t\tset area's description to \"My Description\"",
-        "\t\t\tset area's world to world of player",
-        "\t\t\tset area's style to default area style",
-        "\t\t\tset area's location to {pos1} and {pos2}",
-        "\t\tcreate the last area"
-})
+@Since("1.1")
+@Examples("command /makearea:\n" +
+        "\ttrigger:\n" +
+        "\t\tmake area:\n" +
+        "\t\t\tset name of area to \"My Area\"\n" +
+        "\t\t\tset description of area to \"Using sections !\"\n" +
+        "\t\t\tset locations of area to {pos-1} and {pos-2}\n" +
+        "\t\t\tset {_style} to default area style\n" +
+        "\t\t\tset line color of {_style} to \"##00FF00\"\n" +
+        "\t\t\tset fill color of {_style} to \"##FFFF00\"\n" +
+        "\t\t\tset style of area to {_style}\n" +
+        "\t\tcreate area from last generated area\n" +
+        "\t\tsend \"Area created !\"")
 @RequiredPlugins("dynmap")
 public class ExprLastArea extends SimpleExpression<AreaBuilder> {
 

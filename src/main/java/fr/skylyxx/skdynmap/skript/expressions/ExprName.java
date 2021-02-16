@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
@@ -11,6 +12,12 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
+@Name("Name of Area/Marker")
+@Description("Returns the name of a area/areabuilder/marker/markerbuilder\n" +
+        "It can be get, or set")
+@Since("1.1")
+@Examples("set name of {_area} to \"New Name\"")
+@RequiredPlugins("dynmap")
 public class ExprName extends SimplePropertyExpression<Object, String> {
 
     static {
