@@ -6,7 +6,7 @@ import org.dynmap.markers.MarkerIcon;
 
 public class DynmapMarker {
 
-    private SkDynmap skDynmap = SkDynmap.getINSTANCE();
+    private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
 
     private String id;
     private String name;

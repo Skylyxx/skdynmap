@@ -12,7 +12,7 @@ public class DynmapArea {
     private String desc;
     private Location[] locations;
 
-    private SkDynmap skDynmap = SkDynmap.getINSTANCE();
+    private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
     private AreaStyle areaStyle;
 
     public DynmapArea(String id, String name, String desc, Location[] locations, AreaStyle areaStyle) {

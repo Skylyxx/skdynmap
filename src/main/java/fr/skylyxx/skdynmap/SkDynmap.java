@@ -36,7 +36,6 @@ public class SkDynmap extends JavaPlugin {
     public File storageFile;
     public CustomYamlConfig storageYaml;
 
-    public DynmapCommonAPI dynmapCommonAPI;
     public MarkerAPI markerAPI;
     public MarkerSet markerSet;
 
@@ -137,17 +136,15 @@ public class SkDynmap extends JavaPlugin {
         storageYaml.load(storageFile);
         dynmapAreas.clear();
         if (storageYaml.isSet("areas.")) {
-            storageYaml.getConfigurationSection("areas").getKeys(false).forEach(s -> {
-                DynmapArea area = new DynmapArea(s);
-                dynmapAreas.put(s, area);
-            });
+            storageYaml.getConfigurationSection("areas").getKeys(false).forEach(id ->
+                dynmapAreas.put(id, new DynmapArea(id))
+            );
         }
         dynmapMarkers.clear();
         if (storageYaml.isSet("markers.")) {
-            storageYaml.getConfigurationSection("markers").getKeys(false).forEach(s -> {
-                DynmapMarker marker = new DynmapMarker(s);
-                dynmapMarkers.put(s, marker);
-            });
+            storageYaml.getConfigurationSection("markers").getKeys(false).forEach(id ->
+                dynmapMarkers.put(id, new DynmapMarker(id))
+            );
         }
     }
 
@@ -157,12 +154,12 @@ public class SkDynmap extends JavaPlugin {
 
     public void saveStorageYaml() {
         storageYaml = new CustomYamlConfig();
-        dynmapAreas.forEach((s, dynmapArea) -> {
-            storageYaml.setArea("areas." + s, dynmapArea);
-        });
-        dynmapMarkers.forEach((s, dynmapMarker) -> {
-            storageYaml.setMarker("markers." + s, dynmapMarker);
-        });
+        dynmapAreas.forEach((id, dynmapArea) ->
+            storageYaml.setArea("areas." + id, dynmapArea)
+        );
+        dynmapMarkers.forEach((id, dynmapMarker) ->
+            storageYaml.setMarker("markers." + id, dynmapMarker)
+        );
         try {
             storageYaml.save(storageFile);
             Logger.info("File storage.yml was saved successfully", true);
@@ -194,8 +191,7 @@ public class SkDynmap extends JavaPlugin {
 
     private boolean loadDynmap() {
         final Plugin dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
-        dynmapCommonAPI = (DynmapCommonAPI) dynmap;
-        markerAPI = dynmapCommonAPI.getMarkerAPI();
+        markerAPI = ((DynmapCommonAPI) dynmap).getMarkerAPI();
         if (markerAPI == null) {
             Logger.severe("There was an error while loading MarkerAPI ! Disabling...");
             return false;
@@ -211,13 +207,10 @@ public class SkDynmap extends JavaPlugin {
         markerSet.setHideByDefault(false);
         int taskInterval = Config.UPDATE_INTERVAL;
         if (taskInterval > 0) {
-            int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-                @Override
-                public void run() {
-                    Util.renderAllAreas();
-                    Util.renderAllMarkers();
-                }
-            }, 100, taskInterval * 20);
+            int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+                Util.renderAllAreas();
+                Util.renderAllMarkers();
+            }, 100, taskInterval * 20L);
         }
         return true;
     }
