@@ -4,7 +4,6 @@ import ch.njol.skript.classes.Changer;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.Config;
-import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.event.Event;
 
@@ -38,7 +37,7 @@ public class ExprFillColor extends SimplePropertyExpression<AreaStyle, String> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(String.class);
         }
         return CollectionUtils.array();
@@ -46,15 +45,15 @@ public class ExprFillColor extends SimplePropertyExpression<AreaStyle, String> {
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        switch(mode) {
+        switch (mode) {
             case RESET:
-                for(AreaStyle style : getExpr().getArray(e)) {
+                for (AreaStyle style : getExpr().getArray(e)) {
                     style.setFillColor(Config.DEFAULT_STYLE.getFillColor());
                 }
                 break;
             case SET:
-                for(AreaStyle style : getExpr().getArray(e)) {
-                    style.setFillColor((String)delta[0]);
+                for (AreaStyle style : getExpr().getArray(e)) {
+                    style.setFillColor((String) delta[0]);
                 }
                 break;
             default:

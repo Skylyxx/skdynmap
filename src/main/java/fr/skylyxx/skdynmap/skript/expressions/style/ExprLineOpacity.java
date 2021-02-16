@@ -37,7 +37,7 @@ public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double>
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(Double.class, Number.class, Integer.class);
         }
         return CollectionUtils.array();
@@ -53,7 +53,7 @@ public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double>
                 break;
             case SET:
                 for (AreaStyle style : getExpr().getArray(e)) {
-                    style.setLineOpacity(((Number)delta[0]).doubleValue());
+                    style.setLineOpacity(((Number) delta[0]).doubleValue());
                 }
                 break;
             default:

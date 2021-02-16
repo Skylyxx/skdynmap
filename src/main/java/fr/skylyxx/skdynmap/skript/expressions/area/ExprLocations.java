@@ -22,9 +22,9 @@ public class ExprLocations extends MultiplyPropertyExpression<Object, Location> 
     @Nullable
     @Override
     public Location[] convert(Object o) {
-        if(o instanceof DynmapArea) {
+        if (o instanceof DynmapArea) {
             return ((DynmapArea) o).getLocations();
-        } else if(o instanceof AreaBuilder) {
+        } else if (o instanceof AreaBuilder) {
             return ((AreaBuilder) o).getLocations();
         }
         return null;
@@ -43,7 +43,7 @@ public class ExprLocations extends MultiplyPropertyExpression<Object, Location> 
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(Location[].class);
         }
         return CollectionUtils.array();
@@ -51,10 +51,10 @@ public class ExprLocations extends MultiplyPropertyExpression<Object, Location> 
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        for(Object o : getExpr().getArray(e)) {
-            if(o instanceof DynmapArea) {
+        for (Object o : getExpr().getArray(e)) {
+            if (o instanceof DynmapArea) {
                 ((DynmapArea) o).setLocations((Location[]) delta);
-            } else if(o instanceof AreaBuilder) {
+            } else if (o instanceof AreaBuilder) {
                 ((AreaBuilder) o).setLocations((Location[]) delta);
             }
         }

@@ -23,7 +23,7 @@ public class ExprId extends SimplePropertyExpression<Object, String> {
     @Nullable
     @Override
     public String convert(Object o) {
-        if(o instanceof DynmapArea) {
+        if (o instanceof DynmapArea) {
             return ((DynmapArea) o).getId();
         } else if (o instanceof AreaBuilder) {
             return ((AreaBuilder) o).getId();
@@ -48,7 +48,7 @@ public class ExprId extends SimplePropertyExpression<Object, String> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(String.class);
         }
         return CollectionUtils.array();
@@ -56,8 +56,8 @@ public class ExprId extends SimplePropertyExpression<Object, String> {
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        for(Object o : getExpr().getArray(e)) {
-            if(o instanceof DynmapArea) {
+        for (Object o : getExpr().getArray(e)) {
+            if (o instanceof DynmapArea) {
                 ((DynmapArea) o).setId((String) delta[0]);
             } else if (o instanceof AreaBuilder) {
                 ((AreaBuilder) o).setId((String) delta[0]);

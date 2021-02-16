@@ -34,37 +34,45 @@ public class AreaBuilder {
     public String getId() {
         return id;
     }
-    public String getName() {
-        return name;
-    }
-    public String getDescription() {
-        return desc;
-    }
-    public Location[] getLocations() {
-        return locations;
-    }
-    public AreaStyle getAreaStyle() {
-        return areaStyle;
-    }
 
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDescription() {
+        return desc;
+    }
+
     public void setDescription(String desc) {
         this.desc = desc;
     }
+
+    public Location[] getLocations() {
+        return locations;
+    }
+
     public void setLocations(Location[] locations) {
         this.locations = locations;
     }
+
+    public AreaStyle getAreaStyle() {
+        return areaStyle;
+    }
+
     public void setAreaStyle(AreaStyle areaStyle) {
         this.areaStyle = areaStyle;
     }
 
     public DynmapArea createArea() throws IOException, InvalidConfigurationException {
-        if(getId() == null) {
+        if (getId() == null) {
             setId(getName().toLowerCase().replaceAll(" ", "-") + "_" + getLocations()[0].getWorld().getName().toLowerCase());
         }
         DynmapArea area = new DynmapArea(getId(), getName(), getDescription(), getLocations(), getAreaStyle());

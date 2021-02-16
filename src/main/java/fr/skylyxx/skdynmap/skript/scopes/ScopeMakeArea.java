@@ -1,15 +1,12 @@
 package fr.skylyxx.skdynmap.skript.scopes;
 
-import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.Node;
 import ch.njol.skript.config.SectionNode;
-import ch.njol.skript.config.SimpleNode;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.util.Kleenean;
-import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.EffectSection;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import org.bukkit.event.Event;
@@ -44,25 +41,25 @@ public class ScopeMakeArea extends EffectSection {
         Pattern regexLoc1 = Pattern.compile("set (last )?(generated |created )?area's location(s)? to");
         Pattern regexLoc2 = Pattern.compile("set location(s)? of( last)?( generated| created)? area to");
 
-        for(Node node : topNode) {
+        for (Node node : topNode) {
             Matcher matcherName1 = regexName1.matcher(node.getKey());
             Matcher matcherName2 = regexName2.matcher(node.getKey());
-            if(matcherName1.find() || matcherName2.find()) {
+            if (matcherName1.find() || matcherName2.find()) {
                 hasNameSetter = true;
                 continue;
             }
             Matcher matcherLoc1 = regexLoc1.matcher(node.getKey());
             Matcher matcherLoc2 = regexLoc2.matcher(node.getKey());
-            if(matcherLoc1.find() || matcherLoc2.find()) {
+            if (matcherLoc1.find() || matcherLoc2.find()) {
                 hasLocSetter = true;
                 continue;
             }
         }
 
-        if(!hasNameSetter) {
+        if (!hasNameSetter) {
             Skript.error("You have to define a name for your area in the \"make area\" scope !");
         }
-        if(!hasLocSetter) {
+        if (!hasLocSetter) {
             Skript.error("You have to define locations for your area in the \"make area\" scope !");
         }
         return true;

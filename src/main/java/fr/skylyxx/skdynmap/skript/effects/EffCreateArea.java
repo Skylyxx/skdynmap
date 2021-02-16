@@ -6,7 +6,6 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.Logger;
-import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.Event;

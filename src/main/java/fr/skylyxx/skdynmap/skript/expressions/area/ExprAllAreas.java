@@ -16,7 +16,7 @@ public class ExprAllAreas extends SimpleExpression<DynmapArea> {
 
     static {
         Skript.registerExpression(ExprAllAreas.class, DynmapArea.class, ExpressionType.SIMPLE,
-        "all [dynmap] areas"
+                "all [dynmap] areas"
         );
     }
 

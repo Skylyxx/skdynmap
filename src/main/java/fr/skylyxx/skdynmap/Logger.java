@@ -10,9 +10,10 @@ public class Logger {
         }
         logger.severe(msg);
     }
+
     public static void severe(String msg, boolean debug, String... args) {
         if (debug) {
-            if(SkDynmap.getINSTANCE().isDebugMode()) {
+            if (SkDynmap.getINSTANCE().isDebugMode()) {
                 info(msg, args);
             }
             return;
@@ -26,9 +27,10 @@ public class Logger {
         }
         logger.warning(msg);
     }
+
     public static void warning(String msg, boolean debug, String... args) {
         if (debug) {
-            if(SkDynmap.getINSTANCE().isDebugMode()) {
+            if (SkDynmap.getINSTANCE().isDebugMode()) {
                 warning(msg, args);
             }
             return;
@@ -42,9 +44,10 @@ public class Logger {
         }
         logger.info(msg);
     }
+
     public static void info(String msg, boolean debug, String... args) {
         if (debug) {
-            if(SkDynmap.getINSTANCE().isDebugMode()) {
+            if (SkDynmap.getINSTANCE().isDebugMode()) {
                 info(msg, args);
             }
             return;

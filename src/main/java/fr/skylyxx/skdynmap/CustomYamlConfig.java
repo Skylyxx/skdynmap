@@ -34,6 +34,7 @@ public class CustomYamlConfig extends YamlConfiguration {
         locations = locationList.toArray(locations);
         return new DynmapArea(id, name, desc, locations, areaStyle);
     }
+
     public void setArea(String path, DynmapArea area) {
         set(path + ".name", area.getName());
         set(path + ".description", area.getDescription());

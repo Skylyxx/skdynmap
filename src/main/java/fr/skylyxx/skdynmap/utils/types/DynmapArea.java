@@ -13,6 +13,7 @@ public class DynmapArea {
     private Location[] locations;
 
     private SkDynmap skDynmap = SkDynmap.getINSTANCE();
+    private AreaStyle areaStyle;
 
     public DynmapArea(String id, String name, String desc, Location[] locations, AreaStyle areaStyle) {
         this.id = id;
@@ -23,8 +24,6 @@ public class DynmapArea {
 
         skDynmap.dynmapAreas.put(id, this);
     }
-
-    private AreaStyle areaStyle;
 
     public DynmapArea(AreaBuilder areaBuilder) {
         this.id = areaBuilder.getId();
@@ -38,7 +37,7 @@ public class DynmapArea {
 
     public DynmapArea(String id) {
         DynmapArea area = skDynmap.getStorageYaml().getArea("areas." + id);
-        if(area == null) {
+        if (area == null) {
             return;
         }
         this.id = area.getId();
@@ -51,31 +50,39 @@ public class DynmapArea {
     public String getId() {
         return id;
     }
-    public String getName() {
-        return name;
-    }
-    public String getDescription() {
-        return desc;
-    }
-    public Location[] getLocations() {
-        return locations;
-    }
-    public AreaStyle getAreaStyle() {
-        return areaStyle;
-    }
 
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDescription() {
+        return desc;
+    }
+
     public void setDescription(String desc) {
         this.desc = desc;
     }
+
+    public Location[] getLocations() {
+        return locations;
+    }
+
     public void setLocations(Location[] locations) {
         this.locations = locations;
     }
+
+    public AreaStyle getAreaStyle() {
+        return areaStyle;
+    }
+
     public void setAreaStyle(AreaStyle areaStyle) {
         this.areaStyle = areaStyle;
     }

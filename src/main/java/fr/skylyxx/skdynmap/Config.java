@@ -9,24 +9,23 @@ import java.lang.reflect.Modifier;
 public class Config {
 
     public static boolean isLoaded;
-    private static FileConfiguration configFile = SkDynmap.getINSTANCE().getConfig();
-
     public static boolean DEBUG_MODE;
     public static int UPDATE_INTERVAL;
     public static String DEFAULT_MARKER_ICON;
     public static InfoWindow INFO_WINDOW;
     public static AreaStyle DEFAULT_STYLE;
+    private static FileConfiguration configFile = SkDynmap.getINSTANCE().getConfig();
 
     public static void load() throws IllegalAccessException {
         for (Field field : Config.class.getFields()) {
             if (!Modifier.isStatic(field.getModifiers()) || field.getName().equalsIgnoreCase("isloaded")) {
                 continue;
             }
-            if(field.getName().equalsIgnoreCase("info_window")) {
+            if (field.getName().equalsIgnoreCase("info_window")) {
                 String withDesc = configFile.getString("info_window.with_desc");
                 String withoutDesc = configFile.getString("info_window.without_desc");
                 field.set(null, new InfoWindow(withDesc, withoutDesc));
-            } else if(field.getName().equalsIgnoreCase("default_style")) {
+            } else if (field.getName().equalsIgnoreCase("default_style")) {
                 AreaStyle style = new AreaStyle(
                         configFile.getString("default_style.fill.color"),
                         configFile.getDouble("default_style.fill.opacity"),
@@ -45,6 +44,7 @@ public class Config {
     public static class InfoWindow {
         public static String WITH_DESC;
         public static String WITHOUT_DESC;
+
         public InfoWindow(String withDesc, String withoutDesc) {
             WITH_DESC = withDesc;
             WITHOUT_DESC = withoutDesc;

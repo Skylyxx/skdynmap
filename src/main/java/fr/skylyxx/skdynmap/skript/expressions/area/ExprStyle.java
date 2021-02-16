@@ -22,9 +22,9 @@ public class ExprStyle extends SimplePropertyExpression<Object, AreaStyle> {
     @Nullable
     @Override
     public AreaStyle convert(Object o) {
-        if(o instanceof DynmapArea) {
+        if (o instanceof DynmapArea) {
             return ((DynmapArea) o).getAreaStyle();
-        } else if(o instanceof AreaBuilder) {
+        } else if (o instanceof AreaBuilder) {
             return ((AreaBuilder) o).getAreaStyle();
         }
         return null;
@@ -43,7 +43,7 @@ public class ExprStyle extends SimplePropertyExpression<Object, AreaStyle> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(AreaStyle.class);
         }
         return CollectionUtils.array();
@@ -51,10 +51,10 @@ public class ExprStyle extends SimplePropertyExpression<Object, AreaStyle> {
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        for(Object o : getExpr().getArray(e)) {
-            if(o instanceof DynmapArea) {
+        for (Object o : getExpr().getArray(e)) {
+            if (o instanceof DynmapArea) {
                 ((DynmapArea) o).setAreaStyle((AreaStyle) delta[0]);
-            } else if(o instanceof AreaBuilder) {
+            } else if (o instanceof AreaBuilder) {
                 ((AreaBuilder) o).setAreaStyle((AreaStyle) delta[0]);
             }
         }

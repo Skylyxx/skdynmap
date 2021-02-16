@@ -37,7 +37,7 @@ public class ExprLineColor extends SimplePropertyExpression<AreaStyle, String> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.RESET || mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(String.class);
         }
         return CollectionUtils.array();
@@ -45,15 +45,15 @@ public class ExprLineColor extends SimplePropertyExpression<AreaStyle, String> {
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        switch(mode) {
+        switch (mode) {
             case RESET:
-                for(AreaStyle style : getExpr().getArray(e)) {
+                for (AreaStyle style : getExpr().getArray(e)) {
                     style.setLineColor(Config.DEFAULT_STYLE.getLineColor());
                 }
                 break;
             case SET:
-                for(AreaStyle style : getExpr().getArray(e)) {
-                    style.setLineColor((String)delta[0]);
+                for (AreaStyle style : getExpr().getArray(e)) {
+                    style.setLineColor((String) delta[0]);
                 }
                 break;
             default:
