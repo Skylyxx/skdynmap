@@ -140,6 +140,15 @@ p#example {
     padding-bottom: 10px;
 }
 
+div.gist {
+    width: 60%;
+    display: inline-block;
+}
+
+img.example {
+    width: 30%;
+}
+
 /* page 3 */
 
 .page3 {
