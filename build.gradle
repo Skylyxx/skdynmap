@@ -17,12 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
     implementation('com.github.SkriptLang:Skript:2.5.3') {
         exclude group: 'com.sk89q.worldguard', module: 'worldguard-legacy'
         exclude group: 'net.milkbowl.vault', module: 'Vault'
     }
-    implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-2'
+    implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-7'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
