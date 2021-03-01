@@ -36,6 +36,7 @@ public class SkDynmap extends JavaPlugin {
     public File storageFile;
     public CustomYamlConfig storageYaml;
 
+    public Plugin dynmap;
     public MarkerAPI markerAPI;
     public MarkerSet markerSet;
 
@@ -51,14 +52,14 @@ public class SkDynmap extends JavaPlugin {
         Metrics metrics = new Metrics(this, 9273);
         INSTANCE = this;
         final PluginManager pm = Bukkit.getPluginManager();
-        final Plugin SKRIPT = pm.getPlugin("Skript");
-        final Plugin DYNMAP = pm.getPlugin("dynmap");
-        if (SKRIPT == null || !SKRIPT.isEnabled()) {
+        final Plugin skript = pm.getPlugin("Skript");
+        dynmap = pm.getPlugin("dynmap");
+        if (skript == null || !skript.isEnabled()) {
             Logger.severe("Skript dependency was not found ! Disabling...");
             pm.disablePlugin(this);
             return;
         }
-        if (DYNMAP == null || !DYNMAP.isEnabled()) {
+        if (dynmap == null || !dynmap.isEnabled()) {
             Logger.severe("Dynmap dependency was not found ! Disabling...");
             pm.disablePlugin(this);
             return;
@@ -190,7 +191,7 @@ public class SkDynmap extends JavaPlugin {
     }
 
     private boolean loadDynmap() {
-        final Plugin dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
+        dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
         markerAPI = ((DynmapCommonAPI) dynmap).getMarkerAPI();
         if (markerAPI == null) {
             Logger.severe("There was an error while loading MarkerAPI ! Disabling...");
