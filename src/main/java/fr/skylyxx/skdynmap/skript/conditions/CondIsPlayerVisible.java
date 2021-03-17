@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.conditions;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -12,6 +13,16 @@ import org.dynmap.DynmapCommonAPI;
 
 import javax.annotation.Nullable;
 
+@Name("Is player visible")
+@Description("Check if a player is visible on the map")
+@Since("1.2")
+@Examples("command /isvisible <player>:\n" +
+        "\ttrigger:\n" +
+        "\t\tif arg-1 is visible:\n" +
+        "\t\t\tsend \"yes\"\n" +
+        "\t\telse:\n" +
+        "\t\t\tsend \"no\"")
+@RequiredPlugins("dynmap")
 public class CondIsPlayerVisible extends Condition {
 
     static {

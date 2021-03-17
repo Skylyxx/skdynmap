@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.players;
 
 import ch.njol.skript.classes.Changer;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.SkDynmap;
@@ -10,6 +11,15 @@ import org.dynmap.DynmapCommonAPI;
 
 import javax.annotation.Nullable;
 
+@Name("Visibility of player")
+@Description("Get the visibility of a player on the map.\n" +
+        "It can be set or reset.")
+@Since("1.2")
+@Examples("command /show:\n" +
+        "\ttrigger:\n" +
+        "\t\tset player's visibility to true\n" +
+        "\t\tsend \"You are now visible on the map!\"")
+@RequiredPlugins("dynmap")
 public class ExprVisibility extends SimplePropertyExpression<Player, Boolean> {
 
     static {
@@ -39,7 +49,7 @@ public class ExprVisibility extends SimplePropertyExpression<Player, Boolean> {
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.RESET) {
             return CollectionUtils.array(Boolean.class);
         }
         return CollectionUtils.array();

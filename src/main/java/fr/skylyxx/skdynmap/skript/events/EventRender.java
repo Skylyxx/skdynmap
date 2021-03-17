@@ -10,12 +10,14 @@ import org.bukkit.event.HandlerList;
 @Name("On render")
 @Description("Called each time the SkDynmap layer is rendered. Cancellable event.")
 @Since("1.2")
-@Examples("on render" +
+@Examples("on render:" +
         "\tif {skdynmap-disable} is true:" +
         "\t\tcancel event" +
         "\t\tsend \"The render event has been cancelled !\" to console")
 @RequiredPlugins("dynmap")
 public class EventRender extends Event implements Cancellable {
+
+    private static final HandlerList HANDLERS = new HandlerList();
 
     static {
         Skript.registerEvent("SkDynmap render", SimpleEvent.class, EventRender.class,
@@ -23,19 +25,18 @@ public class EventRender extends Event implements Cancellable {
         );
     }
 
-    private static final HandlerList HANDLERS = new HandlerList();
     private boolean isCancelled;
 
     public EventRender() {
         this.isCancelled = false;
     }
 
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
-    public static HandlerList getHandlerList() {
+    @Override
+    public HandlerList getHandlers() {
         return HANDLERS;
     }
 
