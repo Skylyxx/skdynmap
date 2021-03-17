@@ -6,11 +6,13 @@ import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.GenericMarker;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
 
@@ -24,6 +26,73 @@ public class Util {
     public static int hexToInt(String hex) {
         hex = hex.replace("#", "");
         return Integer.parseInt(hex, 16);
+    }
+
+    /*
+        CHUNKS CORNERS
+     */
+
+    final static List<Pair<Integer, Integer>> coordinateCouple = new ArrayList<>();
+
+    public static List<Location> getCorners(final List<Chunk> chunks) {
+        final List<Location> output = new ArrayList<>();
+        if (chunks.size() == 0)
+            return output;
+        coordinateCouple.clear();
+        coordinateCouple.add(new Pair<>(-1, 0)); // left
+        coordinateCouple.add(new Pair<>(0, -1)); // top
+        coordinateCouple.add(new Pair<>(1, 0));  // right
+        coordinateCouple.add(new Pair<>(0, 1));  // down
+        int startIndex = 0;
+        final List<Chunk> viewedChunks = new ArrayList<>();
+        for (final Chunk chunk : chunks) {
+            if (viewedChunks.contains(chunk))
+                continue;
+            final Pair<List<Location>, Pair<List<Chunk>, Integer>> intermediateResult = cornerRecursive(chunk, chunks, viewedChunks, startIndex);
+            intermediateResult.getFirst().stream().filter(location -> !output.contains(location)).forEach(output::add);
+            startIndex = intermediateResult.getSecond().getSecond();
+        }
+        return output;
+    }
+
+    private static Pair<List<Location>, Pair<List<Chunk>, Integer>> cornerRecursive(final Chunk seeing, final List<Chunk> toSee, final List<Chunk> viewed, final int startAt) {
+        // System.out.println("blabla: " + seeing.getX() + " / " + seeing.getZ());
+        final List<Location> locations = new ArrayList<>();
+        viewed.add(seeing);
+        int start = startAt;
+        // System.out.println(startAt);
+        for (int index = 0; index < coordinateCouple.size(); index++) {
+            start %= coordinateCouple.size();
+            final Pair<Integer, Integer> relativeCoordinate = coordinateCouple.get(start);
+            final Chunk chunk = seeing.getWorld().getChunkAt(seeing.getX() + relativeCoordinate.getFirst(), seeing.getZ() + relativeCoordinate.getSecond());
+            // System.out.println(viewed);
+            if (viewed.contains(chunk)) {
+                start++;
+                continue;
+            }
+            if (toSee.contains(chunk)) {
+                final Pair<List<Location>, Pair<List<Chunk>, Integer>> result = cornerRecursive(chunk, toSee, viewed, start + 3);
+                locations.addAll(result.getFirst());
+                viewed.addAll(result.getSecond().getFirst());
+                start++;
+                continue;
+            }
+            if (relativeCoordinate.getFirst() == -1) {
+                locations.add(seeing.getBlock(0, 0, 15).getLocation().add(0, 0, 1));
+                locations.add(seeing.getBlock(0, 0, 0).getLocation().add(0, 0, 0));
+            } else if (relativeCoordinate.getFirst() == 1) {
+                locations.add(seeing.getBlock(15, 0, 0).getLocation().add(1, 0, 0));
+                locations.add(seeing.getBlock(15, 0, 15).getLocation().add(1, 0, 1));
+            } else if (relativeCoordinate.getSecond() == -1) {
+                locations.add(seeing.getBlock(0, 0, 0).getLocation().add(0, 0, 0));
+                locations.add(seeing.getBlock(15, 0, 0).getLocation().add(1, 0, 0));
+            } else {
+                locations.add(seeing.getBlock(0, 0, 15).getLocation().add(0, 0, 1));
+                locations.add(seeing.getBlock(15, 0, 15).getLocation().add(1, 0, 1));
+            }
+            start++;
+        }
+        return new Pair<>(locations, new Pair<>(viewed, start));
     }
 
     /*
