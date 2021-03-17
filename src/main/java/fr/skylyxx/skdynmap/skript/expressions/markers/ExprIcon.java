@@ -59,7 +59,7 @@ public class ExprIcon extends SimplePropertyExpression<Object, String> {
 
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
-        if(mode != Changer.ChangeMode.SET) {
+        if (mode != Changer.ChangeMode.SET) {
             for (Object o : getExpr().getArray(e)) {
                 if (o instanceof DynmapMarker) {
                     ((DynmapMarker) o).setMarkerIcon(Config.DEFAULT_MARKER_ICON);

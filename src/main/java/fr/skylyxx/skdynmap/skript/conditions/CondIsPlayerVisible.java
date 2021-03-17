@@ -35,7 +35,7 @@ public class CondIsPlayerVisible extends Condition {
     @Override
     public boolean check(Event e) {
         boolean bool = ((DynmapCommonAPI) SkDynmap.getINSTANCE().dynmap).getPlayerVisbility(playerExpr.getSingle(e).getName());
-        if(invert)
+        if (invert)
             bool = !bool;
         return bool;
     }

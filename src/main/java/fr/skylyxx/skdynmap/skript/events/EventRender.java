@@ -3,7 +3,6 @@ package fr.skylyxx.skdynmap.skript.events;
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.util.SimpleEvent;
-import com.sun.istack.internal.NotNull;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

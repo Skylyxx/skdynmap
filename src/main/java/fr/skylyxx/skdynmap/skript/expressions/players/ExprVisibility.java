@@ -33,13 +33,13 @@ public class ExprVisibility extends SimplePropertyExpression<Player, Boolean> {
     @Nullable
     @Override
     public Boolean convert(Player player) {
-        return ((DynmapCommonAPI)SkDynmap.getINSTANCE().dynmap).getPlayerVisbility(player.getName());
+        return ((DynmapCommonAPI) SkDynmap.getINSTANCE().dynmap).getPlayerVisbility(player.getName());
     }
 
     @Nullable
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if(mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.SET) {
+        if (mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.SET) {
             return CollectionUtils.array(Boolean.class);
         }
         return CollectionUtils.array();
@@ -48,16 +48,17 @@ public class ExprVisibility extends SimplePropertyExpression<Player, Boolean> {
     @Override
     public void change(Event e, @Nullable Object[] delta, Changer.ChangeMode mode) {
         for (Player player : getExpr().getArray(e)) {
-            switch(mode) {
+            switch (mode) {
                 case SET: {
-                    ((DynmapCommonAPI)SkDynmap.getINSTANCE().dynmap).setPlayerVisiblity(player.getName(), (Boolean) delta[0]);
+                    ((DynmapCommonAPI) SkDynmap.getINSTANCE().dynmap).setPlayerVisiblity(player.getName(), (Boolean) delta[0]);
                     break;
                 }
                 case RESET: {
-                    ((DynmapCommonAPI)SkDynmap.getINSTANCE().dynmap).setPlayerVisiblity(player.getName(), (Boolean) true);
+                    ((DynmapCommonAPI) SkDynmap.getINSTANCE().dynmap).setPlayerVisiblity(player.getName(), (Boolean) true);
                     break;
                 }
-                default: break;
+                default:
+                    break;
             }
         }
     }

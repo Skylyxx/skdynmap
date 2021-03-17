@@ -139,13 +139,13 @@ public class SkDynmap extends JavaPlugin {
         dynmapAreas.clear();
         if (storageYaml.isSet("areas.")) {
             storageYaml.getConfigurationSection("areas").getKeys(false).forEach(id ->
-                dynmapAreas.put(id, new DynmapArea(id))
+                    dynmapAreas.put(id, new DynmapArea(id))
             );
         }
         dynmapMarkers.clear();
         if (storageYaml.isSet("markers.")) {
             storageYaml.getConfigurationSection("markers").getKeys(false).forEach(id ->
-                dynmapMarkers.put(id, new DynmapMarker(id))
+                    dynmapMarkers.put(id, new DynmapMarker(id))
             );
         }
     }
@@ -157,10 +157,10 @@ public class SkDynmap extends JavaPlugin {
     public void saveStorageYaml() {
         storageYaml = new CustomYamlConfig();
         dynmapAreas.forEach((id, dynmapArea) ->
-            storageYaml.setArea("areas." + id, dynmapArea)
+                storageYaml.setArea("areas." + id, dynmapArea)
         );
         dynmapMarkers.forEach((id, dynmapMarker) ->
-            storageYaml.setMarker("markers." + id, dynmapMarker)
+                storageYaml.setMarker("markers." + id, dynmapMarker)
         );
         try {
             storageYaml.save(storageFile);
@@ -212,7 +212,7 @@ public class SkDynmap extends JavaPlugin {
             int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
                 EventRender event = new EventRender();
                 Bukkit.getPluginManager().callEvent(event);
-                if(!event.isCancelled()) {
+                if (!event.isCancelled()) {
                     Util.renderAllAreas();
                     Util.renderAllMarkers();
                 }
