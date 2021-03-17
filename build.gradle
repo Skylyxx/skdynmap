@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'fr.skylyxx.skdynmap'
-version '1.2-BETA'
+version '1.2'
 
 repositories {
     mavenCentral()
