@@ -3,6 +3,7 @@ package fr.skylyxx.skdynmap;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import fr.skylyxx.skdynmap.commands.CmdSkDynmap;
+import fr.skylyxx.skdynmap.skript.events.EventRender;
 import fr.skylyxx.skdynmap.utils.Metrics;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
@@ -209,8 +210,12 @@ public class SkDynmap extends JavaPlugin {
         int taskInterval = Config.UPDATE_INTERVAL;
         if (taskInterval > 0) {
             int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-                Util.renderAllAreas();
-                Util.renderAllMarkers();
+                EventRender event = new EventRender();
+                Bukkit.getPluginManager().callEvent(event);
+                if(!event.isCancelled()) {
+                    Util.renderAllAreas();
+                    Util.renderAllMarkers();
+                }
             }, 100, taskInterval * 20L);
         }
         return true;
