@@ -33,7 +33,7 @@ jar {
 
 task copyJar(type: Copy) {
     from jar
-    into '.\\out'
+    into 'D:\\Servers\\Minecraft\\SkDynmap\\plugins' // You have to modify this path to your server's plugin folder
     println "Project ${project.name} has been builded !"
 }
 

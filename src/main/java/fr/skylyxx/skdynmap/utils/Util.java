@@ -28,6 +28,10 @@ public class Util {
         return Integer.parseInt(hex, 16);
     }
 
+    /*
+        CHUNKS CORNERS
+     */
+
     final static List<Pair<Integer, Integer>> coordinateCouple = new ArrayList<>();
 
     public static List<Location> getCorners(final List<Chunk> chunks) {
