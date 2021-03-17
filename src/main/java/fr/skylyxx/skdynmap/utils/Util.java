@@ -16,23 +16,21 @@ import java.util.List;
 
 public class Util {
 
+    final static List<Pair<Integer, Integer>> coordinateCouple = new ArrayList<>();
     private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
-
-    private static final ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
     /*
         OTHER
+     */
+    private static final ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
+
+    /*
+        CHUNKS CORNERS
      */
 
     public static int hexToInt(String hex) {
         hex = hex.replace("#", "");
         return Integer.parseInt(hex, 16);
     }
-
-    /*
-        CHUNKS CORNERS
-     */
-
-    final static List<Pair<Integer, Integer>> coordinateCouple = new ArrayList<>();
 
     public static List<Location> getCorners(final List<Chunk> chunks) {
         final List<Location> output = new ArrayList<>();

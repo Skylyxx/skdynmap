@@ -7,12 +7,11 @@ import java.util.Arrays;
 
 public class DynmapArea {
 
+    private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
     private String id;
     private String name;
     private String desc;
     private Location[] locations;
-
-    private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
     private AreaStyle areaStyle;
 
     public DynmapArea(String id, String name, String desc, Location[] locations, AreaStyle areaStyle) {
