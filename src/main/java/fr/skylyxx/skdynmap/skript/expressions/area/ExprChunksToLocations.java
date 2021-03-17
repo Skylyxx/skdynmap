@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.skript.expressions.area;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -15,6 +16,18 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
+@Name("Corners of chunks")
+@Description("Get the locations from a list of chunks, to be used with locations of areas")
+@Since("1.2")
+@Examples("command /makechunks:\n" +
+        "\ttrigger:\n" +
+        "\t\tmake area:\n" +
+        "\t\t\tset id of area to \"chunk_id\"\n" +
+        "\t\t\tset name of area to \"Chunks\"\n" +
+        "\t\t\tset locations of area to corners of {chunk::*}\n" +
+        "\t\tcreate area from last area\n" +
+        "\t\tsend \"Ok!\"")
+@RequiredPlugins("dynmap")
 public class ExprChunksToLocations extends SimpleExpression<Location> {
 
     static {
