@@ -15,16 +15,16 @@ public final class Pair<T, K> {
         this.secondValue = secondValue;
     }
 
+    public static <T, K> Pair<T, K> from(final T firstValue, final K secondValue) {
+        return new Pair<>(firstValue, secondValue);
+    }
+
     public T getFirst() {
         return this.firstValue;
     }
 
     public K getSecond() {
         return this.secondValue;
-    }
-
-    public static <T, K> Pair<T, K> from(final T firstValue, final K secondValue) {
-        return new Pair<>(firstValue, secondValue);
     }
 
     @Override
