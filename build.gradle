@@ -23,7 +23,7 @@ dependencies {
         exclude group: 'net.milkbowl.vault', module: 'Vault'
     }
     implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-7'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation group: 'org.jetbrains', name: 'annotations', version: '16.0.2'
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
