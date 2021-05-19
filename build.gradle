@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'fr.skylyxx.skdynmap'
-version '1.2'
+version '1.2.1'
 
 def mcVersion = '1.16'
 def subVersion = '.5'
@@ -31,7 +31,37 @@ jar {
     archiveName("SkDynmap.jar")
 }
 
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+} as Object
+
+task githubRessources(type: ProcessResources) {
+    from("src/main/resources", {
+        include("**")
+        def lastCommit = getGitHash()
+        def ver = project.version + "-Github-" + lastCommit
+        filter ReplaceTokens, tokens: [
+                'version': ver,
+                'apiVersion': mcVersion,
+        ]
+    })
+    into("build/resources/main")
+}
+
+task githubRelease(type: Jar) {
+    from sourceSets.main.output
+    dependsOn(githubRessources)
+    archiveName("SkDynmap-Github.jar")
+}
+githubRelease.finalizedBy(clean)
+
 setLibsDirName("..\\out")
+build.finalizedBy(clean)
 
 processResources {
     filter ReplaceTokens, tokens: [
