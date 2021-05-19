@@ -169,10 +169,10 @@ public class Util {
 
         String desc;
         if (description == null || description.trim().isEmpty()) {
-            desc = Config.INFO_WINDOW.WITHOUT_DESC;
+            desc = Config.InfoWindow.WITHOUT_DESC;
             desc = desc.replaceAll("%name%", name);
         } else {
-            desc = Config.INFO_WINDOW.WITH_DESC;
+            desc = Config.InfoWindow.WITH_DESC;
             desc = desc.replaceAll("%name%", name);
             desc = desc.replaceAll("%description%", description);
         }
