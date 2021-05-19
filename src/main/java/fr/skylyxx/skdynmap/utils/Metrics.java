@@ -69,7 +69,7 @@ public class Metrics {
     // A list with all custom charts
     private final List<fr.skylyxx.skdynmap.utils.Metrics.CustomChart> charts = new ArrayList<>();
     // Is bStats enabled on this server?
-    private boolean enabled;
+    private final boolean enabled;
 
     /**
      * Class constructor.

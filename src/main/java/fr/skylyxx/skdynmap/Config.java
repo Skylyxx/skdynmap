@@ -13,7 +13,6 @@ public class Config {
     public static boolean DEBUG_MODE;
     public static int UPDATE_INTERVAL;
     public static String DEFAULT_MARKER_ICON;
-    public static InfoWindow INFO_WINDOW;
     public static AreaStyle DEFAULT_STYLE;
 
     public static void load() throws IllegalAccessException {

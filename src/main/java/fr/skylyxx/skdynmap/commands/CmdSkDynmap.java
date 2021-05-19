@@ -28,7 +28,7 @@ public class CmdSkDynmap implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("info")) {
                 sender.sendMessage("§c§m          §r " + prefix + "§r §c§m          §r");
                 sender.sendMessage("§6SkDynmap version: §e" + skDynmap.getDescription().getVersion());
-                sender.sendMessage("§6Author: §e" + skDynmap.getDescription().getAuthors().toString());
+                sender.sendMessage("§6Author: §e" + skDynmap.getDescription().getAuthors());
                 sender.sendMessage("§6Documentation: §ehttps://github.com/Skylyxx/skdynmap#documentation");
             } else if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("update")) {
                 String update = null;
