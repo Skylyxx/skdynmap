@@ -8,8 +8,7 @@ import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Locations of area")
 @Description("Returns the locations of an area/areabuilder\n" +

@@ -12,8 +12,7 @@ import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Area builder")
 @Description("The constructor for a future area")

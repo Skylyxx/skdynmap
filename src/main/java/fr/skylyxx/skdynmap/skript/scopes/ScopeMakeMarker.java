@@ -11,8 +11,8 @@ import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.EffectSection;
 import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

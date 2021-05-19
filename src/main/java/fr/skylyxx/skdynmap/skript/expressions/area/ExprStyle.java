@@ -8,8 +8,7 @@ import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Style of area")
 @Description("Returns the style of an area/areabuilder\n" +
