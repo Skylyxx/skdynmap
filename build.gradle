@@ -7,23 +7,23 @@ plugins {
 group 'fr.skylyxx.skdynmap'
 version '1.2'
 
+def mcVersion = '1.16'
+def subVersion = '.5'
+
 repositories {
-    mavenCentral()
-    jcenter()
-    maven {url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'}
-    maven {url = 'https://oss.sonatype.org/content/repositories/snapshots'}
-    maven {url = 'https://jitpack.io'}
-    maven {url = 'https://repo.destroystokyo.com/repository/maven-public/'}
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://repo.destroystokyo.com/repository/maven-public/' }
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    implementation('com.github.SkriptLang:Skript:2.5.3') {
-        exclude group: 'com.sk89q.worldguard', module: 'worldguard-legacy'
-        exclude group: 'net.milkbowl.vault', module: 'Vault'
+    compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion + subVersion + '-R0.1-SNAPSHOT'
+    compileOnly group: 'com.github.SkriptLang', name:  'Skript', version: '2.5.3', {
+        exclude module: 'worldguard-legacy'
+        exclude module: 'Vault'
     }
-    implementation 'com.github.webbukkit.dynmap:DynmapCore:3.1-beta-7'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly group: 'com.github.webbukkit.dynmap', name: 'DynmapCore', version: '3.1-beta-7'
+    compileOnly group: 'org.jetbrains', name: 'annotations', version: '20.1.0'
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -31,16 +31,11 @@ jar {
     archiveName("SkDynmap.jar")
 }
 
-task copyJar(type: Copy) {
-    from jar
-    into '.\\out'
-    // into 'D:\\Servers\\Minecraft\\SkDynmap\\plugins' // You have to modify this path to your server's plugin folder
-    println "Project ${project.name} has been builded !"
-}
-
-build.finalizedBy copyJar
-copyJar.finalizedBy clean
+setLibsDirName("..\\out")
 
 processResources {
-    filter ReplaceTokens, tokens: ["version": project.property("version")]
+    filter ReplaceTokens, tokens: [
+            'version': project.property('version'),
+            'apiVersion': mcVersion
+    ]
 }
