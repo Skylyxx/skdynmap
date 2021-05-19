@@ -7,8 +7,7 @@ import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.Config;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Fill opacity")
 @Description("Returns the fill-opacity property of the provided style.")

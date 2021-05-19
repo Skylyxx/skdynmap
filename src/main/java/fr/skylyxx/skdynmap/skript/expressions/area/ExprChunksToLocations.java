@@ -11,8 +11,8 @@ import fr.skylyxx.skdynmap.utils.Util;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 

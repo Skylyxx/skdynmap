@@ -10,8 +10,7 @@ import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.dynmap.DynmapCommonAPI;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Is player visible")
 @Description("Check if a player is visible on the map")

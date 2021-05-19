@@ -9,8 +9,7 @@ import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Name of Area/Marker")
 @Description("Returns the name of a area/areabuilder/marker/markerbuilder\n" +

@@ -10,8 +10,7 @@ import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Area with id")
 @Description("Get an area from its id")

@@ -10,8 +10,8 @@ import fr.skylyxx.skdynmap.Logger;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 @Name("Create area")

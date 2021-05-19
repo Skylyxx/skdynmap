@@ -8,8 +8,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.Util;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Clear renders")
 @Description("Clear all areas and markers on the map")

@@ -5,8 +5,8 @@ import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.dynmap.markers.MarkerIcon;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class MarkerBuilder {

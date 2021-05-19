@@ -11,8 +11,7 @@ import fr.skylyxx.skdynmap.Config;
 import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Marker builder")
 @Description("The constructor for a future marker")

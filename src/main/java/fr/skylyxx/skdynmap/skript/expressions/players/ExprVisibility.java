@@ -8,8 +8,7 @@ import fr.skylyxx.skdynmap.SkDynmap;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.dynmap.DynmapCommonAPI;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Visibility of player")
 @Description("Get the visibility of a player on the map.\n" +
@@ -64,7 +63,7 @@ public class ExprVisibility extends SimplePropertyExpression<Player, Boolean> {
                     break;
                 }
                 case RESET: {
-                    ((DynmapCommonAPI) SkDynmap.getINSTANCE().dynmap).setPlayerVisiblity(player.getName(), (Boolean) true);
+                    ((DynmapCommonAPI) SkDynmap.getINSTANCE().dynmap).setPlayerVisiblity(player.getName(), true);
                     break;
                 }
                 default:

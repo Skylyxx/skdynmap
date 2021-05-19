@@ -7,8 +7,7 @@ import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Description of area")
 @Description("Returns the description of an area/areabuilder\n" +

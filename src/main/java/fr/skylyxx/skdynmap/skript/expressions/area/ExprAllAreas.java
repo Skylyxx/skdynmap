@@ -10,8 +10,7 @@ import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("All areas")
 @Description("Return a list with all created areas")

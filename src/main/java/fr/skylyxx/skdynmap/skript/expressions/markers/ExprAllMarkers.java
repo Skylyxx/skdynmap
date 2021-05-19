@@ -10,8 +10,7 @@ import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("All markers")
 @Description("Return a list with all created markers")

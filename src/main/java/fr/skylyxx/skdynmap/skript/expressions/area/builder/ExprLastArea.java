@@ -10,8 +10,7 @@ import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.skript.scopes.ScopeMakeArea;
 import fr.skylyxx.skdynmap.utils.types.AreaBuilder;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("The area")
 @Description("This expression returns the last generated area using area scope")

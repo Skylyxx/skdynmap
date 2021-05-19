@@ -7,8 +7,7 @@ import ch.njol.util.coll.CollectionUtils;
 import fr.skylyxx.skdynmap.Config;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Line color")
 @Description("Returns the line-color property of the provided style.")

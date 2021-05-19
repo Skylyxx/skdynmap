@@ -10,8 +10,7 @@ import ch.njol.util.Kleenean;
 import fr.skylyxx.skdynmap.skript.scopes.ScopeMakeMarker;
 import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("The marker")
 @Description("This expression returns the last generated marker using marker scope")

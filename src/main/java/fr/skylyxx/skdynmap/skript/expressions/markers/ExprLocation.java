@@ -8,8 +8,7 @@ import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import fr.skylyxx.skdynmap.utils.types.MarkerBuilder;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Location of marker")
 @Description("Returns the location of a marker/markerbuilder\n" +
