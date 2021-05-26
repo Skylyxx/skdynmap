@@ -53,7 +53,7 @@ public class ExprLineColor extends SimplePropertyExpression<AreaStyle, String> {
         switch (mode) {
             case RESET:
                 for (AreaStyle style : getExpr().getArray(e)) {
-                    style.setLineColor(Config.DEFAULT_STYLE.getLineColor());
+                    style.setLineColor(Config.DEFAULT_STYLE.<AreaStyle>get().getLineColor());
                 }
                 break;
             case SET:

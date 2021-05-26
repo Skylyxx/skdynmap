@@ -111,7 +111,7 @@ public class ExprAreaBuilder extends SimpleExpression<AreaBuilder> {
         String name = nameExpr.getSingle(e);
         String desc = descExpr != null ? descExpr.getSingle(e) : "";
         Location[] locations = locationsExpr.getAll(e);
-        AreaStyle areaStyle = styleExpr != null ? styleExpr.getSingle(e) : Config.DEFAULT_STYLE;
+        AreaStyle areaStyle = styleExpr != null ? styleExpr.getSingle(e) : Config.DEFAULT_STYLE.<AreaStyle>get();
         String id = idExpr != null ? idExpr.getSingle(e) : name.toLowerCase().replaceAll(" ", "-") + "_" + locations[0].getWorld().getName().toLowerCase();
         AreaBuilder areaBuilder = new AreaBuilder(
                 id,

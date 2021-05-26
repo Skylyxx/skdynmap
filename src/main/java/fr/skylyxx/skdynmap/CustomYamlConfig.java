@@ -6,6 +6,7 @@ import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,11 +44,11 @@ public class CustomYamlConfig extends YamlConfiguration {
     }
 
     public AreaStyle getStyle(String path) {
-        String fillColor = getString(path + ".fill.color", Config.DEFAULT_STYLE.getFillColor());
-        double fillOpacity = getDouble(path + ".fill.opacity", Config.DEFAULT_STYLE.getFillOpacity());
-        String lineColor = getString(path + ".line.color", Config.DEFAULT_STYLE.getLineColor());
-        double lineOpacity = getDouble(path + ".line.opacity", Config.DEFAULT_STYLE.getLineOpacity());
-        int lineWeight = getInt(path + ".line.weight", Config.DEFAULT_STYLE.getLineWeight());
+        String fillColor = getString(path + ".fill.color", Config.DEFAULT_STYLE.<AreaStyle>get().getFillColor());
+        double fillOpacity = getDouble(path + ".fill.opacity", Config.DEFAULT_STYLE.<AreaStyle>get().getFillOpacity());
+        String lineColor = getString(path + ".line.color", Config.DEFAULT_STYLE.<AreaStyle>get().getLineColor());
+        double lineOpacity = getDouble(path + ".line.opacity", Config.DEFAULT_STYLE.<AreaStyle>get().getLineOpacity());
+        int lineWeight = getInt(path + ".line.weight", Config.DEFAULT_STYLE.<AreaStyle>get().getLineWeight());
         return new AreaStyle(fillColor, fillOpacity, lineColor, lineOpacity, lineWeight);
     }
 

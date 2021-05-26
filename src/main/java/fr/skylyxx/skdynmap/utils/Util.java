@@ -1,6 +1,7 @@
 package fr.skylyxx.skdynmap.utils;
 
 import fr.skylyxx.skdynmap.Config;
+import fr.skylyxx.skdynmap.CustomYamlConfig;
 import fr.skylyxx.skdynmap.Logger;
 import fr.skylyxx.skdynmap.SkDynmap;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
@@ -8,6 +9,7 @@ import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.GenericMarker;
 
@@ -18,10 +20,30 @@ public class Util {
 
     final static List<Pair<Integer, Integer>> coordinateCouple = new ArrayList<>();
     private static final SkDynmap skDynmap = SkDynmap.getINSTANCE();
+    private static final ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
+
     /*
         OTHER
      */
-    private static final ArrayList<AreaMarker> renderedAreas = new ArrayList<AreaMarker>();
+    public static boolean addDefault(YamlConfiguration config, String path, Object o) {
+        if (config == null) return true;
+        if (!config.isSet(path)) {
+            if (config instanceof CustomYamlConfig) {
+                if (o instanceof AreaStyle)
+                    ((CustomYamlConfig) config).setStyle(path, ((AreaStyle) o));
+                else if (o instanceof DynmapArea)
+                    ((CustomYamlConfig) config).setArea(path, ((DynmapArea) o));
+                else if (o instanceof DynmapMarker)
+                    ((CustomYamlConfig) config).setMarker(path, ((DynmapMarker) o));
+                else
+                    config.set(path, o);
+            } else {
+                config.set(path, o);
+            }
+            return true;
+        }
+        return false;
+    }
 
     /*
         CHUNKS CORNERS
@@ -169,10 +191,10 @@ public class Util {
 
         String desc;
         if (description == null || description.trim().isEmpty()) {
-            desc = Config.InfoWindow.WITHOUT_DESC;
+            desc = Config.INFOWINDOW_WITHOUT_DESC.get();
             desc = desc.replaceAll("%name%", name);
         } else {
-            desc = Config.InfoWindow.WITH_DESC;
+            desc = Config.INFOWINDOW_WITH_DESC.get();
             desc = desc.replaceAll("%name%", name);
             desc = desc.replaceAll("%description%", description);
         }

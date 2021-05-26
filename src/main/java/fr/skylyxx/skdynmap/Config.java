@@ -1,53 +1,71 @@
 package fr.skylyxx.skdynmap;
 
+import ch.njol.skript.util.FileUtils;
+import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.io.File;
+import java.io.IOException;
 
-public class Config {
+public enum Config {
 
-    private static final FileConfiguration configFile = SkDynmap.getINSTANCE().getConfig();
-    public static boolean isLoaded;
-    public static boolean DEBUG_MODE;
-    public static int UPDATE_INTERVAL;
-    public static String DEFAULT_MARKER_ICON;
-    public static AreaStyle DEFAULT_STYLE;
+    DEBUG_MODE(false),
+    UPDATE_INTERVAL(5),
+    DEFAULT_MARKER_ICON("pin"),
+    INFOWINDOW_WITH_DESC("<div class\"infowindow\"><span><strong>Name: </strong>%name%<br><strong>Description: </strong>%description%</div>"),
+    INFOWINDOW_WITHOUT_DESC("<div class\"infowindow\"><span><strong>Name: </strong>%name%</div>"),
+    DEFAULT_STYLE(new AreaStyle("#FF0000", 0.35, "#FF0000", 0.8, 3)),
+    ;
 
-    public static void load() throws IllegalAccessException {
-        for (Field field : Config.class.getFields()) {
-            if (!Modifier.isStatic(field.getModifiers()) || field.getName().equalsIgnoreCase("isloaded")) {
-                continue;
-            }
-            if (field.getName().equalsIgnoreCase("info_window")) {
-                String withDesc = configFile.getString("info_window.with_desc");
-                String withoutDesc = configFile.getString("info_window.without_desc");
-                field.set(null, new InfoWindow(withDesc, withoutDesc));
-            } else if (field.getName().equalsIgnoreCase("default_style")) {
-                AreaStyle style = new AreaStyle(
-                        configFile.getString("default_style.fill.color"),
-                        configFile.getDouble("default_style.fill.opacity"),
-                        configFile.getString("default_style.line.color"),
-                        configFile.getDouble("default_style.line.opacity"),
-                        configFile.getInt("default_style.line.weight")
-                );
-                field.set(null, style);
-            } else {
-                field.set(null, configFile.get(field.getName().toLowerCase()));
-            }
-            isLoaded = true;
-        }
+    private static boolean isLoaded = false;
+    private static File file;
+    private static CustomYamlConfig configuration;
+    private Object value;
+
+    Config(Object value) {
+        this.value = value;
     }
 
-    public static class InfoWindow {
-        public static String WITH_DESC;
-        public static String WITHOUT_DESC;
-
-        public InfoWindow(String withDesc, String withoutDesc) {
-            WITH_DESC = withDesc;
-            WITHOUT_DESC = withoutDesc;
-        }
+    public static boolean isLoaded() {
+        return isLoaded;
     }
 
+    public static void load() {
+        try {
+            file = new File(SkDynmap.getINSTANCE().getDataFolder(), "config.yml");
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            configuration = new CustomYamlConfig();
+            configuration.load(file);
+        } catch (IOException | InvalidConfigurationException exception) {
+            SkDynmap.getINSTANCE().getLogger().severe("Failed to create/load configuration file !");
+            exception.printStackTrace();
+        }
+        for (Config cfg : Config.values()) {
+            String key = cfg.toString();
+            Object value = cfg.get();
+            if(!Util.addDefault(configuration, key.toLowerCase(),value)) {
+                cfg.set(configuration.get(key.toLowerCase()));
+            }
+        }
+        try {
+            configuration.save(file);
+        } catch (IOException exception) {
+            SkDynmap.getINSTANCE().getLogger().severe("Failed to save configuration file !");
+            exception.printStackTrace();
+        }
+        isLoaded = true;
+    }
+
+    public void set(Object value) {
+        this.value = value;
+    }
+
+    public <T> T get() {
+        return (T) this.value;
+    }
 }

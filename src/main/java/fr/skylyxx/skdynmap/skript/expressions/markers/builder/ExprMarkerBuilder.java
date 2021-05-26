@@ -78,7 +78,7 @@ public class ExprMarkerBuilder extends SimpleExpression<MarkerBuilder> {
         String name = nameExpr.getSingle(e);
         Location location = locationsExpr.getSingle(e);
         String id = idExpr != null ? idExpr.getSingle(e) : null;
-        String iconID = iconExpr != null ? iconExpr.getSingle(e) : Config.DEFAULT_MARKER_ICON;
+        String iconID = iconExpr != null ? iconExpr.getSingle(e) : Config.DEFAULT_MARKER_ICON.get();
         MarkerBuilder markerBuilder = new MarkerBuilder(id, name, location, iconID);
         return new MarkerBuilder[]{markerBuilder};
     }
