@@ -2,12 +2,15 @@ package fr.skylyxx.skdynmap;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import fr.skylyxx.skdynmap.commands.CmdSkDynmap;
 import fr.skylyxx.skdynmap.skript.events.EventRender;
 import fr.skylyxx.skdynmap.utils.Metrics;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -28,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class SkDynmap extends JavaPlugin {
 
@@ -83,6 +87,11 @@ public class SkDynmap extends JavaPlugin {
         skDynmapCommand.setPermission("skdynmap.use");
         skDynmapCommand.setPermissionMessage("&cSorry but you don't have the required permission !");
 
+        try {
+            checkForUpdates();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
@@ -90,24 +99,18 @@ public class SkDynmap extends JavaPlugin {
         saveStorageYaml();
     }
 
-    @Nullable
-    public String checkForUpdates() throws IOException {
-        URL url = new URL("https://pastebin.com/raw/ZECi01d9");
+    public boolean checkForUpdates() throws IOException {
+        URL url = new URL("https://api.github.com/repos/Skylyxx/skdynmap/releases/latest");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-        StringBuilder stringBuilder = new StringBuilder();
-        String inputLine;
-        while ((inputLine = bufferedReader.readLine()) != null) {
-            stringBuilder.append(inputLine);
-            stringBuilder.append(System.lineSeparator());
-        }
-        bufferedReader.close();
-        String result = stringBuilder.toString();
-        if (!result.equalsIgnoreCase(getDescription().getVersion())) {
-            Logger.severe("You are not running the last stable version of SkDynmap. SkDynmap v%s is available ! Download it at %s !", result, getDescription().getWebsite());
-            return result;
-        }
-        Logger.info("You are runing the latest version of SkDynmap !");
-        return "up-to-date";
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(bufferedReader, JsonObject.class);
+        DefaultArtifactVersion reference = new DefaultArtifactVersion(jsonObject.get("tag_name").getAsString());
+        DefaultArtifactVersion current = new DefaultArtifactVersion(getDescription().getVersion());
+        if(current.compareTo(reference) < 0)
+            getLogger().warning("New version is available (" + jsonObject.get("tag_name") + ")! Download it at https://github.com/Skylyxx/skdynmap/releases/latest !");
+        else
+            getLogger().info("You are running the latest version of SkDynmap.");
+        return current.compareTo(reference) < 0;
     }
 
     private void initConfig() throws IOException, InvalidConfigurationException, IllegalAccessException {
