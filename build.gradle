@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     compileOnly group: 'org.spigotmc', name: 'spigot-api', version: mcVersion + subVersion + '-R0.1-SNAPSHOT'
-    compileOnly group: 'com.github.SkriptLang', name:  'Skript', version: '2.5.3', {
+    compileOnly group: 'com.github.SkriptLang', name:  'Skript', version: '2.6-alpha1', {
         exclude module: 'worldguard-legacy'
         exclude module: 'Vault'
     }
