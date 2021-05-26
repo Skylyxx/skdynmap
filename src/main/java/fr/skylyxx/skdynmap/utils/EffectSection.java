@@ -1,10 +1,10 @@
 package fr.skylyxx.skdynmap.utils;
 
-import ch.njol.skript.ScriptLoader;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.Node;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.lang.*;
+import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.log.*;
 import ch.njol.util.Kleenean;
 import ch.njol.util.StringUtils;
@@ -148,7 +148,7 @@ public abstract class EffectSection extends Condition {
 
     /**
      * It will load the section of this if any and then it will parse as in specific event.
-     * Basically it will call {@link ScriptLoader#setCurrentEvent(String, Class[])}, parse the current section,
+     * Basically it will call {@link ParserInstance#setCurrentEvent(String, Class[])}, parse the current section,
      * and then set the current event back to the previous one.
      * Useful to load a code from event X and parse as Y, allowing to use syntaxes that work on it.
      *
@@ -158,13 +158,13 @@ public abstract class EffectSection extends Condition {
      */
     public void loadSection(String name, boolean setNext, Class<? extends Event>... events) {
         if (section != null && name != null && events != null && events.length > 0) {
-            String previousName = ScriptLoader.getCurrentEventName();
-            Class<? extends Event>[] previousEvents = ScriptLoader.getCurrentEvents();
-            Kleenean previousDelay = ScriptLoader.hasDelayBefore;
-            ScriptLoader.setCurrentEvent(name, events);
+            String previousName = ParserInstance.get().getCurrentEventName();
+            Class<? extends Event>[] previousEvents = ParserInstance.get().getCurrentEvents();
+            Kleenean previousDelay = ParserInstance.get().getHasDelayBefore();
+            ParserInstance.get().setCurrentEvent(name, events);
             loadSection(setNext);
-            ScriptLoader.setCurrentEvent(previousName, previousEvents);
-            ScriptLoader.hasDelayBefore = previousDelay;
+            ParserInstance.get().setCurrentEvent(previousName, previousEvents);
+            ParserInstance.get().setHasDelayBefore(previousDelay);
         }
     }
 
