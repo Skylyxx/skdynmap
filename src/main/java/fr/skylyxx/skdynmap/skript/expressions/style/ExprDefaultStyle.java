@@ -33,7 +33,7 @@ public class ExprDefaultStyle extends SimpleExpression<AreaStyle> {
     @Nullable
     @Override
     protected AreaStyle[] get(Event e) {
-        return new AreaStyle[]{Config.DEFAULT_STYLE.clone()};
+        return new AreaStyle[]{Config.DEFAULT_STYLE.<AreaStyle>get().clone()};
     }
 
     @Override

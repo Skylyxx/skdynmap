@@ -28,7 +28,7 @@ public class AreaBuilder {
         this.name = null;
         this.desc = "";
         this.locations = null;
-        this.areaStyle = Config.DEFAULT_STYLE.clone();
+        this.areaStyle = Config.DEFAULT_STYLE.<AreaStyle>get().clone();
     }
 
     public String getId() {

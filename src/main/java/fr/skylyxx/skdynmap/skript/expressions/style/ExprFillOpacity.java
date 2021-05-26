@@ -53,7 +53,7 @@ public class ExprFillOpacity extends SimplePropertyExpression<AreaStyle, Double>
         switch (mode) {
             case RESET:
                 for (AreaStyle style : getExpr().getArray(e)) {
-                    style.setFillOpacity(Config.DEFAULT_STYLE.getFillOpacity());
+                    style.setFillOpacity(Config.DEFAULT_STYLE.<AreaStyle>get().getFillOpacity());
                 }
                 break;
             case SET:

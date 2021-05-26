@@ -53,7 +53,7 @@ public class ExprLineOpacity extends SimplePropertyExpression<AreaStyle, Double>
         switch (mode) {
             case RESET:
                 for (AreaStyle style : getExpr().getArray(e)) {
-                    style.setLineOpacity(Config.DEFAULT_STYLE.getLineOpacity());
+                    style.setLineOpacity(Config.DEFAULT_STYLE.<AreaStyle>get().getLineOpacity());
                 }
                 break;
             case SET:

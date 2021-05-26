@@ -111,20 +111,7 @@ public class SkDynmap extends JavaPlugin {
     }
 
     private void initConfig() throws IOException, InvalidConfigurationException, IllegalAccessException {
-        saveDefaultConfig();
-        if (!(getConfig().getInt("version") == 1) || !(getConfig().isSet("version"))) {
-            Path configPath = Paths.get(getDataFolder().getAbsolutePath() + File.separator + "config.yml");
-            Path configOldPath = Paths.get(getDataFolder().getAbsolutePath() + File.separator + "config.yml.old");
-            Files.deleteIfExists(configOldPath);
-            configPath.toFile().renameTo(configOldPath.toFile());
-            saveDefaultConfig();
-            Logger.warning("You were using an old version of the config !");
-            Logger.warning("Old configuration has been saved as config.old.yml.");
-            Logger.warning("A new configuration has been generated.");
-            Logger.warning("Be careful ! All the config has the default values, please verify the config !");
-        }
         Config.load();
-
         storageFile = new File(getDataFolder() + File.separator + "storage.yml");
         if (!storageFile.exists()) {
             storageFile.getParentFile().mkdirs();
@@ -207,7 +194,7 @@ public class SkDynmap extends JavaPlugin {
         markerSet.setMinZoom(0);
         markerSet.setLayerPriority(10);
         markerSet.setHideByDefault(false);
-        int taskInterval = Config.UPDATE_INTERVAL;
+        int taskInterval = Config.UPDATE_INTERVAL.<Integer>get();
         if (taskInterval > 0) {
             int renderTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
                 EventRender event = new EventRender();
@@ -222,7 +209,7 @@ public class SkDynmap extends JavaPlugin {
     }
 
     public boolean isDebugMode() {
-        return Config.isLoaded && Config.DEBUG_MODE;
+        return Config.isLoaded() && Config.DEBUG_MODE.<Boolean>get();
     }
 
     public MarkerSet getMarkerSet() {

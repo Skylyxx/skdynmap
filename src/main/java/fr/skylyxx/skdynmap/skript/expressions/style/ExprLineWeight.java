@@ -53,7 +53,7 @@ public class ExprLineWeight extends SimplePropertyExpression<AreaStyle, Integer>
         switch (mode) {
             case RESET:
                 for (AreaStyle style : getExpr().getArray(e)) {
-                    style.setLineWeight(Config.DEFAULT_STYLE.getLineWeight());
+                    style.setLineWeight(Config.DEFAULT_STYLE.<AreaStyle>get().getLineWeight());
                 }
                 break;
             case SET:

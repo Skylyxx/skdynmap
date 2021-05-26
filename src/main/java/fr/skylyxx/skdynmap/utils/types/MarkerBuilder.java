@@ -27,7 +27,7 @@ public class MarkerBuilder {
         this.id = null;
         this.name = null;
         this.location = null;
-        setMarkerIcon(Config.DEFAULT_MARKER_ICON);
+        setMarkerIcon(Config.DEFAULT_MARKER_ICON.get());
     }
 
     public String getId() {

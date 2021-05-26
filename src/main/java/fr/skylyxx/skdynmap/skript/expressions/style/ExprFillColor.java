@@ -53,7 +53,7 @@ public class ExprFillColor extends SimplePropertyExpression<AreaStyle, String> {
         switch (mode) {
             case RESET:
                 for (AreaStyle style : getExpr().getArray(e)) {
-                    style.setFillColor(Config.DEFAULT_STYLE.getFillColor());
+                    style.setFillColor(Config.DEFAULT_STYLE.<AreaStyle>get().getFillColor());
                 }
                 break;
             case SET:
