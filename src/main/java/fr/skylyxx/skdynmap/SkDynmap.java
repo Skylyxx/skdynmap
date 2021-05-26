@@ -20,18 +20,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapCommonAPI;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class SkDynmap extends JavaPlugin {
 
@@ -106,7 +101,7 @@ public class SkDynmap extends JavaPlugin {
         JsonObject jsonObject = gson.fromJson(bufferedReader, JsonObject.class);
         DefaultArtifactVersion reference = new DefaultArtifactVersion(jsonObject.get("tag_name").getAsString());
         DefaultArtifactVersion current = new DefaultArtifactVersion(getDescription().getVersion());
-        if(current.compareTo(reference) < 0)
+        if (current.compareTo(reference) < 0)
             getLogger().warning("New version is available (" + jsonObject.get("tag_name") + ")! Download it at https://github.com/Skylyxx/skdynmap/releases/latest !");
         else
             getLogger().info("You are running the latest version of SkDynmap.");

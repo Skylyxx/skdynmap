@@ -6,7 +6,6 @@ import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;

@@ -32,7 +32,7 @@ public class CmdSkDynmap implements CommandExecutor {
                 sender.sendMessage("§6Documentation: §ehttps://github.com/Skylyxx/skdynmap#documentation");
             } else if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("update")) {
                 try {
-                    if(skDynmap.checkForUpdates()) {
+                    if (skDynmap.checkForUpdates()) {
                         sender.sendMessage(prefix + "§eSkDynmap has new version available ! Download it at §6" + skDynmap.getDescription().getWebsite() + " §e!");
                     } else {
                         sender.sendMessage(prefix + "§aGood ! You are running the latest version of SkDynmap !");
