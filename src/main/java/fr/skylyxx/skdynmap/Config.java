@@ -1,10 +1,10 @@
 package fr.skylyxx.skdynmap;
 
-import ch.njol.skript.util.FileUtils;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.AreaStyle;
+import fr.skylyxx.skdynmap.utils.types.DynmapArea;
+import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +48,15 @@ public enum Config {
         for (Config cfg : Config.values()) {
             String key = cfg.toString();
             Object value = cfg.get();
-            if(!Util.addDefault(configuration, key.toLowerCase(),value)) {
-                cfg.set(configuration.get(key.toLowerCase()));
+            if (!Util.addDefault(configuration, key.toLowerCase(), value)) {
+                if (value instanceof AreaStyle)
+                    cfg.set(configuration.getStyle(key.toLowerCase()));
+                else if (value instanceof DynmapArea)
+                    cfg.set(configuration.getArea(key.toLowerCase()));
+                else if (value instanceof DynmapMarker)
+                    cfg.set(configuration.getMarker(key.toLowerCase()));
+                else
+                    cfg.set(configuration.get(key.toLowerCase()));
             }
         }
         try {
