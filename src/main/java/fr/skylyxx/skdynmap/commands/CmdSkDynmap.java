@@ -31,20 +31,15 @@ public class CmdSkDynmap implements CommandExecutor {
                 sender.sendMessage("§6Author: §e" + skDynmap.getDescription().getAuthors());
                 sender.sendMessage("§6Documentation: §ehttps://github.com/Skylyxx/skdynmap#documentation");
             } else if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("update")) {
-                String update = null;
                 try {
-                    update = skDynmap.checkForUpdates();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (update == null) {
-                    sender.sendMessage(prefix + "§cAn error happend while trying to check for SkDynmap update !");
-                } else {
-                    if (update.equalsIgnoreCase("up-to-date")) {
-                        sender.sendMessage(prefix + "§aGood ! You are running the latest version of SkDynmap !");
+                    if(skDynmap.checkForUpdates()) {
+                        sender.sendMessage(prefix + "§eSkDynmap has new version available ! Download it at §6" + skDynmap.getDescription().getWebsite() + " §e!");
                     } else {
-                        sender.sendMessage(prefix + "§eSkDynmap v" + update + " is available ! Download it at §6" + skDynmap.getDescription().getWebsite() + " §e!");
+                        sender.sendMessage(prefix + "§aGood ! You are running the latest version of SkDynmap !");
                     }
+                } catch (IOException e) {
+                    sender.sendMessage(prefix + "§cAn error happend while trying to check for SkDynmap update !");
+                    e.printStackTrace();
                 }
             } else {
                 sendHelp(sender);
