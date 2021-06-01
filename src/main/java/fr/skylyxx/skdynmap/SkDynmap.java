@@ -2,6 +2,7 @@ package fr.skylyxx.skdynmap;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
+import ch.njol.skript.util.Version;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import fr.skylyxx.skdynmap.commands.CmdSkDynmap;
@@ -10,7 +11,6 @@ import fr.skylyxx.skdynmap.utils.Metrics;
 import fr.skylyxx.skdynmap.utils.Util;
 import fr.skylyxx.skdynmap.utils.types.DynmapArea;
 import fr.skylyxx.skdynmap.utils.types.DynmapMarker;
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -99,8 +99,8 @@ public class SkDynmap extends JavaPlugin {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(bufferedReader, JsonObject.class);
-        DefaultArtifactVersion reference = new DefaultArtifactVersion(jsonObject.get("tag_name").getAsString());
-        DefaultArtifactVersion current = new DefaultArtifactVersion(getDescription().getVersion());
+        Version reference = new Version(jsonObject.get("tag_name").getAsString());
+        Version current = new Version(getDescription().getVersion());
         if (current.compareTo(reference) < 0)
             getLogger().warning("New version is available (" + jsonObject.get("tag_name") + ")! Download it at https://github.com/Skylyxx/skdynmap/releases/latest !");
         else
