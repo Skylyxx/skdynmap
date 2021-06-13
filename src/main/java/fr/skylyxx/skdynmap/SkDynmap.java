@@ -140,7 +140,7 @@ public class SkDynmap extends JavaPlugin {
     }
 
     public void saveStorageYaml() {
-        if(storageFile == null)
+        if (storageFile == null)
             return;
         storageYaml = new CustomYamlConfig();
         dynmapAreas.forEach((id, dynmapArea) ->
@@ -150,8 +150,8 @@ public class SkDynmap extends JavaPlugin {
                 storageYaml.setMarker("markers." + id, dynmapMarker)
         );
         try {
-            if(!storageFile.exists())
-                if(storageFile.getParentFile().mkdirs())
+            if (!storageFile.exists())
+                if (storageFile.getParentFile().mkdirs())
                     storageFile.createNewFile();
             storageYaml.save(storageFile);
             Logger.info("File storage.yml was saved successfully", true);
