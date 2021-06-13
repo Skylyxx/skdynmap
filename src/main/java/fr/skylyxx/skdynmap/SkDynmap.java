@@ -49,7 +49,6 @@ public class SkDynmap extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Metrics metrics = new Metrics(this, 9273);
         INSTANCE = this;
         final PluginManager pm = Bukkit.getPluginManager();
         final Plugin skript = pm.getPlugin("Skript");
@@ -87,6 +86,8 @@ public class SkDynmap extends JavaPlugin {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+
+        this.setupMetrics();
     }
 
     @Override
@@ -106,6 +107,11 @@ public class SkDynmap extends JavaPlugin {
         else
             getLogger().info("You are running the latest version of SkDynmap.");
         return current.compareTo(reference) < 0;
+    }
+
+    private void setupMetrics() {
+        Metrics metrics = new Metrics(this, 9273);
+        metrics.addCustomChart(new Metrics.SimplePie("skript_version", () -> Skript.getVersion().toString()));
     }
 
     private void initConfig() throws IOException, InvalidConfigurationException, IllegalAccessException {
