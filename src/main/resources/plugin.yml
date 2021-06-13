@@ -9,5 +9,3 @@ softdepend: [ Skript,dynmap ]
 commands:
   skdynmap:
     description: SkDynmap management command
-  test:
-    description: test
