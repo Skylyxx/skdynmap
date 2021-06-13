@@ -123,7 +123,7 @@ public class Util {
         if (!areaExist(id)) {
             return null;
         }
-        return new DynmapArea(id);
+        return SkDynmap.getINSTANCE().dynmapAreas.get(id);
     }
 
     public static boolean areaExist(String id) {

@@ -124,7 +124,7 @@ public class SkDynmap extends JavaPlugin {
         dynmapAreas.clear();
         if (storageYaml.isSet("areas.")) {
             storageYaml.getConfigurationSection("areas").getKeys(false).forEach(id ->
-                    dynmapAreas.put(id, new DynmapArea(id))
+                    dynmapAreas.put(id, getStorageYaml().getArea("areas." + id))
             );
         }
         dynmapMarkers.clear();

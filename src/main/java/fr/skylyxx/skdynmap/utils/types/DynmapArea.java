@@ -34,18 +34,6 @@ public class DynmapArea {
         skDynmap.dynmapAreas.put(id, this);
     }
 
-    public DynmapArea(String id) {
-        DynmapArea area = skDynmap.getStorageYaml().getArea("areas." + id);
-        if (area == null) {
-            return;
-        }
-        this.id = area.getId();
-        this.name = area.getName();
-        this.desc = area.getDescription();
-        this.locations = area.getLocations();
-        this.areaStyle = area.getAreaStyle();
-    }
-
     public String getId() {
         return id;
     }
