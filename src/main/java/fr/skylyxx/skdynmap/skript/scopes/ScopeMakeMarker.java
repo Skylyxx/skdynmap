@@ -70,9 +70,11 @@ public class ScopeMakeMarker extends EffectSection {
 
         if (!hasNameSetter) {
             Skript.error("You have to define a name for your marker in the \"make marker\" scope !");
+            return false;
         }
         if (!hasLocSetter) {
             Skript.error("You have to define location for your marker in the \"make marker\" scope !");
+            return false;
         }
         return true;
     }

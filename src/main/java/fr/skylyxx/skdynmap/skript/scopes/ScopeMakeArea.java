@@ -74,9 +74,11 @@ public class ScopeMakeArea extends EffectSection {
 
         if (!hasNameSetter) {
             Skript.error("You have to define a name for your area in the \"make area\" scope !");
+            return false;
         }
         if (!hasLocSetter) {
             Skript.error("You have to define locations for your area in the \"make area\" scope !");
+            return false;
         }
         return true;
     }
