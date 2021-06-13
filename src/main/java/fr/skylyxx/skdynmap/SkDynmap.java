@@ -130,7 +130,7 @@ public class SkDynmap extends JavaPlugin {
         dynmapMarkers.clear();
         if (storageYaml.isSet("markers.")) {
             storageYaml.getConfigurationSection("markers").getKeys(false).forEach(id ->
-                    dynmapMarkers.put(id, new DynmapMarker(id))
+                    dynmapMarkers.put(id, getStorageYaml().getMarker("markers." + id))
             );
         }
     }

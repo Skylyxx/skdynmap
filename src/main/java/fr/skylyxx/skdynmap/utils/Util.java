@@ -123,7 +123,7 @@ public class Util {
         if (!areaExist(id)) {
             return null;
         }
-        return SkDynmap.getINSTANCE().dynmapAreas.get(id);
+        return skDynmap.dynmapAreas.get(id);
     }
 
     public static boolean areaExist(String id) {
@@ -231,7 +231,7 @@ public class Util {
         if (!markerExist(id)) {
             return null;
         }
-        return new DynmapMarker(id);
+        return skDynmap.dynmapMarkers.get(id);
     }
 
     public static boolean markerExist(String id) {

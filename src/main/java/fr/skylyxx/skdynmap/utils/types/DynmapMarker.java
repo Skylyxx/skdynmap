@@ -22,19 +22,6 @@ public class DynmapMarker {
         skDynmap.dynmapMarkers.put(id, this);
     }
 
-    public DynmapMarker(String id) {
-        DynmapMarker marker = skDynmap.getStorageYaml().getMarker("markers." + id);
-        if (marker == null) {
-            return;
-        }
-        this.id = marker.getId();
-        this.name = marker.getName();
-        this.location = marker.getLocation();
-        this.markerIcon = marker.getMarkerIcon();
-
-        skDynmap.dynmapMarkers.put(id, this);
-    }
-
     public String getId() {
         return id;
     }
